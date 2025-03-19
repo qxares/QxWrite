@@ -73,6 +73,8 @@ void QxWrite::handleEditorCreated(DocumentWindow *editor) {
     qDebug() << "Text edit retrieved:" << (textEdit != nullptr);
 
     if (textEdit) {
+        // Temporarily disable selector and manipulator setup
+        /*
         qDebug() << "Creating selector...";
         selector = new ImageSelector(textEdit, this);
         selector->setSceneManager(sceneManager);
@@ -93,6 +95,7 @@ void QxWrite::handleEditorCreated(DocumentWindow *editor) {
         connect(resizeAction, &QAction::triggered, manipulator, &ImageManipulator::resizeImage);
         menuManager->addCustomMenu(tr("&Image"), imageActions);
         qDebug() << "Updated image menu actions";
+        */
     } else {
         qDebug() << "Text edit is null, skipping selector/manipulator setup";
     }
