@@ -1,7 +1,5 @@
 #include "documenteditor.h"
-#include "filedialog.h"
 #include <QDebug>
-#include <QTextImageFormat>
 #include <QTextCursor>
 #include <QFont>
 #include <QMenu>
@@ -27,20 +25,15 @@ void DocumentEditor::insertImage() {
     if (dialog.exec()) {
         QString fileName = dialog.getSelectedFile();
         if (!fileName.isEmpty()) {
-            QImage image(fileName);
-            if (image.isNull()) {
+            ImageHandler image(fileName);
+            if (image.isValid()) {
+                QTextCursor cursor = textCursor();
+                document()->addResource(QTextDocument::ImageResource, image.getUrl(), QImage(fileName));
+                cursor.insertImage(image.getFormat());
+                qDebug() << "Inserted image at" << image.getUrl() << "Size:" << image.getOriginalSize();
+            } else {
                 qDebug() << "Cannot load image:" << fileName;
-                return;
             }
-            QTextCursor cursor = textCursor();
-            QString placeholder = QString("placeholder://%1").arg(qrand() % 1000);
-            document()->addResource(QTextDocument::ImageResource, QUrl(placeholder), image);
-            QTextImageFormat format;
-            format.setName(placeholder);
-            format.setWidth(100);
-            format.setHeight(117);
-            cursor.insertImage(format);
-            qDebug() << "Inserted image at" << placeholder << "Size:" << image.size();
         }
     }
 }

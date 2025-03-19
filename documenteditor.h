@@ -2,8 +2,8 @@
 #define DOCUMENTEDITOR_H
 
 #include <QTextEdit>
-#include <QMap>
-#include <QImage>
+#include "filedialog.h"
+#include "imagehandler.h"
 
 class DocumentEditor : public QTextEdit {
     Q_OBJECT
