@@ -12,7 +12,3 @@ DocumentWindow::DocumentWindow(ImageSceneManager *sceneManager, QWidget *parent)
     setCentralWidget(textEdit);
     qDebug() << "Editor created:" << true;
 }
-
-QTextEdit* DocumentWindow::getTextEdit() {
-    return textEdit;
-}
