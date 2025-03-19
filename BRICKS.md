@@ -4,11 +4,11 @@
 Tracks modular components in QxWrite, now with reusable bricks.
 
 ### 1. ImageSceneManager
-- **Purpose**: Manages graphics scene (standalone).
+- **Purpose**: Manages graphics scene (standalone, future use).
 - **Files**: `imagescenemanager.h`, `imagescenemanager.cpp`
 
 ### 2. ImagePlaceholderInserter
-- **Purpose**: Inserts images via menu.
+- **Purpose**: Inserts images into active editor via QTextDocument.
 - **Files**: `imageplaceholderinserter.h`, `imageplaceholderinserter.cpp`
 
 ### 3. ImageDragHandler
@@ -52,6 +52,6 @@ Tracks modular components in QxWrite, now with reusable bricks.
 - **Files**: `documentwindow.h`, `documentwindow.cpp`
 
 ## Notes
-- **Current Features**: Stable "New", image insertion with QFileDialog.
-- **Pending Fixes**: Full SDI transition, refine image positioning.
-- **Future Potential**: Toolbar, mouse resizing, undo/redo.
+- **Current Features**: Stable "New", image insertion with QFileDialog, single menu, images in QTextEdit.
+- **Pending Fixes**: Full SDI transition, scene integration for drag/resize.
+- **Future Potential**: Toolbar_Func, mouse resizing, undo/redo.

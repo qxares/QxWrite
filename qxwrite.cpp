@@ -1,5 +1,6 @@
 #include "qxwrite.h"
 #include <QMdiArea>
+#include <QMdiSubWindow>
 #include <QMenuBar>
 #include <QDebug>
 #include <QTimer>
@@ -27,7 +28,7 @@ QxWrite::QxWrite(QWidget *parent)
 
     menuManager->addFileMenu();
     QList<QAction*> imageActions;
-    QAction *insertAction = new QAction(tr("Insert Image"), inserter);
+    QAction *insertAction = new QAction(tr("Insert Image"), this);
     insertAction->setObjectName("insertImage");
     imageActions.append(insertAction);
     moveAction = new QAction(tr("Move Image"), this);
@@ -36,7 +37,7 @@ QxWrite::QxWrite(QWidget *parent)
     resizeAction = new QAction(tr("Resize Image"), this);
     resizeAction->setObjectName("resizeImage");
     imageActions.append(resizeAction);
-    connect(insertAction, &QAction::triggered, inserter, &ImagePlaceholderInserter::insertImage);
+    connect(insertAction, &QAction::triggered, this, &QxWrite::insertImageToActiveEditor);
     menuManager->addCustomMenu(tr("&Image"), imageActions);
 
     connect(menuManager, &MenuManager::newFileRequested, this, &QxWrite::handleNewFile);
@@ -80,14 +81,14 @@ void QxWrite::handleEditorCreated(DocumentWindow *editor) {
         qDebug() << "Manipulator created";
         
         QList<QAction*> imageActions;
-        QAction *insertAction = new QAction(tr("Insert Image"), inserter);
+        QAction *insertAction = new QAction(tr("Insert Image"), this);
         insertAction->setObjectName("insertImage");
         imageActions.append(insertAction);
         imageActions.append(moveAction);
         imageActions.append(resizeAction);
         disconnect(moveAction, nullptr, nullptr, nullptr);
         disconnect(resizeAction, nullptr, nullptr, nullptr);
-        connect(insertAction, &QAction::triggered, inserter, &ImagePlaceholderInserter::insertImage);
+        connect(insertAction, &QAction::triggered, this, &QxWrite::insertImageToActiveEditor);
         connect(moveAction, &QAction::triggered, manipulator, &ImageManipulator::moveImage);
         connect(resizeAction, &QAction::triggered, manipulator, &ImageManipulator::resizeImage);
         menuManager->addCustomMenu(tr("&Image"), imageActions);
@@ -95,6 +96,21 @@ void QxWrite::handleEditorCreated(DocumentWindow *editor) {
     } else {
         qDebug() << "Text edit is null, skipping selector/manipulator setup";
     }
+}
+
+void QxWrite::insertImageToActiveEditor() {
+    qDebug() << "Insert image to active editor triggered";
+    QMdiSubWindow *activeSubWindow = mdiArea->activeSubWindow();
+    if (!activeSubWindow) {
+        qDebug() << "No active subwindow!";
+        return;
+    }
+    DocumentWindow *docWindow = qobject_cast<DocumentWindow*>(activeSubWindow->widget());
+    if (!docWindow) {
+        qDebug() << "Active subwindow is not a DocumentWindow!";
+        return;
+    }
+    inserter->insertImage(docWindow);
 }
 
 QxWrite::~QxWrite() {}

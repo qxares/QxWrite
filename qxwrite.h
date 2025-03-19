@@ -2,19 +2,42 @@
 #define QXWRITE_H
 
 #include <QMainWindow>
-#include <QMdiArea>
+#include "imagescenemanager.h"
+#include "documentwindow.h"
+
+class QMdiArea;
+class MenuManager;
+class FileManager;
+class ImagePlaceholderInserter;
+class ImageManipulator;
+class ImageResizer;
+class ImageSelector;
+class QAction;
 
 class QxWrite : public QMainWindow {
     Q_OBJECT
 public:
-    QxWrite(QWidget *parent = nullptr);
+    explicit QxWrite(QWidget *parent = nullptr);
+    ~QxWrite();
 
 private slots:
-    void newDocument();
+    void handleNewFile();
+    void handleOpenFile();
+    void handleSaveFile();
+    void handleEditorCreated(DocumentWindow *editor);
+    void insertImageToActiveEditor();
 
 private:
     QMdiArea *mdiArea;
-    void setupMenus();
+    ImageSceneManager *sceneManager;
+    MenuManager *menuManager;
+    FileManager *fileManager;
+    ImagePlaceholderInserter *inserter;
+    ImageManipulator *manipulator;
+    ImageResizer *resizer;
+    ImageSelector *selector;
+    QAction *moveAction;
+    QAction *resizeAction;
 };
 
 #endif // QXWRITE_H
