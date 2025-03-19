@@ -53,5 +53,5 @@ Tracks modular components in QxWrite, now with reusable bricks.
 
 ## Notes
 - **Current Features**: Stable "New", image insertion with QFileDialog.
-- **Pending Fixes**: Refine image positioning, full SDI transition.
+- **Pending Fixes**: Full SDI transition, refine image positioning.
 - **Future Potential**: Toolbar, mouse resizing, undo/redo.

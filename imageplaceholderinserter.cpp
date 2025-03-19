@@ -22,7 +22,6 @@ void ImagePlaceholderInserter::insertImage() {
             format.setName(fileName);
             cursor.insertImage(format);
             QPixmap pixmap(fileName);
-            // Use a default QPoint (e.g., top-left of text area) since cursor.position() is an int
             sceneManager->addImage(QUrl::fromLocalFile(fileName), pixmap, QPoint(0, 0));
             qDebug() << "Image inserted:" << fileName;
         } else {

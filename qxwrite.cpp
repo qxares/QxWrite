@@ -1,43 +1,101 @@
 #include "qxwrite.h"
-#include "documenteditor.h"
+#include <QMdiArea>
 #include <QMenuBar>
-#include <QMdiSubWindow>
 #include <QDebug>
 #include <QTimer>
+#include "menumanager.h"
+#include "filemanager.h"
+#include "documentwindow.h"
+#include "imageplaceholderinserter.h"
+#include "imagemanipulator.h"
 
-QxWrite::QxWrite(QWidget *parent) : QMainWindow(parent) {
+QxWrite::QxWrite(QWidget *parent) 
+    : QMainWindow(parent), 
+      mdiArea(new QMdiArea(this)), 
+      sceneManager(new ImageSceneManager(this)), 
+      menuManager(new MenuManager(menuBar(), this)),
+      fileManager(new FileManager(this)),
+      inserter(new ImagePlaceholderInserter(sceneManager, this)), 
+      resizer(new ImageResizer(this)),
+      manipulator(nullptr),
+      selector(nullptr) {
     qDebug() << "QxWrite constructor starting...";
-    mdiArea = new QMdiArea(this);
     setCentralWidget(mdiArea);
     qDebug() << "MDI area created successfully.";
-    setupMenus();
-    resize(800, 600);
-    menuBar()->setVisible(true);  // Force here
-    QTimer::singleShot(100, this, [this]() {
-        qDebug() << "Menu bar visible after delay:" << menuBar()->isVisible();
-    });
+    qDebug() << "ImageSceneManager initialized";
+    resizer->setSceneManager(sceneManager);
+
+    menuManager->addFileMenu();
+    QList<QAction*> imageActions;
+    QAction *insertAction = new QAction(tr("Insert Image"), inserter);
+    insertAction->setObjectName("insertImage");
+    imageActions.append(insertAction);
+    moveAction = new QAction(tr("Move Image"), this);
+    moveAction->setObjectName("moveImage");
+    imageActions.append(moveAction);
+    resizeAction = new QAction(tr("Resize Image"), this);
+    resizeAction->setObjectName("resizeImage");
+    imageActions.append(resizeAction);
+    connect(insertAction, &QAction::triggered, inserter, &ImagePlaceholderInserter::insertImage);
+    menuManager->addCustomMenu(tr("&Image"), imageActions);
+
+    connect(menuManager, &MenuManager::newFileRequested, this, &QxWrite::handleNewFile);
+    connect(menuManager, &MenuManager::openFileRequested, this, &QxWrite::handleOpenFile);
+    connect(menuManager, &MenuManager::saveFileRequested, this, &QxWrite::handleSaveFile);
+    connect(menuManager, &MenuManager::quitRequested, this, &QxWrite::close);
+    
     qDebug() << "QxWrite constructor finished.";
+    QTimer::singleShot(0, this, [this]() { qDebug() << "Menu bar visible after delay:" << menuBar()->isVisible(); });
 }
 
-void QxWrite::setupMenus() {
-    qDebug() << "Setting up menus...";
-    QMenu *fileMenu = menuBar()->addMenu("File");
-    QAction *newAct = fileMenu->addAction("New");
-    connect(newAct, &QAction::triggered, this, &QxWrite::newDocument);
-    fileMenu->addAction("Open");
-    fileMenu->addAction("Save");
-    fileMenu->addSeparator();
-    fileMenu->addAction("Exit", this, &QWidget::close);
-    menuBar()->setVisible(true);  // Force again
-    qDebug() << "Menu bar is native:" << menuBar()->isNativeMenuBar();
-    qDebug() << "Menu bar is visible:" << menuBar()->isVisible();
+void QxWrite::handleNewFile() {
+    qDebug() << "Handling new file request...";
+    DocumentWindow *editor = new DocumentWindow(sceneManager, this);
+    qDebug() << "Editor created:" << (editor != nullptr);
+    if (editor) {
+        handleEditorCreated(editor);
+    } else {
+        qDebug() << "Failed to create editor!";
+    }
 }
 
-void QxWrite::newDocument() {
-    QMdiSubWindow *subWindow = new QMdiSubWindow;
-    DocumentEditor *editor = new DocumentEditor(subWindow);
-    subWindow->setWidget(editor);
-    mdiArea->addSubWindow(subWindow);
-    subWindow->show();
-    qDebug() << "New Document window created. Active subwindow:" << (mdiArea->activeSubWindow() == subWindow);
+void QxWrite::handleOpenFile() { fileManager->openFile(); }
+void QxWrite::handleSaveFile() { fileManager->saveFile(); }
+
+void QxWrite::handleEditorCreated(DocumentWindow *editor) {
+    qDebug() << "Adding editor to MDI...";
+    mdiArea->addSubWindow(editor);
+    qDebug() << "Showing editor...";
+    editor->show();
+    qDebug() << "Editor shown, getting text edit...";
+    QTextEdit *textEdit = editor->getTextEdit();
+    qDebug() << "Text edit retrieved:" << (textEdit != nullptr);
+
+    if (textEdit) {
+        qDebug() << "Creating selector...";
+        selector = new ImageSelector(textEdit, this);
+        selector->setSceneManager(sceneManager);
+        qDebug() << "Selector created, creating manipulator...";
+        manipulator = new ImageManipulator(sceneManager, resizer, selector, this);
+        qDebug() << "Manipulator created";
+        
+        QList<QAction*> imageActions;
+        QAction *insertAction = new QAction(tr("Insert Image"), inserter);
+        insertAction->setObjectName("insertImage");
+        imageActions.append(insertAction);
+        imageActions.append(moveAction);
+        imageActions.append(resizeAction);
+        disconnect(moveAction, nullptr, nullptr, nullptr);
+        disconnect(resizeAction, nullptr, nullptr, nullptr);
+        connect(insertAction, &QAction::triggered, inserter, &ImagePlaceholderInserter::insertImage);
+        connect(moveAction, &QAction::triggered, manipulator, &ImageManipulator::moveImage);
+        connect(resizeAction, &QAction::triggered, manipulator, &ImageManipulator::resizeImage);
+        menuManager->addCustomMenu(tr("&Image"), imageActions);
+        qDebug() << "Updated image menu actions";
+    } else {
+        qDebug() << "Text edit is null, skipping selector/manipulator setup";
+    }
 }
+
+QxWrite::~QxWrite() {}
+
