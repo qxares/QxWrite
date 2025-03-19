@@ -1,11 +1,11 @@
 #include "documenteditor.h"
+#include "filedialog.h"
 #include <QDebug>
 #include <QTextImageFormat>
 #include <QTextCursor>
 #include <QFont>
 #include <QMenu>
 #include <QContextMenuEvent>
-#include <QFileDialog>
 
 DocumentEditor::DocumentEditor(QWidget *parent) : QTextEdit(parent) {
     setAcceptRichText(true);
@@ -23,21 +23,24 @@ void DocumentEditor::contextMenuEvent(QContextMenuEvent *event) {
 }
 
 void DocumentEditor::insertImage() {
-    QString fileName = QFileDialog::getOpenFileName(this, "Insert Image", QDir::homePath(), "Images (*.png *.jpg *.bmp)");
-    if (!fileName.isEmpty()) {
-        QImage image(fileName);
-        if (image.isNull()) {
-            qDebug() << "Cannot load image:" << fileName;
-            return;
+    FileDialog dialog(this, QDir::homePath(), FileDialog::Import);
+    if (dialog.exec()) {
+        QString fileName = dialog.getSelectedFile();
+        if (!fileName.isEmpty()) {
+            QImage image(fileName);
+            if (image.isNull()) {
+                qDebug() << "Cannot load image:" << fileName;
+                return;
+            }
+            QTextCursor cursor = textCursor();
+            QString placeholder = QString("placeholder://%1").arg(qrand() % 1000);
+            document()->addResource(QTextDocument::ImageResource, QUrl(placeholder), image);
+            QTextImageFormat format;
+            format.setName(placeholder);
+            format.setWidth(100);
+            format.setHeight(117);
+            cursor.insertImage(format);
+            qDebug() << "Inserted image at" << placeholder << "Size:" << image.size();
         }
-        QTextCursor cursor = textCursor();
-        QString placeholder = QString("placeholder://%1").arg(qrand() % 1000);
-        document()->addResource(QTextDocument::ImageResource, QUrl(placeholder), image);
-        QTextImageFormat format;
-        format.setName(placeholder);
-        format.setWidth(100);
-        format.setHeight(117);
-        cursor.insertImage(format);
-        qDebug() << "Inserted image at" << placeholder << "Size:" << image.size();
     }
 }

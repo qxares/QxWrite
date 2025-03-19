@@ -5,7 +5,9 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
            qxwrite.cpp \
-           documenteditor.cpp
+           documenteditor.cpp \
+           filedialog.cpp
 
 HEADERS += qxwrite.h \
-           documenteditor.h
+           documenteditor.h \
+           filedialog.h
