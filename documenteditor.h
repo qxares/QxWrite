@@ -3,7 +3,7 @@
 
 #include <QTextEdit>
 #include "filedialog.h"
-#include "imagehandler.h"
+#include "imageplaceholder.h"  // Swap from imagehandler.h
 
 class DocumentEditor : public QTextEdit {
     Q_OBJECT

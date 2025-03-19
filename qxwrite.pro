@@ -7,9 +7,9 @@ SOURCES += main.cpp \
            qxwrite.cpp \
            documenteditor.cpp \
            filedialog.cpp \
-           imagehandler.cpp
+           imageplaceholder.cpp
 
 HEADERS += qxwrite.h \
            documenteditor.h \
            filedialog.h \
-           imagehandler.h
+           imageplaceholder.h

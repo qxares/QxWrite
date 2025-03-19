@@ -56,14 +56,14 @@ SOURCES       = main.cpp \
 		qxwrite.cpp \
 		documenteditor.cpp \
 		filedialog.cpp \
-		imagehandler.cpp moc_qxwrite.cpp \
+		imageplaceholder.cpp moc_qxwrite.cpp \
 		moc_documenteditor.cpp \
 		moc_filedialog.cpp
 OBJECTS       = main.o \
 		qxwrite.o \
 		documenteditor.o \
 		filedialog.o \
-		imagehandler.o \
+		imageplaceholder.o \
 		moc_qxwrite.o \
 		moc_documenteditor.o \
 		moc_filedialog.o
@@ -147,11 +147,11 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		qxwrite.pro qxwrite.h \
 		documenteditor.h \
 		filedialog.h \
-		imagehandler.h main.cpp \
+		imageplaceholder.h main.cpp \
 		qxwrite.cpp \
 		documenteditor.cpp \
 		filedialog.cpp \
-		imagehandler.cpp
+		imageplaceholder.cpp
 QMAKE_TARGET  = QxWrite
 DESTDIR       = 
 TARGET        = QxWrite
@@ -335,8 +335,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents qxwrite.h documenteditor.h filedialog.h imagehandler.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp qxwrite.cpp documenteditor.cpp filedialog.cpp imagehandler.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents qxwrite.h documenteditor.h filedialog.h imageplaceholder.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp qxwrite.cpp documenteditor.cpp filedialog.cpp imageplaceholder.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -378,7 +378,7 @@ moc_qxwrite.cpp: qxwrite.h \
 
 moc_documenteditor.cpp: documenteditor.h \
 		filedialog.h \
-		imagehandler.h \
+		imageplaceholder.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include documenteditor.h -o moc_documenteditor.cpp
@@ -410,19 +410,19 @@ main.o: main.cpp qxwrite.h
 qxwrite.o: qxwrite.cpp qxwrite.h \
 		documenteditor.h \
 		filedialog.h \
-		imagehandler.h
+		imageplaceholder.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qxwrite.o qxwrite.cpp
 
 documenteditor.o: documenteditor.cpp documenteditor.h \
 		filedialog.h \
-		imagehandler.h
+		imageplaceholder.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o documenteditor.o documenteditor.cpp
 
 filedialog.o: filedialog.cpp filedialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o filedialog.o filedialog.cpp
 
-imagehandler.o: imagehandler.cpp imagehandler.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o imagehandler.o imagehandler.cpp
+imageplaceholder.o: imageplaceholder.cpp imageplaceholder.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o imageplaceholder.o imageplaceholder.cpp
 
 moc_qxwrite.o: moc_qxwrite.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_qxwrite.o moc_qxwrite.cpp

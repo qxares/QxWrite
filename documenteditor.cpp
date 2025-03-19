@@ -25,12 +25,12 @@ void DocumentEditor::insertImage() {
     if (dialog.exec()) {
         QString fileName = dialog.getSelectedFile();
         if (!fileName.isEmpty()) {
-            ImageHandler image(fileName);
-            if (image.isValid()) {
+            ImagePlaceholder placeholder(fileName);
+            if (placeholder.isValid()) {
                 QTextCursor cursor = textCursor();
-                document()->addResource(QTextDocument::ImageResource, image.getUrl(), QImage(fileName));
-                cursor.insertImage(image.getFormat());
-                qDebug() << "Inserted image at" << image.getUrl() << "Size:" << image.getOriginalSize();
+                document()->addResource(QTextDocument::ImageResource, placeholder.getUrl(), placeholder.getImage());
+                cursor.insertImage(placeholder.getFormat());
+                qDebug() << "Inserted image at" << placeholder.getUrl() << "Size:" << placeholder.getImage().size();
             } else {
                 qDebug() << "Cannot load image:" << fileName;
             }

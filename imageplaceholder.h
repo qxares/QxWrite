@@ -1,22 +1,23 @@
-#ifndef IMAGEHANDLER_H
-#define IMAGEHANDLER_H
+#ifndef IMAGEPLACEHOLDER_H
+#define IMAGEPLACEHOLDER_H
 
 #include <QImage>
 #include <QUrl>
 #include <QTextImageFormat>
 
-class ImageHandler {
+class ImagePlaceholder {
 public:
-    ImageHandler(const QString &filePath);
+    ImagePlaceholder(const QString &filePath);
     bool isValid() const;
     QTextImageFormat getFormat() const;
     QUrl getUrl() const;
-    QSize getOriginalSize() const;
+    QImage getImage() const;
 
 private:
     QImage image;
     QUrl placeholderUrl;
     QTextImageFormat format;
+    static int counter;  // Unique ID for placeholders
 };
 
-#endif // IMAGEHANDLER_H
+#endif // IMAGEPLACEHOLDER_H
