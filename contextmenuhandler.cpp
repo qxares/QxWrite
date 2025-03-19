@@ -7,26 +7,26 @@
 ContextMenuHandler::ContextMenuHandler(ImageSceneManager *sceneManager, ImageResizer *resizer, ImageSelector *selector, QWidget *parent)
     : QObject(parent), sceneManager(sceneManager), resizer(resizer), selector(selector), parentWidget(parent) {}
 
-void ContextMenuHandler::showContextMenu(QContextMenuEvent *event) {
-    qDebug() << "Context menu requested at" << event->pos();
+void ContextMenuHandler::showContextMenu(const QPoint &pos) {
+    qDebug() << "Context menu requested at" << pos;
     QMenu menu(parentWidget);
     QAction *insertImageAction = menu.addAction("Insert Image");
-    QUrl imageUrl = selector->selectImage(event->pos());
+    QUrl imageUrl = selector->selectImage(pos);
     if (selector->isImageSelected()) {
         QAction *resizeImageAction = menu.addAction("Resize Image");
-        QAction *selectedAction = menu.exec(event->globalPos());
+        QAction *selectedAction = menu.exec(parentWidget->mapToGlobal(pos));
         if (selectedAction == insertImageAction) {
             insertImage();
         } else if (selectedAction == resizeImageAction) {
             QGraphicsPixmapItem *item = sceneManager->getImageItem(imageUrl);
             if (item) {
                 item->setSelected(true);
-                resizer->startResizing(imageUrl, item, event->pos());
+                resizer->startResizing(imageUrl, item, pos);
                 qDebug() << "Resize selected for" << imageUrl;
             }
         }
     } else {
-        if (menu.exec(event->globalPos()) == insertImageAction) {
+        if (menu.exec(parentWidget->mapToGlobal(pos)) == insertImageAction) {
             insertImage();
         }
     }

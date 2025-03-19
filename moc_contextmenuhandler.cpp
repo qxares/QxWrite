@@ -1,5 +1,5 @@
 /****************************************************************************
-** Meta object code from reading C++ file 'qxwrite.h'
+** Meta object code from reading C++ file 'contextmenuhandler.h'
 **
 ** Created by: The Qt Meta Object Compiler version 67 (Qt 5.15.13)
 **
@@ -7,11 +7,11 @@
 *****************************************************************************/
 
 #include <memory>
-#include "qxwrite.h"
+#include "contextmenuhandler.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'qxwrite.h' doesn't include <QObject>."
+#error "The header file 'contextmenuhandler.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
 #error "This file was generated using the moc from 5.15.13. It"
 #error "cannot be used with the include files from this version of Qt."
@@ -21,27 +21,27 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_QxWrite_t {
+struct qt_meta_stringdata_ContextMenuHandler_t {
     QByteArrayData data[3];
-    char stringdata0[21];
+    char stringdata0[32];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_QxWrite_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_ContextMenuHandler_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_QxWrite_t qt_meta_stringdata_QxWrite = {
+static const qt_meta_stringdata_ContextMenuHandler_t qt_meta_stringdata_ContextMenuHandler = {
     {
-QT_MOC_LITERAL(0, 0, 7), // "QxWrite"
-QT_MOC_LITERAL(1, 8, 11), // "newDocument"
-QT_MOC_LITERAL(2, 20, 0) // ""
+QT_MOC_LITERAL(0, 0, 18), // "ContextMenuHandler"
+QT_MOC_LITERAL(1, 19, 11), // "insertImage"
+QT_MOC_LITERAL(2, 31, 0) // ""
 
     },
-    "QxWrite\0newDocument\0"
+    "ContextMenuHandler\0insertImage\0"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_QxWrite[] = {
+static const uint qt_meta_data_ContextMenuHandler[] = {
 
  // content:
        8,       // revision
@@ -63,45 +63,45 @@ static const uint qt_meta_data_QxWrite[] = {
        0        // eod
 };
 
-void QxWrite::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void ContextMenuHandler::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        auto *_t = static_cast<QxWrite *>(_o);
+        auto *_t = static_cast<ContextMenuHandler *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->newDocument(); break;
+        case 0: _t->insertImage(); break;
         default: ;
         }
     }
     (void)_a;
 }
 
-QT_INIT_METAOBJECT const QMetaObject QxWrite::staticMetaObject = { {
-    QMetaObject::SuperData::link<QMainWindow::staticMetaObject>(),
-    qt_meta_stringdata_QxWrite.data,
-    qt_meta_data_QxWrite,
+QT_INIT_METAOBJECT const QMetaObject ContextMenuHandler::staticMetaObject = { {
+    QMetaObject::SuperData::link<QObject::staticMetaObject>(),
+    qt_meta_stringdata_ContextMenuHandler.data,
+    qt_meta_data_ContextMenuHandler,
     qt_static_metacall,
     nullptr,
     nullptr
 } };
 
 
-const QMetaObject *QxWrite::metaObject() const
+const QMetaObject *ContextMenuHandler::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *QxWrite::qt_metacast(const char *_clname)
+void *ContextMenuHandler::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_QxWrite.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_ContextMenuHandler.stringdata0))
         return static_cast<void*>(this);
-    return QMainWindow::qt_metacast(_clname);
+    return QObject::qt_metacast(_clname);
 }
 
-int QxWrite::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int ContextMenuHandler::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QMainWindow::qt_metacall(_c, _id, _a);
+    _id = QObject::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {

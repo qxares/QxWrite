@@ -1,34 +1,28 @@
 #include "filedialog.h"
+#include <QVBoxLayout>
+#include <QPushButton>
+#include <QLineEdit>
+#include <QDebug>
 
-FileDialog::FileDialog(QWidget *parent, const QString &initialDir, Mode mode)
-    : QFileDialog(parent, "File Dialog", initialDir) {
-    configureForMode(mode);
-    setOption(QFileDialog::DontUseNativeDialog, true);
+FileDialog::FileDialog(QWidget *parent) 
+    : QDialog(parent), mode(Import), selectedFile("") {
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    fileInput = new QLineEdit(this);
+    okButton = new QPushButton(tr("OK"), this);
+    layout->addWidget(fileInput);
+    layout->addWidget(okButton);
+    setLayout(layout);
+    connect(okButton, &QPushButton::clicked, this, &FileDialog::accept);
 }
 
-void FileDialog::configureForMode(Mode mode) {
-    switch (mode) {
-        case Open:
-            setFileMode(QFileDialog::ExistingFile);
-            setAcceptMode(QFileDialog::AcceptOpen);
-            break;
-        case Save:
-            setFileMode(QFileDialog::AnyFile);
-            setAcceptMode(QFileDialog::AcceptSave);
-            break;
-        case Import:
-            setFileMode(QFileDialog::ExistingFile);
-            setAcceptMode(QFileDialog::AcceptOpen);
-            setNameFilter("Images (*.png *.jpg *.bmp)");
-            break;
-        case Export:
-            setFileMode(QFileDialog::AnyFile);
-            setAcceptMode(QFileDialog::AcceptSave);
-            setNameFilter("Images (*.png *.jpg)");
-            break;
-    }
+void FileDialog::configureForMode(FileMode m) {
+    mode = m;
+    setWindowTitle(mode == Import ? tr("Import Image") : tr("Export Image"));
 }
 
-QString FileDialog::getSelectedFile() const {
-    return selectedFiles().value(0, QString());
+QString FileDialog::getSelectedFile() {
+    exec();
+    selectedFile = fileInput->text();
+    qDebug() << "Selected file from dialog:" << selectedFile;
+    return selectedFile;
 }

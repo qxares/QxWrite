@@ -1,27 +1,31 @@
 #ifndef IMAGERESIZER_H
 #define IMAGERESIZER_H
 
-#include <QTextEdit>
+#include <QObject>
 #include <QUrl>
 #include <QPoint>
 #include <QRubberBand>
+#include <QGraphicsPixmapItem>
 
-class ImageResizer {
+class ImageSceneManager;
+
+class ImageResizer : public QObject {
+    Q_OBJECT
 public:
-    ImageResizer(QTextEdit *editor);
-    ~ImageResizer();
-    void startResizing(const QUrl &imageUrl, const QPoint &startPos, const QRect &imageRect);
-    void updateResizing(const QPoint ¤tPos);
+    ImageResizer(QWidget *parent = nullptr);
+    void setSceneManager(ImageSceneManager *manager);
+    void startResizing(const QUrl &imageUrl, QGraphicsPixmapItem *item, const QPoint &startPos);
+    void updateResizing(const QPoint &currentPos);
     void finishResizing();
+    QWidget* parentWidget() const;
 
 private:
-    QTextEdit *editor;
-    QUrl imageUrl;
+    ImageSceneManager *sceneManager;
+    QUrl activeImageUrl;
+    QGraphicsPixmapItem *activeItem;
     QPoint startPos;
     QSize startSize;
-    QRect imageRect;
     QRubberBand *rubberBand;
-    int cursorPos;
 };
 
 #endif // IMAGERESIZER_H

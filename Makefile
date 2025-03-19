@@ -54,19 +54,55 @@ OBJECTS_DIR   = ./
 
 SOURCES       = main.cpp \
 		qxwrite.cpp \
-		documenteditor.cpp \
+		documentwindow.cpp \
 		filedialog.cpp \
-		imageplaceholder.cpp moc_qxwrite.cpp \
-		moc_documenteditor.cpp \
-		moc_filedialog.cpp
+		imageplaceholder.cpp \
+		imageselector.cpp \
+		imagescenemanager.cpp \
+		imageresizer.cpp \
+		mouseeventhandler.cpp \
+		imageplaceholderinserter.cpp \
+		imagedraghandler.cpp \
+		imagemanipulator.cpp \
+		menumanager.cpp \
+		filemanager.cpp moc_qxwrite.cpp \
+		moc_documentwindow.cpp \
+		moc_filedialog.cpp \
+		moc_imageselector.cpp \
+		moc_imagescenemanager.cpp \
+		moc_imageresizer.cpp \
+		moc_mouseeventhandler.cpp \
+		moc_imageplaceholderinserter.cpp \
+		moc_imagedraghandler.cpp \
+		moc_imagemanipulator.cpp \
+		moc_menumanager.cpp \
+		moc_filemanager.cpp
 OBJECTS       = main.o \
 		qxwrite.o \
-		documenteditor.o \
+		documentwindow.o \
 		filedialog.o \
 		imageplaceholder.o \
+		imageselector.o \
+		imagescenemanager.o \
+		imageresizer.o \
+		mouseeventhandler.o \
+		imageplaceholderinserter.o \
+		imagedraghandler.o \
+		imagemanipulator.o \
+		menumanager.o \
+		filemanager.o \
 		moc_qxwrite.o \
-		moc_documenteditor.o \
-		moc_filedialog.o
+		moc_documentwindow.o \
+		moc_filedialog.o \
+		moc_imageselector.o \
+		moc_imagescenemanager.o \
+		moc_imageresizer.o \
+		moc_mouseeventhandler.o \
+		moc_imageplaceholderinserter.o \
+		moc_imagedraghandler.o \
+		moc_imagemanipulator.o \
+		moc_menumanager.o \
+		moc_filemanager.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -145,13 +181,31 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		qxwrite.pro qxwrite.h \
-		documenteditor.h \
+		documentwindow.h \
 		filedialog.h \
-		imageplaceholder.h main.cpp \
+		imageplaceholder.h \
+		imageselector.h \
+		imagescenemanager.h \
+		imageresizer.h \
+		mouseeventhandler.h \
+		imageplaceholderinserter.h \
+		imagedraghandler.h \
+		imagemanipulator.h \
+		menumanager.h \
+		filemanager.h main.cpp \
 		qxwrite.cpp \
-		documenteditor.cpp \
+		documentwindow.cpp \
 		filedialog.cpp \
-		imageplaceholder.cpp
+		imageplaceholder.cpp \
+		imageselector.cpp \
+		imagescenemanager.cpp \
+		imageresizer.cpp \
+		mouseeventhandler.cpp \
+		imageplaceholderinserter.cpp \
+		imagedraghandler.cpp \
+		imagemanipulator.cpp \
+		menumanager.cpp \
+		filemanager.cpp
 QMAKE_TARGET  = QxWrite
 DESTDIR       = 
 TARGET        = QxWrite
@@ -335,8 +389,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents qxwrite.h documenteditor.h filedialog.h imageplaceholder.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp qxwrite.cpp documenteditor.cpp filedialog.cpp imageplaceholder.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents qxwrite.h documentwindow.h filedialog.h imageplaceholder.h imageselector.h imagescenemanager.h imageresizer.h mouseeventhandler.h imageplaceholderinserter.h imagedraghandler.h imagemanipulator.h menumanager.h filemanager.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp qxwrite.cpp documentwindow.cpp filedialog.cpp imageplaceholder.cpp imageselector.cpp imagescenemanager.cpp imageresizer.cpp mouseeventhandler.cpp imageplaceholderinserter.cpp imagedraghandler.cpp imagemanipulator.cpp menumanager.cpp filemanager.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -368,25 +422,79 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_qxwrite.cpp moc_documenteditor.cpp moc_filedialog.cpp
+compiler_moc_header_make_all: moc_qxwrite.cpp moc_documentwindow.cpp moc_filedialog.cpp moc_imageselector.cpp moc_imagescenemanager.cpp moc_imageresizer.cpp moc_mouseeventhandler.cpp moc_imageplaceholderinserter.cpp moc_imagedraghandler.cpp moc_imagemanipulator.cpp moc_menumanager.cpp moc_filemanager.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_qxwrite.cpp moc_documenteditor.cpp moc_filedialog.cpp
+	-$(DEL_FILE) moc_qxwrite.cpp moc_documentwindow.cpp moc_filedialog.cpp moc_imageselector.cpp moc_imagescenemanager.cpp moc_imageresizer.cpp moc_mouseeventhandler.cpp moc_imageplaceholderinserter.cpp moc_imagedraghandler.cpp moc_imagemanipulator.cpp moc_menumanager.cpp moc_filemanager.cpp
 moc_qxwrite.cpp: qxwrite.h \
+		imagescenemanager.h \
+		documentwindow.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include qxwrite.h -o moc_qxwrite.cpp
 
-moc_documenteditor.cpp: documenteditor.h \
-		filedialog.h \
-		imageplaceholder.h \
+moc_documentwindow.cpp: documentwindow.h \
+		imagescenemanager.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include documenteditor.h -o moc_documenteditor.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include documentwindow.h -o moc_documentwindow.cpp
 
 moc_filedialog.cpp: filedialog.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include filedialog.h -o moc_filedialog.cpp
+
+moc_imageselector.cpp: imageselector.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include imageselector.h -o moc_imageselector.cpp
+
+moc_imagescenemanager.cpp: imagescenemanager.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include imagescenemanager.h -o moc_imagescenemanager.cpp
+
+moc_imageresizer.cpp: imageresizer.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include imageresizer.h -o moc_imageresizer.cpp
+
+moc_mouseeventhandler.cpp: mouseeventhandler.h \
+		imagescenemanager.h \
+		imageresizer.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include mouseeventhandler.h -o moc_mouseeventhandler.cpp
+
+moc_imageplaceholderinserter.cpp: imageplaceholderinserter.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include imageplaceholderinserter.h -o moc_imageplaceholderinserter.cpp
+
+moc_imagedraghandler.cpp: imagedraghandler.h \
+		imagescenemanager.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include imagedraghandler.h -o moc_imagedraghandler.cpp
+
+moc_imagemanipulator.cpp: imagemanipulator.h \
+		imagescenemanager.h \
+		imageresizer.h \
+		imageselector.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include imagemanipulator.h -o moc_imagemanipulator.cpp
+
+moc_menumanager.cpp: menumanager.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include menumanager.h -o moc_menumanager.cpp
+
+moc_filemanager.cpp: filemanager.h \
+		documentwindow.h \
+		imagescenemanager.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include filemanager.h -o moc_filemanager.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -404,19 +512,25 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean
 
 ####### Compile
 
-main.o: main.cpp qxwrite.h
+main.o: main.cpp qxwrite.h \
+		imagescenemanager.h \
+		documentwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 qxwrite.o: qxwrite.cpp qxwrite.h \
-		documenteditor.h \
-		filedialog.h \
-		imageplaceholder.h
+		imagescenemanager.h \
+		documentwindow.h \
+		menumanager.h \
+		filemanager.h \
+		imageplaceholderinserter.h \
+		imagemanipulator.h \
+		imageresizer.h \
+		imageselector.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qxwrite.o qxwrite.cpp
 
-documenteditor.o: documenteditor.cpp documenteditor.h \
-		filedialog.h \
-		imageplaceholder.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o documenteditor.o documenteditor.cpp
+documentwindow.o: documentwindow.cpp documentwindow.h \
+		imagescenemanager.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o documentwindow.o documentwindow.cpp
 
 filedialog.o: filedialog.cpp filedialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o filedialog.o filedialog.cpp
@@ -424,14 +538,80 @@ filedialog.o: filedialog.cpp filedialog.h
 imageplaceholder.o: imageplaceholder.cpp imageplaceholder.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o imageplaceholder.o imageplaceholder.cpp
 
+imageselector.o: imageselector.cpp imageselector.h \
+		imagescenemanager.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o imageselector.o imageselector.cpp
+
+imagescenemanager.o: imagescenemanager.cpp imagescenemanager.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o imagescenemanager.o imagescenemanager.cpp
+
+imageresizer.o: imageresizer.cpp imageresizer.h \
+		imagescenemanager.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o imageresizer.o imageresizer.cpp
+
+mouseeventhandler.o: mouseeventhandler.cpp mouseeventhandler.h \
+		imagescenemanager.h \
+		imageresizer.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mouseeventhandler.o mouseeventhandler.cpp
+
+imageplaceholderinserter.o: imageplaceholderinserter.cpp imageplaceholderinserter.h \
+		imagescenemanager.h \
+		documentwindow.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o imageplaceholderinserter.o imageplaceholderinserter.cpp
+
+imagedraghandler.o: imagedraghandler.cpp imagedraghandler.h \
+		imagescenemanager.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o imagedraghandler.o imagedraghandler.cpp
+
+imagemanipulator.o: imagemanipulator.cpp imagemanipulator.h \
+		imagescenemanager.h \
+		imageresizer.h \
+		imageselector.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o imagemanipulator.o imagemanipulator.cpp
+
+menumanager.o: menumanager.cpp menumanager.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o menumanager.o menumanager.cpp
+
+filemanager.o: filemanager.cpp filemanager.h \
+		documentwindow.h \
+		imagescenemanager.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o filemanager.o filemanager.cpp
+
 moc_qxwrite.o: moc_qxwrite.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_qxwrite.o moc_qxwrite.cpp
 
-moc_documenteditor.o: moc_documenteditor.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_documenteditor.o moc_documenteditor.cpp
+moc_documentwindow.o: moc_documentwindow.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_documentwindow.o moc_documentwindow.cpp
 
 moc_filedialog.o: moc_filedialog.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_filedialog.o moc_filedialog.cpp
+
+moc_imageselector.o: moc_imageselector.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_imageselector.o moc_imageselector.cpp
+
+moc_imagescenemanager.o: moc_imagescenemanager.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_imagescenemanager.o moc_imagescenemanager.cpp
+
+moc_imageresizer.o: moc_imageresizer.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_imageresizer.o moc_imageresizer.cpp
+
+moc_mouseeventhandler.o: moc_mouseeventhandler.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mouseeventhandler.o moc_mouseeventhandler.cpp
+
+moc_imageplaceholderinserter.o: moc_imageplaceholderinserter.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_imageplaceholderinserter.o moc_imageplaceholderinserter.cpp
+
+moc_imagedraghandler.o: moc_imagedraghandler.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_imagedraghandler.o moc_imagedraghandler.cpp
+
+moc_imagemanipulator.o: moc_imagemanipulator.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_imagemanipulator.o moc_imagemanipulator.cpp
+
+moc_menumanager.o: moc_menumanager.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_menumanager.o moc_menumanager.cpp
+
+moc_filemanager.o: moc_filemanager.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_filemanager.o moc_filemanager.cpp
 
 ####### Install
 

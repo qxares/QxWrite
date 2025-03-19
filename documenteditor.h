@@ -1,30 +1,23 @@
 #ifndef DOCUMENTEDITOR_H
 #define DOCUMENTEDITOR_H
 
-#include <QTextEdit>
-#include "filedialog.h"
-#include "imageplaceholder.h"
-#include "imageselector.h"
-#include "imagepositioner.h"
-#include "imageresizer.h"
+#include <QWidget>
+#include "imagescenemanager.h"
 
-class DocumentEditor : public QTextEdit {
+class QTextEdit;
+class QGraphicsView;
+
+class DocumentEditor : public QWidget {
     Q_OBJECT
 public:
-    explicit DocumentEditor(QWidget *parent = nullptr);
-
-protected:
-    void contextMenuEvent(QContextMenuEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
+    DocumentEditor(ImageSceneManager *sceneManager, QWidget *parent = nullptr);
+    bool acceptRichText() const;
+    QTextEdit* getTextEdit() const;
 
 private:
-    void insertImage();
-    ImageSelector selector;
-    ImagePositioner positioner;
-    ImageResizer resizer;
-    bool resizing;
+    ImageSceneManager *sceneManager;
+    QTextEdit *textEdit;
+    QGraphicsView *view;
 };
 
 #endif // DOCUMENTEDITOR_H

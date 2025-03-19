@@ -1,64 +1,46 @@
 #include "imageresizer.h"
-#include <QTextCursor>
-#include <QTextImageFormat>
+#include "imagescenemanager.h"
 #include <QDebug>
 
-ImageResizer::ImageResizer(QTextEdit *editor) : editor(editor), rubberBand(nullptr), cursorPos(-1) {}
+ImageResizer::ImageResizer(QWidget *parent) 
+    : QObject(parent), sceneManager(nullptr), activeItem(nullptr), rubberBand(nullptr) {}
 
-ImageResizer::~ImageResizer() {
-    delete rubberBand;
+void ImageResizer::setSceneManager(ImageSceneManager *manager) {
+    sceneManager = manager;
 }
 
-void ImageResizer::startResizing(const QUrl &imageUrl, const QPoint &startPos, const QRect &imageRect) {
-    this->imageUrl = imageUrl;
+void ImageResizer::startResizing(const QUrl &imageUrl, QGraphicsPixmapItem *item, const QPoint &startPos) {
+    activeImageUrl = imageUrl;
+    activeItem = item;
     this->startPos = startPos;
-    this->imageRect = imageRect;
-    QTextCursor cursor = editor->cursorForPosition(startPos);
-    QTextImageFormat format = cursor.charFormat().toImageFormat();
-    if (format.isValid() && format.name() == imageUrl.toString()) {
-        startSize = QSize(format.width(), format.height());
-        cursorPos = cursor.position();
-        rubberBand = new QRubberBand(QRubberBand::Rectangle, editor);
-        rubberBand->setGeometry(imageRect);
-        rubberBand->show();
-        editor->setCursor(Qt::SizeFDiagCursor);
-        qDebug() << "Starting resizing for" << imageUrl << "Start size:" << startSize << "at" << imageRect;
+    startSize = item->pixmap().size();
+    if (!rubberBand) {
+        rubberBand = new QRubberBand(QRubberBand::Rectangle, parentWidget());
     }
+    rubberBand->setGeometry(QRect(startPos, QSize()));
+    rubberBand->show();
+    qDebug() << "Starting resize for" << imageUrl << "at" << startPos;
 }
 
-void ImageResizer::updateResizing(const QPoint ¤tPos) {
-    if (imageUrl.isEmpty() || !rubberBand || cursorPos == -1) return;
-    int deltaX = currentPos.x() - startPos.x();
-    int newWidth = qMax(50, startSize.width() + deltaX);
-    qreal aspectRatio = static_cast<qreal>(startSize.height()) / startSize.width();
-    int newHeight = qMax(50, static_cast<int>(newWidth * aspectRatio));
-    int maxWidth = editor->viewport()->width() - imageRect.left();
-    newWidth = qMin(newWidth, maxWidth);
-    newHeight = qMin(newHeight, static_cast<int>(maxWidth * aspectRatio));
-
-    QRect newRect = imageRect;
-    newRect.setSize(QSize(newWidth, newHeight));
-    rubberBand->setGeometry(newRect);
-
-    QTextCursor cursor(editor->document());
-    cursor.setPosition(cursorPos);
-    if (cursor.charFormat().isImageFormat()) {
-        QTextImageFormat format = cursor.charFormat().toImageFormat();
-        format.setWidth(newWidth);
-        format.setHeight(newHeight);
-        cursor.setCharFormat(format);
-        editor->viewport()->update();
-        qDebug() << "Resizing to" << newWidth << "x" << newHeight;
-    }
+void ImageResizer::updateResizing(const QPoint &currentPos) {
+    if (!activeItem || !rubberBand) return;
+    QRect rect(startPos, currentPos);
+    rubberBand->setGeometry(rect.normalized());
 }
 
 void ImageResizer::finishResizing() {
-    if (!imageUrl.isEmpty()) {
-        delete rubberBand;
-        rubberBand = nullptr;
-        imageUrl.clear();
-        cursorPos = -1;
-        editor->unsetCursor();
-        qDebug() << "Resizing finished";
+    if (!activeItem || !rubberBand || !sceneManager) return;
+    QRect rect = rubberBand->geometry();
+    QSize newSize = rect.size();
+    if (newSize.isValid() && newSize != startSize) {
+        QPixmap scaledPixmap = activeItem->pixmap().scaled(newSize, Qt::KeepAspectRatio);
+        activeItem->setPixmap(scaledPixmap);
+        qDebug() << "Resized image" << activeImageUrl << "to" << newSize;
     }
+    rubberBand->hide();
+    activeItem = nullptr;
+}
+
+QWidget* ImageResizer::parentWidget() const {
+    return qobject_cast<QWidget*>(parent());
 }

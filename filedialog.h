@@ -1,18 +1,24 @@
 #ifndef FILEDIALOG_H
 #define FILEDIALOG_H
 
-#include <QFileDialog>
-#include <QString>
+#include <QDialog>
 
-class FileDialog : public QFileDialog {
+class QLineEdit;
+class QPushButton;
+
+class FileDialog : public QDialog {
     Q_OBJECT
 public:
-    enum Mode { Open, Save, Import, Export };
-    explicit FileDialog(QWidget *parent, const QString &initialDir = QDir::homePath(), Mode mode = Open);
-    QString getSelectedFile() const;
+    enum FileMode { Import, Export };
+    explicit FileDialog(QWidget *parent = nullptr);
+    void configureForMode(FileMode mode);
+    QString getSelectedFile();
 
 private:
-    void configureForMode(Mode mode);
+    FileMode mode;
+    QString selectedFile;
+    QLineEdit *fileInput;
+    QPushButton *okButton;
 };
 
 #endif // FILEDIALOG_H
