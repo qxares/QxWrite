@@ -5,17 +5,14 @@
 #include "imagescenemanager.h"
 
 DocumentWindow::DocumentWindow(ImageSceneManager *sceneManager, QWidget *parent)
-    : QWidget(parent), m_sceneManager(sceneManager) {
+    : QMainWindow(parent), textEdit(new QTextEdit(this)) {
     qDebug() << "Creating DocumentWindow...";
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    m_textEdit = new QTextEdit(this);
-    m_textEdit->setAcceptRichText(true);
-    qDebug() << "Rich text enabled:" << m_textEdit->acceptRichText();
-    layout->addWidget(m_textEdit);
-    setLayout(layout);
+    textEdit->setAcceptRichText(true);
+    qDebug() << "Rich text enabled:" << textEdit->acceptRichText();
+    setCentralWidget(textEdit);
     qDebug() << "Editor created:" << true;
 }
 
 QTextEdit* DocumentWindow::getTextEdit() {
-    return m_textEdit;
+    return textEdit;
 }
