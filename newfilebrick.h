@@ -13,6 +13,9 @@ public:
 public slots:
     void newFile();
 
+signals:
+    void newFileCreated();
+
 private:
     QTextEdit *targetEdit;
 };

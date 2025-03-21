@@ -9,7 +9,7 @@
 #include "italicbrick.h"
 
 MenuManagerBrick::MenuManagerBrick(QMenuBar *bar, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, QObject *parent)
-    : QObject(parent), menuBar(bar), insertBrick(insert), saveBrick(save), boldBrick(bold), newFileBrick(newFile), italicBrick(italic) {
+    : QObject(parent), menuBar(bar), insertBrick(insert), saveBrick(save), boldBrick(bold), newFileBrick(newFile), italicBrick(italic), boldAction(nullptr), italicAction(nullptr) {
     qDebug() << "MenuManagerBrick initialized, menuBar:" << menuBar;
 }
 
@@ -22,6 +22,7 @@ void MenuManagerBrick::setupMenus() {
     QMenu *fileMenu = menuBar->addMenu(tr("&File"));
     QAction *newAction = fileMenu->addAction(tr("New"));
     connect(newAction, &QAction::triggered, newFileBrick, &NewFileBrick::newFile);
+
     QAction *saveAction = fileMenu->addAction(tr("Save"));
     connect(saveAction, &QAction::triggered, saveBrick, &SaveBrick::save);
 
@@ -30,15 +31,23 @@ void MenuManagerBrick::setupMenus() {
     connect(insertImageAction, &QAction::triggered, insertBrick, &InsertBrick::insertImage);
 
     QMenu *formatMenu = menuBar->addMenu(tr("&Format"));
-    QAction *boldAction = formatMenu->addAction(tr("Bold"));
+    boldAction = formatMenu->addAction(tr("Bold"));
     boldAction->setCheckable(true);
     connect(boldAction, &QAction::toggled, boldBrick, &BoldBrick::toggleBold);
     connect(boldBrick, &BoldBrick::boldToggled, boldAction, &QAction::setChecked);
 
-    QAction *italicAction = formatMenu->addAction(tr("Italic"));
+    italicAction = formatMenu->addAction(tr("Italic"));
     italicAction->setCheckable(true);
     connect(italicAction, &QAction::toggled, italicBrick, &ItalicBrick::toggleItalic);
     connect(italicBrick, &ItalicBrick::italicToggled, italicAction, &QAction::setChecked);
 
+    connect(newFileBrick, &NewFileBrick::newFileCreated, this, &MenuManagerBrick::updateToggleStates);
+    updateToggleStates();
+
     qDebug() << "Menus set up.";
+}
+
+void MenuManagerBrick::updateToggleStates() {
+    boldAction->setChecked(false);
+    italicAction->setChecked(false);
 }

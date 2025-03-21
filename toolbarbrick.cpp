@@ -41,6 +41,7 @@ void ToolBarBrick::setupToolBar() {
 
     if (targetEdit) {
         connect(targetEdit, &QTextEdit::cursorPositionChanged, this, &ToolBarBrick::updateToggleStates);
+        connect(newFileBrick, &NewFileBrick::newFileCreated, this, &ToolBarBrick::updateToggleStates);
         updateToggleStates(); // Initial state
     } else {
         qDebug() << "ToolBarBrick: No QTextEdit provided for toggle updates!";

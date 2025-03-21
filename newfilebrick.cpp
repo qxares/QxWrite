@@ -14,4 +14,5 @@ void NewFileBrick::newFile() {
         return;
     }
     targetEdit->clear();
+    emit newFileCreated();
 }

@@ -4,6 +4,7 @@
 #include <QObject>
 
 class QMenuBar;
+class QAction;
 class InsertBrick;
 class SaveBrick;
 class BoldBrick;
@@ -16,6 +17,9 @@ public:
     explicit MenuManagerBrick(QMenuBar *bar, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, QObject *parent = nullptr);
     void setupMenus();
 
+private slots:
+    void updateToggleStates();
+
 private:
     QMenuBar *menuBar;
     InsertBrick *insertBrick;
@@ -23,6 +27,8 @@ private:
     BoldBrick *boldBrick;
     NewFileBrick *newFileBrick;
     ItalicBrick *italicBrick;
+    QAction *boldAction;
+    QAction *italicAction;
 };
 
 #endif // MENUMANAGERBRICK_H
