@@ -35,7 +35,11 @@ Pure brick system for QxWrite—modular, reusable, clean slate.
 - **Purpose**: Toggles italic formatting on selected text.
 - **Files**: `italicbrick.h`, `italicbrick.cpp`
 
+### 9. OpenFileBrick
+- **Purpose**: Loads a .txt file into the editor.
+- **Files**: `openfilebrick.h`, `openfilebrick.cpp`
+
 ## Notes
-- **Current Features**: New doc (resets toggles), save to .txt, insert images, bold/italic with toolbar/menu toggles.
-- **Next Steps**: OpenFileBrick, ShortcutsBrick, SDI polish.
+- **Current Features**: New doc (resets toggles), save/open .txt, insert images, bold/italic with toolbar/menu toggles.
+- **Next Steps**: ShortcutsBrick, SDI polish.
 - **Future**: More formats, tables, spellcheck.

@@ -9,6 +9,7 @@
 #include "newfilebrick.h"
 #include "toolbarbrick.h"
 #include "italicbrick.h"
+#include "openfilebrick.h"
 #include <QDebug>
 
 MainWindowBrick::MainWindowBrick(QWidget *parent)
@@ -18,15 +19,17 @@ MainWindowBrick::MainWindowBrick(QWidget *parent)
     setCentralWidget(textEdit);
     setMinimumSize(800, 600);
 
-    InsertBrick *insert = new InsertBrick(textEdit, this);
-    SaveBrick *save = new SaveBrick(textEdit, this);
-    BoldBrick *bold = new BoldBrick(textEdit, this);
-    NewFileBrick *newFile = new NewFileBrick(textEdit, this);
-    ItalicBrick *italic = new ItalicBrick(textEdit, this);
-    MenuManagerBrick *menu = new MenuManagerBrick(menuBar(), insert, save, bold, newFile, italic, this);
-    ToolBarBrick *toolbar = new ToolBarBrick(addToolBar("Main Toolbar"), textEdit, insert, save, bold, newFile, italic, this);
-    menu->setupMenus();
-    toolbar->setupToolBar();
+    insertBrick = new InsertBrick(textEdit, this);
+    saveBrick = new SaveBrick(textEdit, this);
+    boldBrick = new BoldBrick(textEdit, this);
+    newFileBrick = new NewFileBrick(textEdit, this);
+    italicBrick = new ItalicBrick(textEdit, this);
+    openFileBrick = new OpenFileBrick(textEdit, this);
+    menuManagerBrick = new MenuManagerBrick(menuBar(), insertBrick, saveBrick, boldBrick, newFileBrick, italicBrick, openFileBrick, this);
+    toolBarBrick = new ToolBarBrick(addToolBar("Main Toolbar"), textEdit, insertBrick, saveBrick, boldBrick, newFileBrick, italicBrick, openFileBrick, this);
+
+    menuManagerBrick->setupMenus();
+    toolBarBrick->setupToolBar();
 
     qDebug() << "MainWindowBrick ready.";
 }

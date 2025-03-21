@@ -7,9 +7,10 @@
 #include "boldbrick.h"
 #include "newfilebrick.h"
 #include "italicbrick.h"
+#include "openfilebrick.h"
 
-MenuManagerBrick::MenuManagerBrick(QMenuBar *bar, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, QObject *parent)
-    : QObject(parent), menuBar(bar), insertBrick(insert), saveBrick(save), boldBrick(bold), newFileBrick(newFile), italicBrick(italic), boldAction(nullptr), italicAction(nullptr) {
+MenuManagerBrick::MenuManagerBrick(QMenuBar *bar, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile, QObject *parent)
+    : QObject(parent), menuBar(bar), insertBrick(insert), saveBrick(save), boldBrick(bold), newFileBrick(newFile), italicBrick(italic), openFileBrick(openFile), boldAction(nullptr), italicAction(nullptr) {
     qDebug() << "MenuManagerBrick initialized, menuBar:" << menuBar;
 }
 
@@ -22,6 +23,9 @@ void MenuManagerBrick::setupMenus() {
     QMenu *fileMenu = menuBar->addMenu(tr("&File"));
     QAction *newAction = fileMenu->addAction(tr("New"));
     connect(newAction, &QAction::triggered, newFileBrick, &NewFileBrick::newFile);
+
+    QAction *openAction = fileMenu->addAction(tr("Open"));
+    connect(openAction, &QAction::triggered, openFileBrick, &OpenFileBrick::openFile);
 
     QAction *saveAction = fileMenu->addAction(tr("Save"));
     connect(saveAction, &QAction::triggered, saveBrick, &SaveBrick::save);

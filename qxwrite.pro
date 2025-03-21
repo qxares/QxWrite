@@ -12,7 +12,8 @@ SOURCES += \
     boldbrick.cpp \
     newfilebrick.cpp \
     toolbarbrick.cpp \
-    italicbrick.cpp
+    italicbrick.cpp \
+    openfilebrick.cpp
 
 HEADERS += \
     mainwindowbrick.h \
@@ -22,8 +23,8 @@ HEADERS += \
     boldbrick.h \
     newfilebrick.h \
     toolbarbrick.h \
-    italicbrick.h
+    italicbrick.h \
+    openfilebrick.h
 
 RESOURCES += \
     icons.qrc
-
