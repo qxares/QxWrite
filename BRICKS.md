@@ -23,7 +23,11 @@ Pure brick system for QxWrite—modular, reusable, clean slate.
 - **Purpose**: Toggles bold formatting on selected text.
 - **Files**: `boldbrick.h`, `boldbrick.cpp`
 
+### 6. NewFileBrick
+- **Purpose**: Clears the editor for a new document.
+- **Files**: `newfilebrick.h`, `newfilebrick.cpp`
+
 ## Notes
-- **Current Features**: Save to .txt, insert images, bold text, basic menus.
-- **Next Steps**: ToolBarBrick, NewFileBrick, SDI polish.
+- **Current Features**: New doc, save to .txt, insert images, bold text, basic menus.
+- **Next Steps**: ToolBarBrick, ItalicBrick, SDI polish.
 - **Future**: More formats, tables, spellcheck.

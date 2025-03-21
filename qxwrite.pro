@@ -9,12 +9,14 @@ SOURCES += \
     insertbrick.cpp \
     savebrick.cpp \
     menumanagerbrick.cpp \
-    boldbrick.cpp
+    boldbrick.cpp \
+    newfilebrick.cpp
 
 HEADERS += \
     mainwindowbrick.h \
     insertbrick.h \
     savebrick.h \
     menumanagerbrick.h \
-    boldbrick.h
+    boldbrick.h \
+    newfilebrick.h
 

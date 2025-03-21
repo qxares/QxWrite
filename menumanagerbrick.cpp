@@ -5,9 +5,10 @@
 #include "insertbrick.h"
 #include "savebrick.h"
 #include "boldbrick.h"
+#include "newfilebrick.h"
 
-MenuManagerBrick::MenuManagerBrick(QMenuBar *bar, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, QObject *parent)
-    : QObject(parent), menuBar(bar), insertBrick(insert), saveBrick(save), boldBrick(bold) {
+MenuManagerBrick::MenuManagerBrick(QMenuBar *bar, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, QObject *parent)
+    : QObject(parent), menuBar(bar), insertBrick(insert), saveBrick(save), boldBrick(bold), newFileBrick(newFile) {
     qDebug() << "MenuManagerBrick initialized, menuBar:" << menuBar;
 }
 
@@ -18,6 +19,8 @@ void MenuManagerBrick::setupMenus() {
         return;
     }
     QMenu *fileMenu = menuBar->addMenu(tr("&File"));
+    QAction *newAction = fileMenu->addAction(tr("New"));
+    connect(newAction, &QAction::triggered, newFileBrick, &NewFileBrick::newFile);
     QAction *saveAction = fileMenu->addAction(tr("Save"));
     connect(saveAction, &QAction::triggered, saveBrick, &SaveBrick::save);
 
