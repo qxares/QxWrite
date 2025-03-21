@@ -16,13 +16,16 @@ void SaveBrick::save() {
         qDebug() << "No target QTextEdit provided!";
         return;
     }
-    QString filter = tr("Text Files (*.txt);;All Files (*)");
-    QString selectedFilter = tr("Text Files (*.txt)");
-    QString fileName = QFileDialog::getSaveFileName(nullptr, tr("Save File"), QDir::homePath(), filter, &selectedFilter);
-    if (fileName.isEmpty()) {
+    QFileDialog dialog(nullptr, tr("Save File"), QDir::homePath());
+    dialog.setNameFilter(tr("Text Files (*.txt);;All Files (*)"));
+    dialog.selectNameFilter(tr("Text Files (*.txt)"));
+    dialog.setDefaultSuffix("txt");  // Forces .txt in dialog UI
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    if (dialog.exec() != QDialog::Accepted) {
         qDebug() << "SaveBrick: No file selected";
         return;
     }
+    QString fileName = dialog.selectedFiles().first();
     if (!fileName.endsWith(".txt", Qt::CaseInsensitive)) {
         fileName += ".txt";
     }
