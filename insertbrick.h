@@ -2,6 +2,7 @@
 #define INSERTBRICK_H
 
 #include <QObject>
+#include <QUrl>  // For the inserted signal
 
 class QTextEdit;
 
