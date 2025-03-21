@@ -28,7 +28,7 @@ Pure brick system for QxWrite—modular, reusable, clean slate.
 - **Files**: `newfilebrick.h`, `newfilebrick.cpp`
 
 ### 7. ToolBarBrick
-- **Purpose**: Adds a toolbar with quick action buttons.
+- **Purpose**: Adds a toolbar with quick action buttons, now with Feather icons.
 - **Files**: `toolbarbrick.h`, `toolbarbrick.cpp`
 
 ### 8. ItalicBrick
@@ -36,6 +36,6 @@ Pure brick system for QxWrite—modular, reusable, clean slate.
 - **Files**: `italicbrick.h`, `italicbrick.cpp`
 
 ## Notes
-- **Current Features**: New doc, save to .txt, insert images, bold/italic text, menus, toolbar.
-- **Next Steps**: OpenFileBrick, IconBrick, SDI polish.
+- **Current Features**: New doc, save to .txt, insert images, bold/italic text, menus, toolbar with icons.
+- **Next Steps**: OpenFileBrick, ShortcutsBrick, SDI polish.
 - **Future**: More formats, tables, spellcheck.

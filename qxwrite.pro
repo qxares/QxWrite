@@ -24,3 +24,6 @@ HEADERS += \
     toolbarbrick.h \
     italicbrick.h
 
+RESOURCES += \
+    icons.qrc
+
