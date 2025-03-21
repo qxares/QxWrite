@@ -1,12 +1,12 @@
 #include "savebrick.h"
+#include <QTextEdit>
 #include <QFileDialog>
 #include <QFile>
 #include <QTextStream>
-#include <QTextEdit>
 #include <QDebug>
 
 SaveBrick::SaveBrick(QTextEdit *edit, QObject *parent)
-    : QObject(parent), targetEdit(edit), currentFile("") {
+    : QObject(parent), targetEdit(edit) {
     qDebug() << "SaveBrick initialized, target edit:" << targetEdit;
 }
 
@@ -16,20 +16,23 @@ void SaveBrick::save() {
         qDebug() << "No target QTextEdit provided!";
         return;
     }
-    QString fileName = currentFile.isEmpty() ?
-        QFileDialog::getSaveFileName(nullptr, tr("Save File"), "", tr("Text Files (*.txt)")) :
-        currentFile;
-    if (!fileName.isEmpty()) {
-        QFile file(fileName);
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QTextStream out(&file);
-            out << targetEdit->toPlainText();
-            file.close();
-            currentFile = fileName;
-            qDebug() << "File saved:" << fileName;
-            emit saved(fileName);
-        } else {
-            qDebug() << "Failed to save file:" << fileName;
-        }
+    QString filter = tr("Text Files (*.txt);;All Files (*)");
+    QString selectedFilter = tr("Text Files (*.txt)");
+    QString fileName = QFileDialog::getSaveFileName(nullptr, tr("Save File"), QDir::homePath(), filter, &selectedFilter);
+    if (fileName.isEmpty()) {
+        qDebug() << "SaveBrick: No file selected";
+        return;
     }
+    if (!fileName.endsWith(".txt", Qt::CaseInsensitive)) {
+        fileName += ".txt";
+    }
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qDebug() << "SaveBrick: Failed to open file:" << fileName;
+        return;
+    }
+    QTextStream out(&file);
+    out << targetEdit->toHtml();
+    file.close();
+    qDebug() << "File saved:" << fileName;
 }
