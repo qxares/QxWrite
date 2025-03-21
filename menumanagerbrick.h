@@ -8,11 +8,12 @@ class InsertBrick;
 class SaveBrick;
 class BoldBrick;
 class NewFileBrick;
+class ItalicBrick;
 
 class MenuManagerBrick : public QObject {
     Q_OBJECT
 public:
-    explicit MenuManagerBrick(QMenuBar *bar, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, QObject *parent = nullptr);
+    explicit MenuManagerBrick(QMenuBar *bar, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, QObject *parent = nullptr);
     void setupMenus();
 
 private:
@@ -21,6 +22,7 @@ private:
     SaveBrick *saveBrick;
     BoldBrick *boldBrick;
     NewFileBrick *newFileBrick;
+    ItalicBrick *italicBrick;
 };
 
 #endif // MENUMANAGERBRICK_H

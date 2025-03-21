@@ -6,9 +6,10 @@
 #include "savebrick.h"
 #include "boldbrick.h"
 #include "newfilebrick.h"
+#include "italicbrick.h"
 
-MenuManagerBrick::MenuManagerBrick(QMenuBar *bar, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, QObject *parent)
-    : QObject(parent), menuBar(bar), insertBrick(insert), saveBrick(save), boldBrick(bold), newFileBrick(newFile) {
+MenuManagerBrick::MenuManagerBrick(QMenuBar *bar, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, QObject *parent)
+    : QObject(parent), menuBar(bar), insertBrick(insert), saveBrick(save), boldBrick(bold), newFileBrick(newFile), italicBrick(italic) {
     qDebug() << "MenuManagerBrick initialized, menuBar:" << menuBar;
 }
 
@@ -31,6 +32,8 @@ void MenuManagerBrick::setupMenus() {
     QMenu *formatMenu = menuBar->addMenu(tr("&Format"));
     QAction *boldAction = formatMenu->addAction(tr("Bold"));
     connect(boldAction, &QAction::triggered, boldBrick, &BoldBrick::toggleBold);
+    QAction *italicAction = formatMenu->addAction(tr("Italic"));
+    connect(italicAction, &QAction::triggered, italicBrick, &ItalicBrick::toggleItalic);
 
     qDebug() << "Menus set up.";
 }

@@ -8,11 +8,12 @@ class InsertBrick;
 class SaveBrick;
 class BoldBrick;
 class NewFileBrick;
+class ItalicBrick;
 
 class ToolBarBrick : public QObject {
     Q_OBJECT
 public:
-    explicit ToolBarBrick(QToolBar *bar, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, QObject *parent = nullptr);
+    explicit ToolBarBrick(QToolBar *bar, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, QObject *parent = nullptr);
     void setupToolBar();
 
 private:
@@ -21,6 +22,7 @@ private:
     SaveBrick *saveBrick;
     BoldBrick *boldBrick;
     NewFileBrick *newFileBrick;
+    ItalicBrick *italicBrick;
 };
 
 #endif // TOOLBARBRICK_H

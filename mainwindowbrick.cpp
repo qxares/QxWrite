@@ -8,6 +8,7 @@
 #include "boldbrick.h"
 #include "newfilebrick.h"
 #include "toolbarbrick.h"
+#include "italicbrick.h"
 #include <QDebug>
 
 MainWindowBrick::MainWindowBrick(QWidget *parent)
@@ -21,8 +22,9 @@ MainWindowBrick::MainWindowBrick(QWidget *parent)
     SaveBrick *save = new SaveBrick(textEdit, this);
     BoldBrick *bold = new BoldBrick(textEdit, this);
     NewFileBrick *newFile = new NewFileBrick(textEdit, this);
-    MenuManagerBrick *menu = new MenuManagerBrick(menuBar(), insert, save, bold, newFile, this);
-    ToolBarBrick *toolbar = new ToolBarBrick(addToolBar("Main Toolbar"), insert, save, bold, newFile, this);
+    ItalicBrick *italic = new ItalicBrick(textEdit, this);
+    MenuManagerBrick *menu = new MenuManagerBrick(menuBar(), insert, save, bold, newFile, italic, this);
+    ToolBarBrick *toolbar = new ToolBarBrick(addToolBar("Main Toolbar"), insert, save, bold, newFile, italic, this);
     menu->setupMenus();
     toolbar->setupToolBar();
 
