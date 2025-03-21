@@ -24,7 +24,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent)
     NewFileBrick *newFile = new NewFileBrick(textEdit, this);
     ItalicBrick *italic = new ItalicBrick(textEdit, this);
     MenuManagerBrick *menu = new MenuManagerBrick(menuBar(), insert, save, bold, newFile, italic, this);
-    ToolBarBrick *toolbar = new ToolBarBrick(addToolBar("Main Toolbar"), insert, save, bold, newFile, italic, this);
+    ToolBarBrick *toolbar = new ToolBarBrick(addToolBar("Main Toolbar"), textEdit, insert, save, bold, newFile, italic, this);
     menu->setupMenus();
     toolbar->setupToolBar();
 

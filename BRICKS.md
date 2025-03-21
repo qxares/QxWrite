@@ -16,7 +16,7 @@ Pure brick system for QxWrite—modular, reusable, clean slate.
 - **Files**: `savebrick.h`, `savebrick.cpp`
 
 ### 4. MenuManagerBrick
-- **Purpose**: Sets up menus, wires bricks to actions.
+- **Purpose**: Sets up menus, wires bricks to actions with toggle support.
 - **Files**: `menumanagerbrick.h`, `menumanagerbrick.cpp`
 
 ### 5. BoldBrick
@@ -28,7 +28,7 @@ Pure brick system for QxWrite—modular, reusable, clean slate.
 - **Files**: `newfilebrick.h`, `newfilebrick.cpp`
 
 ### 7. ToolBarBrick
-- **Purpose**: Adds a toolbar with quick action buttons, now with Feather icons.
+- **Purpose**: Adds a toolbar with Feather icons, toggle indicators for bold/italic.
 - **Files**: `toolbarbrick.h`, `toolbarbrick.cpp`
 
 ### 8. ItalicBrick
@@ -36,6 +36,6 @@ Pure brick system for QxWrite—modular, reusable, clean slate.
 - **Files**: `italicbrick.h`, `italicbrick.cpp`
 
 ## Notes
-- **Current Features**: New doc, save to .txt, insert images, bold/italic text, menus, toolbar with icons.
+- **Current Features**: New doc, save to .txt, insert images, bold/italic with toolbar/menu toggles.
 - **Next Steps**: OpenFileBrick, ShortcutsBrick, SDI polish.
 - **Future**: More formats, tables, spellcheck.

@@ -2,8 +2,11 @@
 #define TOOLBARBRICK_H
 
 #include <QObject>
+#include <QTextEdit>
+#include <QTextCursor>
 
 class QToolBar;
+class QAction;
 class InsertBrick;
 class SaveBrick;
 class BoldBrick;
@@ -13,16 +16,22 @@ class ItalicBrick;
 class ToolBarBrick : public QObject {
     Q_OBJECT
 public:
-    explicit ToolBarBrick(QToolBar *bar, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, QObject *parent = nullptr);
+    explicit ToolBarBrick(QToolBar *bar, QTextEdit *edit, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, QObject *parent = nullptr);
     void setupToolBar();
+
+private slots:
+    void updateToggleStates();
 
 private:
     QToolBar *toolBar;
+    QTextEdit *targetEdit;
     InsertBrick *insertBrick;
     SaveBrick *saveBrick;
     BoldBrick *boldBrick;
     NewFileBrick *newFileBrick;
     ItalicBrick *italicBrick;
+    QAction *boldAction;
+    QAction *italicAction;
 };
 
 #endif // TOOLBARBRICK_H

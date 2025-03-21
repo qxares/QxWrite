@@ -9,9 +9,9 @@
 #include "newfilebrick.h"
 #include "italicbrick.h"
 
-ToolBarBrick::ToolBarBrick(QToolBar *bar, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, QObject *parent)
-    : QObject(parent), toolBar(bar), insertBrick(insert), saveBrick(save), boldBrick(bold), newFileBrick(newFile), italicBrick(italic) {
-    qDebug() << "ToolBarBrick initialized, toolBar:" << toolBar;
+ToolBarBrick::ToolBarBrick(QToolBar *bar, QTextEdit *edit, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, QObject *parent)
+    : QObject(parent), toolBar(bar), targetEdit(edit), insertBrick(insert), saveBrick(save), boldBrick(bold), newFileBrick(newFile), italicBrick(italic), boldAction(nullptr), italicAction(nullptr) {
+    qDebug() << "ToolBarBrick initialized, toolBar:" << toolBar << ", target edit:" << targetEdit;
 }
 
 void ToolBarBrick::setupToolBar() {
@@ -26,14 +26,32 @@ void ToolBarBrick::setupToolBar() {
     QAction *saveAction = toolBar->addAction(QIcon(":/icons/save.png"), tr("Save"));
     connect(saveAction, &QAction::triggered, saveBrick, &SaveBrick::save);
 
-    QAction *boldAction = toolBar->addAction(QIcon(":/icons/bold.png"), tr("Bold"));
-    connect(boldAction, &QAction::triggered, boldBrick, &BoldBrick::toggleBold);
+    boldAction = toolBar->addAction(QIcon(":/icons/bold.png"), tr("Bold"));
+    boldAction->setCheckable(true);
+    connect(boldAction, &QAction::toggled, boldBrick, &BoldBrick::toggleBold);
+    connect(boldBrick, &BoldBrick::boldToggled, boldAction, &QAction::setChecked);
 
-    QAction *italicAction = toolBar->addAction(QIcon(":/icons/italic.png"), tr("Italic"));
-    connect(italicAction, &QAction::triggered, italicBrick, &ItalicBrick::toggleItalic);
+    italicAction = toolBar->addAction(QIcon(":/icons/italic.png"), tr("Italic"));
+    italicAction->setCheckable(true);
+    connect(italicAction, &QAction::toggled, italicBrick, &ItalicBrick::toggleItalic);
+    connect(italicBrick, &ItalicBrick::italicToggled, italicAction, &QAction::setChecked);
 
     QAction *insertImageAction = toolBar->addAction(QIcon(":/icons/image.png"), tr("Insert Image"));
     connect(insertImageAction, &QAction::triggered, insertBrick, &InsertBrick::insertImage);
 
-    qDebug() << "Toolbar set up with icons.";
+    if (targetEdit) {
+        connect(targetEdit, &QTextEdit::cursorPositionChanged, this, &ToolBarBrick::updateToggleStates);
+        updateToggleStates(); // Initial state
+    } else {
+        qDebug() << "ToolBarBrick: No QTextEdit provided for toggle updates!";
+    }
+
+    qDebug() << "Toolbar set up with icons and toggles.";
+}
+
+void ToolBarBrick::updateToggleStates() {
+    if (!targetEdit) return;
+    QTextCursor cursor = targetEdit->textCursor();
+    boldAction->setChecked(cursor.charFormat().fontWeight() == QFont::Bold);
+    italicAction->setChecked(cursor.charFormat().fontItalic());
 }

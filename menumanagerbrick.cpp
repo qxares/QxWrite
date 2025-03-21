@@ -31,9 +31,14 @@ void MenuManagerBrick::setupMenus() {
 
     QMenu *formatMenu = menuBar->addMenu(tr("&Format"));
     QAction *boldAction = formatMenu->addAction(tr("Bold"));
-    connect(boldAction, &QAction::triggered, boldBrick, &BoldBrick::toggleBold);
+    boldAction->setCheckable(true);
+    connect(boldAction, &QAction::toggled, boldBrick, &BoldBrick::toggleBold);
+    connect(boldBrick, &BoldBrick::boldToggled, boldAction, &QAction::setChecked);
+
     QAction *italicAction = formatMenu->addAction(tr("Italic"));
-    connect(italicAction, &QAction::triggered, italicBrick, &ItalicBrick::toggleItalic);
+    italicAction->setCheckable(true);
+    connect(italicAction, &QAction::toggled, italicBrick, &ItalicBrick::toggleItalic);
+    connect(italicBrick, &ItalicBrick::italicToggled, italicAction, &QAction::setChecked);
 
     qDebug() << "Menus set up.";
 }
