@@ -1,35 +1,47 @@
 #include "mainwindowbrick.h"
+#include "insertbrick.h"
+#include "savebrick.h"
+#include "menumanagerbrick.h"
+#include "boldbrick.h"
+#include "newfilebrick.h"
+#include "italicbrick.h"
+#include "openfilebrick.h"
+#include "toolbarbrick.h"
+#include "iconbrick.h"
+#include "dialogbrick.h"
 #include <QTextEdit>
 #include <QMenuBar>
 #include <QToolBar>
+#include <QVBoxLayout>
 #include <QDebug>
 
 MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     qDebug() << "MainWindowBrick starting...";
-    textEdit = new QTextEdit(this);
-    setCentralWidget(textEdit);
 
-    insertBrick = new InsertBrick(textEdit, this);
+    edit = new QTextEdit(this);
+    insertBrick = new InsertBrick(edit, this);
     dialogBrick = new DialogBrick(this);
-    saveBrick = new SaveBrick(textEdit, dialogBrick, this);
-    boldBrick = new BoldBrick(textEdit, this);
-    newFileBrick = new NewFileBrick(textEdit, this);
-    italicBrick = new ItalicBrick(textEdit, this);
-    openFileBrick = new OpenFileBrick(textEdit, dialogBrick, this);
+    saveBrick = new SaveBrick(edit, dialogBrick, this);
+    boldBrick = new BoldBrick(edit, this);
+    newFileBrick = new NewFileBrick(edit, this);
+    italicBrick = new ItalicBrick(edit, this);
+    openFileBrick = new OpenFileBrick(edit, dialogBrick, this);
     iconBrick = new IconBrick(this);
-    menuManagerBrick = new MenuManagerBrick(menuBar(), insertBrick, saveBrick, boldBrick, newFileBrick, italicBrick, openFileBrick, this);
-    toolBarBrick = new ToolBarBrick(new QToolBar(this), textEdit, insertBrick, saveBrick, boldBrick, newFileBrick, italicBrick, openFileBrick, iconBrick, this);
 
-    qDebug() << "Setting up menus...";
-    menuManagerBrick->setupMenus();
-    qDebug() << "Menus set up.";
+    QMenuBar *menuBar = new QMenuBar(this);
+    setMenuBar(menuBar);
+    menuManagerBrick = new MenuManagerBrick(menuBar, edit, insertBrick, saveBrick, boldBrick, newFileBrick, italicBrick, openFileBrick, this);
 
-    qDebug() << "Setting up toolbar...";
-    toolBarBrick->setupToolBar();
-    qDebug() << "Toolbar set up with icons and toggles.";
+    QToolBar *toolBar = new QToolBar(this);
+    addToolBar(toolBar);
+    toolBarBrick = new ToolBarBrick(toolBar, edit, insertBrick, saveBrick, boldBrick, newFileBrick, italicBrick, openFileBrick, iconBrick, this);
 
+    QWidget *centralWidget = new QWidget(this);
+    QVBoxLayout *layout = new QVBoxLayout(centralWidget);
+    layout->addWidget(edit);
+    setCentralWidget(centralWidget);
+
+    resize(800, 600);
     qDebug() << "MainWindowBrick ready.";
 }
-
-MainWindowBrick::~MainWindowBrick() {}
 
