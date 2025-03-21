@@ -14,7 +14,8 @@ SOURCES += \
     toolbarbrick.cpp \
     italicbrick.cpp \
     openfilebrick.cpp \
-    iconbrick.cpp
+    iconbrick.cpp \
+    dialogbrick.cpp
 
 HEADERS += \
     mainwindowbrick.h \
@@ -26,7 +27,9 @@ HEADERS += \
     toolbarbrick.h \
     italicbrick.h \
     openfilebrick.h \
-    iconbrick.h
+    iconbrick.h \
+    dialogbrick.h
 
 RESOURCES += \
     icons.qrc
+

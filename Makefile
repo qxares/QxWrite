@@ -62,7 +62,8 @@ SOURCES       = main.cpp \
 		toolbarbrick.cpp \
 		italicbrick.cpp \
 		openfilebrick.cpp \
-		iconbrick.cpp qrc_icons.cpp \
+		iconbrick.cpp \
+		dialogbrick.cpp qrc_icons.cpp \
 		moc_mainwindowbrick.cpp \
 		moc_insertbrick.cpp \
 		moc_savebrick.cpp \
@@ -72,7 +73,8 @@ SOURCES       = main.cpp \
 		moc_toolbarbrick.cpp \
 		moc_italicbrick.cpp \
 		moc_openfilebrick.cpp \
-		moc_iconbrick.cpp
+		moc_iconbrick.cpp \
+		moc_dialogbrick.cpp
 OBJECTS       = main.o \
 		mainwindowbrick.o \
 		insertbrick.o \
@@ -84,6 +86,7 @@ OBJECTS       = main.o \
 		italicbrick.o \
 		openfilebrick.o \
 		iconbrick.o \
+		dialogbrick.o \
 		qrc_icons.o \
 		moc_mainwindowbrick.o \
 		moc_insertbrick.o \
@@ -94,7 +97,8 @@ OBJECTS       = main.o \
 		moc_toolbarbrick.o \
 		moc_italicbrick.o \
 		moc_openfilebrick.o \
-		moc_iconbrick.o
+		moc_iconbrick.o \
+		moc_dialogbrick.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -181,7 +185,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		toolbarbrick.h \
 		italicbrick.h \
 		openfilebrick.h \
-		iconbrick.h main.cpp \
+		iconbrick.h \
+		dialogbrick.h main.cpp \
 		mainwindowbrick.cpp \
 		insertbrick.cpp \
 		savebrick.cpp \
@@ -191,7 +196,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		toolbarbrick.cpp \
 		italicbrick.cpp \
 		openfilebrick.cpp \
-		iconbrick.cpp
+		iconbrick.cpp \
+		dialogbrick.cpp
 QMAKE_TARGET  = QxWrite
 DESTDIR       = 
 TARGET        = QxWrite
@@ -378,8 +384,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents icons.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindowbrick.h insertbrick.h savebrick.h menumanagerbrick.h boldbrick.h newfilebrick.h toolbarbrick.h italicbrick.h openfilebrick.h iconbrick.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainwindowbrick.cpp insertbrick.cpp savebrick.cpp menumanagerbrick.cpp boldbrick.cpp newfilebrick.cpp toolbarbrick.cpp italicbrick.cpp openfilebrick.cpp iconbrick.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindowbrick.h insertbrick.h savebrick.h menumanagerbrick.h boldbrick.h newfilebrick.h toolbarbrick.h italicbrick.h openfilebrick.h iconbrick.h dialogbrick.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp mainwindowbrick.cpp insertbrick.cpp savebrick.cpp menumanagerbrick.cpp boldbrick.cpp newfilebrick.cpp toolbarbrick.cpp italicbrick.cpp openfilebrick.cpp iconbrick.cpp dialogbrick.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -422,9 +428,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindowbrick.cpp moc_insertbrick.cpp moc_savebrick.cpp moc_menumanagerbrick.cpp moc_boldbrick.cpp moc_newfilebrick.cpp moc_toolbarbrick.cpp moc_italicbrick.cpp moc_openfilebrick.cpp moc_iconbrick.cpp
+compiler_moc_header_make_all: moc_mainwindowbrick.cpp moc_insertbrick.cpp moc_savebrick.cpp moc_menumanagerbrick.cpp moc_boldbrick.cpp moc_newfilebrick.cpp moc_toolbarbrick.cpp moc_italicbrick.cpp moc_openfilebrick.cpp moc_iconbrick.cpp moc_dialogbrick.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindowbrick.cpp moc_insertbrick.cpp moc_savebrick.cpp moc_menumanagerbrick.cpp moc_boldbrick.cpp moc_newfilebrick.cpp moc_toolbarbrick.cpp moc_italicbrick.cpp moc_openfilebrick.cpp moc_iconbrick.cpp
+	-$(DEL_FILE) moc_mainwindowbrick.cpp moc_insertbrick.cpp moc_savebrick.cpp moc_menumanagerbrick.cpp moc_boldbrick.cpp moc_newfilebrick.cpp moc_toolbarbrick.cpp moc_italicbrick.cpp moc_openfilebrick.cpp moc_iconbrick.cpp moc_dialogbrick.cpp
 moc_mainwindowbrick.cpp: mainwindowbrick.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -475,6 +481,11 @@ moc_iconbrick.cpp: iconbrick.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include iconbrick.h -o moc_iconbrick.cpp
 
+moc_dialogbrick.cpp: dialogbrick.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include dialogbrick.h -o moc_dialogbrick.cpp
+
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
@@ -500,16 +511,18 @@ mainwindowbrick.o: mainwindowbrick.cpp mainwindowbrick.h \
 		menumanagerbrick.h \
 		boldbrick.h \
 		newfilebrick.h \
-		toolbarbrick.h \
 		italicbrick.h \
 		openfilebrick.h \
-		iconbrick.h
+		toolbarbrick.h \
+		iconbrick.h \
+		dialogbrick.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindowbrick.o mainwindowbrick.cpp
 
 insertbrick.o: insertbrick.cpp insertbrick.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o insertbrick.o insertbrick.cpp
 
-savebrick.o: savebrick.cpp savebrick.h
+savebrick.o: savebrick.cpp savebrick.h \
+		dialogbrick.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o savebrick.o savebrick.cpp
 
 menumanagerbrick.o: menumanagerbrick.cpp menumanagerbrick.h \
@@ -540,11 +553,15 @@ toolbarbrick.o: toolbarbrick.cpp toolbarbrick.h \
 italicbrick.o: italicbrick.cpp italicbrick.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o italicbrick.o italicbrick.cpp
 
-openfilebrick.o: openfilebrick.cpp openfilebrick.h
+openfilebrick.o: openfilebrick.cpp openfilebrick.h \
+		dialogbrick.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o openfilebrick.o openfilebrick.cpp
 
 iconbrick.o: iconbrick.cpp iconbrick.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o iconbrick.o iconbrick.cpp
+
+dialogbrick.o: dialogbrick.cpp dialogbrick.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dialogbrick.o dialogbrick.cpp
 
 qrc_icons.o: qrc_icons.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_icons.o qrc_icons.cpp
@@ -578,6 +595,9 @@ moc_openfilebrick.o: moc_openfilebrick.cpp
 
 moc_iconbrick.o: moc_iconbrick.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_iconbrick.o moc_iconbrick.cpp
+
+moc_dialogbrick.o: moc_dialogbrick.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_dialogbrick.o moc_dialogbrick.cpp
 
 ####### Install
 

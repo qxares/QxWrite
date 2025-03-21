@@ -2,23 +2,18 @@
 #define SAVEBRICK_H
 
 #include <QObject>
-
 class QTextEdit;
+class DialogBrick;
 
 class SaveBrick : public QObject {
     Q_OBJECT
 public:
-    explicit SaveBrick(QTextEdit *edit, QObject *parent = nullptr);
-
-public slots:
+    SaveBrick(QTextEdit *edit, DialogBrick *dialog, QObject *parent = nullptr);
     void save();
-
-signals:
-    void saved(QString fileName);
 
 private:
     QTextEdit *targetEdit;
-    QString currentFile;
+    DialogBrick *dialogBrick;
 };
 
 #endif // SAVEBRICK_H

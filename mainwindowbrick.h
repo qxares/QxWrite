@@ -4,33 +4,38 @@
 #include <QMainWindow>
 
 class QTextEdit;
+class QMenuBar;
+class QToolBar;
 class InsertBrick;
 class SaveBrick;
 class MenuManagerBrick;
 class BoldBrick;
 class NewFileBrick;
-class ToolBarBrick;
 class ItalicBrick;
 class OpenFileBrick;
+class ToolBarBrick;
 class IconBrick;
+class DialogBrick;
 
 class MainWindowBrick : public QMainWindow {
     Q_OBJECT
 public:
-    explicit MainWindowBrick(QWidget *parent = nullptr);
-    ~MainWindowBrick();
+    MainWindowBrick(QWidget *parent = nullptr);
+    virtual ~MainWindowBrick() = default; // Virtual destructor
 
 private:
-    QTextEdit *textEdit;
+    QTextEdit *edit;
     InsertBrick *insertBrick;
     SaveBrick *saveBrick;
+    MenuManagerBrick *menuManagerBrick;
     BoldBrick *boldBrick;
     NewFileBrick *newFileBrick;
     ItalicBrick *italicBrick;
     OpenFileBrick *openFileBrick;
-    IconBrick *iconBrick;
-    MenuManagerBrick *menuManagerBrick;
     ToolBarBrick *toolBarBrick;
+    IconBrick *iconBrick;
+    DialogBrick *dialogBrick;
 };
 
 #endif // MAINWINDOWBRICK_H
+

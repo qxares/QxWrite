@@ -2,10 +2,8 @@
 #define TOOLBARBRICK_H
 
 #include <QObject>
-#include <QTextEdit>
-#include <QTextCursor>
-
 class QToolBar;
+class QTextEdit;
 class QAction;
 class InsertBrick;
 class SaveBrick;
@@ -18,8 +16,7 @@ class IconBrick;
 class ToolBarBrick : public QObject {
     Q_OBJECT
 public:
-    explicit ToolBarBrick(QToolBar *bar, QTextEdit *edit, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile, IconBrick *iconBrick, QObject *parent = nullptr);
-    void setupToolBar();
+    ToolBarBrick(QToolBar *toolBar, QTextEdit *edit, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile, IconBrick *iconBrick, QObject *parent = nullptr);
 
 private slots:
     void updateToggleStates();
@@ -34,8 +31,9 @@ private:
     ItalicBrick *italicBrick;
     OpenFileBrick *openFileBrick;
     IconBrick *iconBrick;
-    QAction *boldAction;
-    QAction *italicAction;
+    QAction *boldAct;
+    QAction *italicAct;
 };
 
 #endif // TOOLBARBRICK_H
+

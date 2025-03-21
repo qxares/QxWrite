@@ -1,12 +1,13 @@
 #include "openfilebrick.h"
 #include <QTextEdit>
-#include <QFileDialog>
 #include <QFile>
 #include <QTextStream>
+#include <QDir>  // Added this
 #include <QDebug>
+#include "dialogbrick.h"
 
-OpenFileBrick::OpenFileBrick(QTextEdit *edit, QObject *parent)
-    : QObject(parent), targetEdit(edit) {
+OpenFileBrick::OpenFileBrick(QTextEdit *edit, DialogBrick *dialog, QObject *parent)
+    : QObject(parent), targetEdit(edit), dialogBrick(dialog) {
     qDebug() << "OpenFileBrick initialized, target edit:" << targetEdit;
 }
 
@@ -16,9 +17,7 @@ void OpenFileBrick::openFile() {
         qDebug() << "No target QTextEdit provided!";
         return;
     }
-    QString filter = tr("Text Files (*.txt);;All Files (*)");
-    QString selectedFilter = tr("Text Files (*.txt)");
-    QString fileName = QFileDialog::getOpenFileName(nullptr, tr("Open File"), QDir::homePath(), filter, &selectedFilter);
+    QString fileName = dialogBrick->getOpenFileName(tr("Open File"), QDir::homePath(), tr("Text Files (*.txt);;All Files (*)"));
     if (fileName.isEmpty()) {
         qDebug() << "OpenFileBrick: No file selected";
         return;

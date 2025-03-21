@@ -1,6 +1,10 @@
 #include "menumanagerbrick.h"
 #include <QMenuBar>
+#include <QMenu>
 #include <QAction>
+#include <QTextEdit>
+#include <QTextCharFormat>
+#include <QApplication>
 #include <QDebug>
 #include "insertbrick.h"
 #include "savebrick.h"
@@ -9,49 +13,39 @@
 #include "italicbrick.h"
 #include "openfilebrick.h"
 
-MenuManagerBrick::MenuManagerBrick(QMenuBar *bar, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile, QObject *parent)
-    : QObject(parent), menuBar(bar), insertBrick(insert), saveBrick(save), boldBrick(bold), newFileBrick(newFile), italicBrick(italic), openFileBrick(openFile), boldAction(nullptr), italicAction(nullptr) {
+MenuManagerBrick::MenuManagerBrick(QMenuBar *menuBar, QTextEdit *edit, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile, QObject *parent)
+    : QObject(parent), menuBar(menuBar), targetEdit(edit), insertBrick(insert), saveBrick(save), boldBrick(bold), newFileBrick(newFile), italicBrick(italic), openFileBrick(openFile), boldAct(nullptr), italicAct(nullptr) {
     qDebug() << "MenuManagerBrick initialized, menuBar:" << menuBar;
-}
 
-void MenuManagerBrick::setupMenus() {
-    qDebug() << "Setting up menus...";
-    if (!menuBar) {
-        qDebug() << "No menu bar provided!";
-        return;
-    }
     QMenu *fileMenu = menuBar->addMenu(tr("&File"));
-    QAction *newAction = fileMenu->addAction(tr("New"));
-    connect(newAction, &QAction::triggered, newFileBrick, &NewFileBrick::newFile);
+    fileMenu->addAction(tr("&New"), newFileBrick, &NewFileBrick::newFile);
+    fileMenu->addAction(tr("&Open"), openFileBrick, &OpenFileBrick::openFile);
+    fileMenu->addAction(tr("&Save"), saveBrick, &SaveBrick::save);
+    fileMenu->addSeparator();
+    fileMenu->addAction(tr("E&xit"), qApp, &QApplication::quit);
 
-    QAction *openAction = fileMenu->addAction(tr("Open"));
-    connect(openAction, &QAction::triggered, openFileBrick, &OpenFileBrick::openFile);
-
-    QAction *saveAction = fileMenu->addAction(tr("Save"));
-    connect(saveAction, &QAction::triggered, saveBrick, &SaveBrick::save);
+    QMenu *editMenu = menuBar->addMenu(tr("&Edit"));
+    boldAct = editMenu->addAction(tr("&Bold"), boldBrick, &BoldBrick::toggleBold);
+    boldAct->setCheckable(true);
+    italicAct = editMenu->addAction(tr("&Italic"), italicBrick, &ItalicBrick::toggleItalic);
+    italicAct->setCheckable(true);
 
     QMenu *insertMenu = menuBar->addMenu(tr("&Insert"));
-    QAction *insertImageAction = insertMenu->addAction(tr("Insert Image"));
-    connect(insertImageAction, &QAction::triggered, insertBrick, &InsertBrick::insertImage);
+    insertMenu->addAction(tr("&Image"), insertBrick, &InsertBrick::insertImage);
 
-    QMenu *formatMenu = menuBar->addMenu(tr("&Format"));
-    boldAction = formatMenu->addAction(tr("Bold"));
-    boldAction->setCheckable(true);
-    connect(boldAction, &QAction::toggled, boldBrick, &BoldBrick::toggleBold);
-    connect(boldBrick, &BoldBrick::boldToggled, boldAction, &QAction::setChecked);
-
-    italicAction = formatMenu->addAction(tr("Italic"));
-    italicAction->setCheckable(true);
-    connect(italicAction, &QAction::toggled, italicBrick, &ItalicBrick::toggleItalic);
-    connect(italicBrick, &ItalicBrick::italicToggled, italicAction, &QAction::setChecked);
-
-    connect(newFileBrick, &NewFileBrick::newFileCreated, this, &MenuManagerBrick::updateToggleStates);
-    updateToggleStates();
+    connect(targetEdit, &QTextEdit::cursorPositionChanged, this, &MenuManagerBrick::updateToggleStates);
+    updateToggleStates(); // Initial state
 
     qDebug() << "Menus set up.";
 }
 
 void MenuManagerBrick::updateToggleStates() {
-    boldAction->setChecked(false);
-    italicAction->setChecked(false);
+    QTextCursor cursor = targetEdit->textCursor();
+    QTextCharFormat format = cursor.charFormat();
+    bool isBold = format.fontWeight() == QFont::Bold;
+    bool isItalic = format.fontItalic();
+    boldAct->setChecked(isBold);
+    italicAct->setChecked(isItalic);
+    qDebug() << "Menu toggle states updated - Bold:" << isBold << ", Italic:" << isItalic;
 }
+
