@@ -12,6 +12,7 @@ class NewFileBrick;
 class ToolBarBrick;
 class ItalicBrick;
 class OpenFileBrick;
+class IconBrick;
 
 class MainWindowBrick : public QMainWindow {
     Q_OBJECT
@@ -26,9 +27,10 @@ private:
     BoldBrick *boldBrick;
     NewFileBrick *newFileBrick;
     ItalicBrick *italicBrick;
+    OpenFileBrick *openFileBrick;
+    IconBrick *iconBrick;
     MenuManagerBrick *menuManagerBrick;
     ToolBarBrick *toolBarBrick;
-    OpenFileBrick *openFileBrick;
 };
 
 #endif // MAINWINDOWBRICK_H

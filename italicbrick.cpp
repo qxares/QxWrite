@@ -8,15 +8,16 @@ ItalicBrick::ItalicBrick(QTextEdit *edit, QObject *parent)
     qDebug() << "ItalicBrick initialized, target edit:" << targetEdit;
 }
 
-void ItalicBrick::toggleItalic() {
-    qDebug() << "ItalicBrick: toggleItalic triggered";
+void ItalicBrick::toggleItalic(bool checked) {
+    qDebug() << "ItalicBrick: toggleItalic triggered, checked:" << checked;
     if (!targetEdit) {
         qDebug() << "No target QTextEdit provided!";
         return;
     }
     QTextCursor cursor = targetEdit->textCursor();
     QTextCharFormat format;
-    format.setFontItalic(!cursor.charFormat().fontItalic());
+    format.setFontItalic(checked);
     cursor.mergeCharFormat(format);
     targetEdit->setTextCursor(cursor);
+    emit italicToggled(checked);
 }

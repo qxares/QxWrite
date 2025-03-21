@@ -12,7 +12,7 @@ Pure brick system for QxWrite—modular, reusable, clean slate.
 - **Files**: `insertbrick.h`, `insertbrick.cpp`
 
 ### 3. SaveBrick
-- **Purpose**: Saves QTextEdit content to a text file.
+- **Purpose**: Saves QTextEdit content to a text file with .txt extension.
 - **Files**: `savebrick.h`, `savebrick.cpp`
 
 ### 4. MenuManagerBrick
@@ -36,10 +36,10 @@ Pure brick system for QxWrite—modular, reusable, clean slate.
 - **Files**: `italicbrick.h`, `italicbrick.cpp`
 
 ### 9. OpenFileBrick
-- **Purpose**: Loads a .txt file into the editor.
+- **Purpose**: Loads a .txt file into the editor with default .txt filter.
 - **Files**: `openfilebrick.h`, `openfilebrick.cpp`
 
 ## Notes
-- **Current Features**: New doc (resets toggles), save/open .txt, insert images, bold/italic with toolbar/menu toggles.
-- **Next Steps**: ShortcutsBrick, SDI polish.
+- **Current Features**: New doc (resets toggles), save/open .txt (enforces .txt), insert images, bold/italic with toolbar/menu toggles.
+- **Next Steps**: ShortcutsBrick, IconBrick (icon management), ExtensionBrick (file extensions).
 - **Future**: More formats, tables, spellcheck.

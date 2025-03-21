@@ -13,11 +13,12 @@ class BoldBrick;
 class NewFileBrick;
 class ItalicBrick;
 class OpenFileBrick;
+class IconBrick;
 
 class ToolBarBrick : public QObject {
     Q_OBJECT
 public:
-    explicit ToolBarBrick(QToolBar *bar, QTextEdit *edit, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile, QObject *parent = nullptr);
+    explicit ToolBarBrick(QToolBar *bar, QTextEdit *edit, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile, IconBrick *iconBrick, QObject *parent = nullptr);
     void setupToolBar();
 
 private slots:
@@ -32,6 +33,7 @@ private:
     NewFileBrick *newFileBrick;
     ItalicBrick *italicBrick;
     OpenFileBrick *openFileBrick;
+    IconBrick *iconBrick;
     QAction *boldAction;
     QAction *italicAction;
 };

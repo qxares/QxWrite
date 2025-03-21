@@ -11,7 +11,10 @@ public:
     explicit BoldBrick(QTextEdit *edit, QObject *parent = nullptr);
 
 public slots:
-    void toggleBold();
+    void toggleBold(bool checked);
+
+signals:
+    void boldToggled(bool checked);
 
 private:
     QTextEdit *targetEdit;

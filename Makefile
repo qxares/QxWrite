@@ -53,56 +53,48 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = main.cpp \
-		qxwrite.cpp \
-		documentwindow.cpp \
-		filedialog.cpp \
-		imageplaceholder.cpp \
-		imageselector.cpp \
-		imagescenemanager.cpp \
-		imageresizer.cpp \
-		mouseeventhandler.cpp \
-		imageplaceholderinserter.cpp \
-		imagedraghandler.cpp \
-		imagemanipulator.cpp \
-		menumanager.cpp \
-		filemanager.cpp moc_qxwrite.cpp \
-		moc_documentwindow.cpp \
-		moc_filedialog.cpp \
-		moc_imageselector.cpp \
-		moc_imagescenemanager.cpp \
-		moc_imageresizer.cpp \
-		moc_mouseeventhandler.cpp \
-		moc_imageplaceholderinserter.cpp \
-		moc_imagedraghandler.cpp \
-		moc_imagemanipulator.cpp \
-		moc_menumanager.cpp \
-		moc_filemanager.cpp
+		mainwindowbrick.cpp \
+		insertbrick.cpp \
+		savebrick.cpp \
+		menumanagerbrick.cpp \
+		boldbrick.cpp \
+		newfilebrick.cpp \
+		toolbarbrick.cpp \
+		italicbrick.cpp \
+		openfilebrick.cpp \
+		iconbrick.cpp qrc_icons.cpp \
+		moc_mainwindowbrick.cpp \
+		moc_insertbrick.cpp \
+		moc_savebrick.cpp \
+		moc_menumanagerbrick.cpp \
+		moc_boldbrick.cpp \
+		moc_newfilebrick.cpp \
+		moc_toolbarbrick.cpp \
+		moc_italicbrick.cpp \
+		moc_openfilebrick.cpp \
+		moc_iconbrick.cpp
 OBJECTS       = main.o \
-		qxwrite.o \
-		documentwindow.o \
-		filedialog.o \
-		imageplaceholder.o \
-		imageselector.o \
-		imagescenemanager.o \
-		imageresizer.o \
-		mouseeventhandler.o \
-		imageplaceholderinserter.o \
-		imagedraghandler.o \
-		imagemanipulator.o \
-		menumanager.o \
-		filemanager.o \
-		moc_qxwrite.o \
-		moc_documentwindow.o \
-		moc_filedialog.o \
-		moc_imageselector.o \
-		moc_imagescenemanager.o \
-		moc_imageresizer.o \
-		moc_mouseeventhandler.o \
-		moc_imageplaceholderinserter.o \
-		moc_imagedraghandler.o \
-		moc_imagemanipulator.o \
-		moc_menumanager.o \
-		moc_filemanager.o
+		mainwindowbrick.o \
+		insertbrick.o \
+		savebrick.o \
+		menumanagerbrick.o \
+		boldbrick.o \
+		newfilebrick.o \
+		toolbarbrick.o \
+		italicbrick.o \
+		openfilebrick.o \
+		iconbrick.o \
+		qrc_icons.o \
+		moc_mainwindowbrick.o \
+		moc_insertbrick.o \
+		moc_savebrick.o \
+		moc_menumanagerbrick.o \
+		moc_boldbrick.o \
+		moc_newfilebrick.o \
+		moc_toolbarbrick.o \
+		moc_italicbrick.o \
+		moc_openfilebrick.o \
+		moc_iconbrick.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -180,32 +172,26 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		qxwrite.pro qxwrite.h \
-		documentwindow.h \
-		filedialog.h \
-		imageplaceholder.h \
-		imageselector.h \
-		imagescenemanager.h \
-		imageresizer.h \
-		mouseeventhandler.h \
-		imageplaceholderinserter.h \
-		imagedraghandler.h \
-		imagemanipulator.h \
-		menumanager.h \
-		filemanager.h main.cpp \
-		qxwrite.cpp \
-		documentwindow.cpp \
-		filedialog.cpp \
-		imageplaceholder.cpp \
-		imageselector.cpp \
-		imagescenemanager.cpp \
-		imageresizer.cpp \
-		mouseeventhandler.cpp \
-		imageplaceholderinserter.cpp \
-		imagedraghandler.cpp \
-		imagemanipulator.cpp \
-		menumanager.cpp \
-		filemanager.cpp
+		qxwrite.pro mainwindowbrick.h \
+		insertbrick.h \
+		savebrick.h \
+		menumanagerbrick.h \
+		boldbrick.h \
+		newfilebrick.h \
+		toolbarbrick.h \
+		italicbrick.h \
+		openfilebrick.h \
+		iconbrick.h main.cpp \
+		mainwindowbrick.cpp \
+		insertbrick.cpp \
+		savebrick.cpp \
+		menumanagerbrick.cpp \
+		boldbrick.cpp \
+		newfilebrick.cpp \
+		toolbarbrick.cpp \
+		italicbrick.cpp \
+		openfilebrick.cpp \
+		iconbrick.cpp
 QMAKE_TARGET  = QxWrite
 DESTDIR       = 
 TARGET        = QxWrite
@@ -294,7 +280,8 @@ Makefile: qxwrite.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		qxwrite.pro
+		qxwrite.pro \
+		icons.qrc
 	$(QMAKE) -o Makefile qxwrite.pro -spec linux-g++ CONFIG+=debug
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf:
@@ -374,6 +361,7 @@ Makefile: qxwrite.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf:
 qxwrite.pro:
+icons.qrc:
 qmake: FORCE
 	@$(QMAKE) -o Makefile qxwrite.pro -spec linux-g++ CONFIG+=debug
 
@@ -388,9 +376,10 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
+	$(COPY_FILE) --parents icons.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents qxwrite.h documentwindow.h filedialog.h imageplaceholder.h imageselector.h imagescenemanager.h imageresizer.h mouseeventhandler.h imageplaceholderinserter.h imagedraghandler.h imagemanipulator.h menumanager.h filemanager.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp qxwrite.cpp documentwindow.cpp filedialog.cpp imageplaceholder.cpp imageselector.cpp imagescenemanager.cpp imageresizer.cpp mouseeventhandler.cpp imageplaceholderinserter.cpp imagedraghandler.cpp imagemanipulator.cpp menumanager.cpp filemanager.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindowbrick.h insertbrick.h savebrick.h menumanagerbrick.h boldbrick.h newfilebrick.h toolbarbrick.h italicbrick.h openfilebrick.h iconbrick.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp mainwindowbrick.cpp insertbrick.cpp savebrick.cpp menumanagerbrick.cpp boldbrick.cpp newfilebrick.cpp toolbarbrick.cpp italicbrick.cpp openfilebrick.cpp iconbrick.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -414,87 +403,77 @@ check: first
 
 benchmark: first
 
-compiler_rcc_make_all:
+compiler_rcc_make_all: qrc_icons.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) qrc_icons.cpp
+qrc_icons.cpp: icons.qrc \
+		/usr/lib/qt5/bin/rcc \
+		icons/italic.png \
+		icons/save.png \
+		icons/file-plus.png \
+		icons/open.png \
+		icons/bold.png \
+		icons/image.png
+	/usr/lib/qt5/bin/rcc -name icons icons.qrc -o qrc_icons.cpp
+
 compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_qxwrite.cpp moc_documentwindow.cpp moc_filedialog.cpp moc_imageselector.cpp moc_imagescenemanager.cpp moc_imageresizer.cpp moc_mouseeventhandler.cpp moc_imageplaceholderinserter.cpp moc_imagedraghandler.cpp moc_imagemanipulator.cpp moc_menumanager.cpp moc_filemanager.cpp
+compiler_moc_header_make_all: moc_mainwindowbrick.cpp moc_insertbrick.cpp moc_savebrick.cpp moc_menumanagerbrick.cpp moc_boldbrick.cpp moc_newfilebrick.cpp moc_toolbarbrick.cpp moc_italicbrick.cpp moc_openfilebrick.cpp moc_iconbrick.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_qxwrite.cpp moc_documentwindow.cpp moc_filedialog.cpp moc_imageselector.cpp moc_imagescenemanager.cpp moc_imageresizer.cpp moc_mouseeventhandler.cpp moc_imageplaceholderinserter.cpp moc_imagedraghandler.cpp moc_imagemanipulator.cpp moc_menumanager.cpp moc_filemanager.cpp
-moc_qxwrite.cpp: qxwrite.h \
-		imagescenemanager.h \
-		documentwindow.h \
+	-$(DEL_FILE) moc_mainwindowbrick.cpp moc_insertbrick.cpp moc_savebrick.cpp moc_menumanagerbrick.cpp moc_boldbrick.cpp moc_newfilebrick.cpp moc_toolbarbrick.cpp moc_italicbrick.cpp moc_openfilebrick.cpp moc_iconbrick.cpp
+moc_mainwindowbrick.cpp: mainwindowbrick.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include qxwrite.h -o moc_qxwrite.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include mainwindowbrick.h -o moc_mainwindowbrick.cpp
 
-moc_documentwindow.cpp: documentwindow.h \
-		imagescenemanager.h \
+moc_insertbrick.cpp: insertbrick.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include documentwindow.h -o moc_documentwindow.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include insertbrick.h -o moc_insertbrick.cpp
 
-moc_filedialog.cpp: filedialog.h \
+moc_savebrick.cpp: savebrick.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include filedialog.h -o moc_filedialog.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include savebrick.h -o moc_savebrick.cpp
 
-moc_imageselector.cpp: imageselector.h \
+moc_menumanagerbrick.cpp: menumanagerbrick.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include imageselector.h -o moc_imageselector.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include menumanagerbrick.h -o moc_menumanagerbrick.cpp
 
-moc_imagescenemanager.cpp: imagescenemanager.h \
+moc_boldbrick.cpp: boldbrick.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include imagescenemanager.h -o moc_imagescenemanager.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include boldbrick.h -o moc_boldbrick.cpp
 
-moc_imageresizer.cpp: imageresizer.h \
+moc_newfilebrick.cpp: newfilebrick.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include imageresizer.h -o moc_imageresizer.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include newfilebrick.h -o moc_newfilebrick.cpp
 
-moc_mouseeventhandler.cpp: mouseeventhandler.h \
-		imagescenemanager.h \
-		imageresizer.h \
+moc_toolbarbrick.cpp: toolbarbrick.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include mouseeventhandler.h -o moc_mouseeventhandler.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include toolbarbrick.h -o moc_toolbarbrick.cpp
 
-moc_imageplaceholderinserter.cpp: imageplaceholderinserter.h \
+moc_italicbrick.cpp: italicbrick.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include imageplaceholderinserter.h -o moc_imageplaceholderinserter.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include italicbrick.h -o moc_italicbrick.cpp
 
-moc_imagedraghandler.cpp: imagedraghandler.h \
-		imagescenemanager.h \
+moc_openfilebrick.cpp: openfilebrick.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include imagedraghandler.h -o moc_imagedraghandler.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include openfilebrick.h -o moc_openfilebrick.cpp
 
-moc_imagemanipulator.cpp: imagemanipulator.h \
-		imagescenemanager.h \
-		imageresizer.h \
-		imageselector.h \
+moc_iconbrick.cpp: iconbrick.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include imagemanipulator.h -o moc_imagemanipulator.cpp
-
-moc_menumanager.cpp: menumanager.h \
-		moc_predefs.h \
-		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include menumanager.h -o moc_menumanager.cpp
-
-moc_filemanager.cpp: filemanager.h \
-		documentwindow.h \
-		imagescenemanager.h \
-		moc_predefs.h \
-		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include filemanager.h -o moc_filemanager.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include iconbrick.h -o moc_iconbrick.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -508,110 +487,97 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean 
 
 ####### Compile
 
-main.o: main.cpp qxwrite.h \
-		imagescenemanager.h \
-		documentwindow.h
+main.o: main.cpp mainwindowbrick.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
-qxwrite.o: qxwrite.cpp qxwrite.h \
-		imagescenemanager.h \
-		documentwindow.h \
-		menumanager.h \
-		filemanager.h \
-		imageplaceholderinserter.h \
-		imagemanipulator.h \
-		imageresizer.h \
-		imageselector.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qxwrite.o qxwrite.cpp
+mainwindowbrick.o: mainwindowbrick.cpp mainwindowbrick.h \
+		insertbrick.h \
+		savebrick.h \
+		menumanagerbrick.h \
+		boldbrick.h \
+		newfilebrick.h \
+		toolbarbrick.h \
+		italicbrick.h \
+		openfilebrick.h \
+		iconbrick.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindowbrick.o mainwindowbrick.cpp
 
-documentwindow.o: documentwindow.cpp documentwindow.h \
-		imagescenemanager.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o documentwindow.o documentwindow.cpp
+insertbrick.o: insertbrick.cpp insertbrick.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o insertbrick.o insertbrick.cpp
 
-filedialog.o: filedialog.cpp filedialog.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o filedialog.o filedialog.cpp
+savebrick.o: savebrick.cpp savebrick.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o savebrick.o savebrick.cpp
 
-imageplaceholder.o: imageplaceholder.cpp imageplaceholder.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o imageplaceholder.o imageplaceholder.cpp
+menumanagerbrick.o: menumanagerbrick.cpp menumanagerbrick.h \
+		insertbrick.h \
+		savebrick.h \
+		boldbrick.h \
+		newfilebrick.h \
+		italicbrick.h \
+		openfilebrick.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o menumanagerbrick.o menumanagerbrick.cpp
 
-imageselector.o: imageselector.cpp imageselector.h \
-		imagescenemanager.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o imageselector.o imageselector.cpp
+boldbrick.o: boldbrick.cpp boldbrick.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o boldbrick.o boldbrick.cpp
 
-imagescenemanager.o: imagescenemanager.cpp imagescenemanager.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o imagescenemanager.o imagescenemanager.cpp
+newfilebrick.o: newfilebrick.cpp newfilebrick.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o newfilebrick.o newfilebrick.cpp
 
-imageresizer.o: imageresizer.cpp imageresizer.h \
-		imagescenemanager.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o imageresizer.o imageresizer.cpp
+toolbarbrick.o: toolbarbrick.cpp toolbarbrick.h \
+		insertbrick.h \
+		savebrick.h \
+		boldbrick.h \
+		newfilebrick.h \
+		italicbrick.h \
+		openfilebrick.h \
+		iconbrick.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o toolbarbrick.o toolbarbrick.cpp
 
-mouseeventhandler.o: mouseeventhandler.cpp mouseeventhandler.h \
-		imagescenemanager.h \
-		imageresizer.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mouseeventhandler.o mouseeventhandler.cpp
+italicbrick.o: italicbrick.cpp italicbrick.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o italicbrick.o italicbrick.cpp
 
-imageplaceholderinserter.o: imageplaceholderinserter.cpp imageplaceholderinserter.h \
-		imagescenemanager.h \
-		documentwindow.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o imageplaceholderinserter.o imageplaceholderinserter.cpp
+openfilebrick.o: openfilebrick.cpp openfilebrick.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o openfilebrick.o openfilebrick.cpp
 
-imagedraghandler.o: imagedraghandler.cpp imagedraghandler.h \
-		imagescenemanager.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o imagedraghandler.o imagedraghandler.cpp
+iconbrick.o: iconbrick.cpp iconbrick.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o iconbrick.o iconbrick.cpp
 
-imagemanipulator.o: imagemanipulator.cpp imagemanipulator.h \
-		imagescenemanager.h \
-		imageresizer.h \
-		imageselector.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o imagemanipulator.o imagemanipulator.cpp
+qrc_icons.o: qrc_icons.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_icons.o qrc_icons.cpp
 
-menumanager.o: menumanager.cpp menumanager.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o menumanager.o menumanager.cpp
+moc_mainwindowbrick.o: moc_mainwindowbrick.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindowbrick.o moc_mainwindowbrick.cpp
 
-filemanager.o: filemanager.cpp filemanager.h \
-		documentwindow.h \
-		imagescenemanager.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o filemanager.o filemanager.cpp
+moc_insertbrick.o: moc_insertbrick.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_insertbrick.o moc_insertbrick.cpp
 
-moc_qxwrite.o: moc_qxwrite.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_qxwrite.o moc_qxwrite.cpp
+moc_savebrick.o: moc_savebrick.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_savebrick.o moc_savebrick.cpp
 
-moc_documentwindow.o: moc_documentwindow.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_documentwindow.o moc_documentwindow.cpp
+moc_menumanagerbrick.o: moc_menumanagerbrick.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_menumanagerbrick.o moc_menumanagerbrick.cpp
 
-moc_filedialog.o: moc_filedialog.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_filedialog.o moc_filedialog.cpp
+moc_boldbrick.o: moc_boldbrick.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_boldbrick.o moc_boldbrick.cpp
 
-moc_imageselector.o: moc_imageselector.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_imageselector.o moc_imageselector.cpp
+moc_newfilebrick.o: moc_newfilebrick.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_newfilebrick.o moc_newfilebrick.cpp
 
-moc_imagescenemanager.o: moc_imagescenemanager.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_imagescenemanager.o moc_imagescenemanager.cpp
+moc_toolbarbrick.o: moc_toolbarbrick.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_toolbarbrick.o moc_toolbarbrick.cpp
 
-moc_imageresizer.o: moc_imageresizer.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_imageresizer.o moc_imageresizer.cpp
+moc_italicbrick.o: moc_italicbrick.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_italicbrick.o moc_italicbrick.cpp
 
-moc_mouseeventhandler.o: moc_mouseeventhandler.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mouseeventhandler.o moc_mouseeventhandler.cpp
+moc_openfilebrick.o: moc_openfilebrick.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_openfilebrick.o moc_openfilebrick.cpp
 
-moc_imageplaceholderinserter.o: moc_imageplaceholderinserter.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_imageplaceholderinserter.o moc_imageplaceholderinserter.cpp
-
-moc_imagedraghandler.o: moc_imagedraghandler.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_imagedraghandler.o moc_imagedraghandler.cpp
-
-moc_imagemanipulator.o: moc_imagemanipulator.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_imagemanipulator.o moc_imagemanipulator.cpp
-
-moc_menumanager.o: moc_menumanager.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_menumanager.o moc_menumanager.cpp
-
-moc_filemanager.o: moc_filemanager.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_filemanager.o moc_filemanager.cpp
+moc_iconbrick.o: moc_iconbrick.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_iconbrick.o moc_iconbrick.cpp
 
 ####### Install
 

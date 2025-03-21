@@ -10,6 +10,7 @@
 #include "toolbarbrick.h"
 #include "italicbrick.h"
 #include "openfilebrick.h"
+#include "iconbrick.h"
 #include <QDebug>
 
 MainWindowBrick::MainWindowBrick(QWidget *parent)
@@ -25,8 +26,9 @@ MainWindowBrick::MainWindowBrick(QWidget *parent)
     newFileBrick = new NewFileBrick(textEdit, this);
     italicBrick = new ItalicBrick(textEdit, this);
     openFileBrick = new OpenFileBrick(textEdit, this);
+    iconBrick = new IconBrick(this);
     menuManagerBrick = new MenuManagerBrick(menuBar(), insertBrick, saveBrick, boldBrick, newFileBrick, italicBrick, openFileBrick, this);
-    toolBarBrick = new ToolBarBrick(addToolBar("Main Toolbar"), textEdit, insertBrick, saveBrick, boldBrick, newFileBrick, italicBrick, openFileBrick, this);
+    toolBarBrick = new ToolBarBrick(addToolBar("Main Toolbar"), textEdit, insertBrick, saveBrick, boldBrick, newFileBrick, italicBrick, openFileBrick, iconBrick, this);
 
     menuManagerBrick->setupMenus();
     toolBarBrick->setupToolBar();

@@ -16,7 +16,9 @@ void OpenFileBrick::openFile() {
         qDebug() << "No target QTextEdit provided!";
         return;
     }
-    QString fileName = QFileDialog::getOpenFileName(nullptr, tr("Open File"), QDir::homePath(), tr("Text Files (*.txt);;All Files (*)"));
+    QString filter = tr("Text Files (*.txt);;All Files (*)");
+    QString selectedFilter = tr("Text Files (*.txt)");
+    QString fileName = QFileDialog::getOpenFileName(nullptr, tr("Open File"), QDir::homePath(), filter, &selectedFilter);
     if (fileName.isEmpty()) {
         qDebug() << "OpenFileBrick: No file selected";
         return;

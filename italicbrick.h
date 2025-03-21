@@ -11,7 +11,10 @@ public:
     explicit ItalicBrick(QTextEdit *edit, QObject *parent = nullptr);
 
 public slots:
-    void toggleItalic();
+    void toggleItalic(bool checked);
+
+signals:
+    void italicToggled(bool checked);
 
 private:
     QTextEdit *targetEdit;
