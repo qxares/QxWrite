@@ -10,7 +10,8 @@ SOURCES += \
     savebrick.cpp \
     menumanagerbrick.cpp \
     boldbrick.cpp \
-    newfilebrick.cpp
+    newfilebrick.cpp \
+    toolbarbrick.cpp
 
 HEADERS += \
     mainwindowbrick.h \
@@ -18,5 +19,6 @@ HEADERS += \
     savebrick.h \
     menumanagerbrick.h \
     boldbrick.h \
-    newfilebrick.h
+    newfilebrick.h \
+    toolbarbrick.h
 

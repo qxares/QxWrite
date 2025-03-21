@@ -27,7 +27,11 @@ Pure brick system for QxWrite—modular, reusable, clean slate.
 - **Purpose**: Clears the editor for a new document.
 - **Files**: `newfilebrick.h`, `newfilebrick.cpp`
 
+### 7. ToolBarBrick
+- **Purpose**: Adds a toolbar with quick action buttons.
+- **Files**: `toolbarbrick.h`, `toolbarbrick.cpp`
+
 ## Notes
-- **Current Features**: New doc, save to .txt, insert images, bold text, basic menus.
-- **Next Steps**: ToolBarBrick, ItalicBrick, SDI polish.
+- **Current Features**: New doc, save to .txt, insert images, bold text, menus, toolbar.
+- **Next Steps**: ItalicBrick, OpenFileBrick, SDI polish.
 - **Future**: More formats, tables, spellcheck.
