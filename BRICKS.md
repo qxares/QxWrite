@@ -19,7 +19,11 @@ Pure brick system for QxWrite—modular, reusable, clean slate.
 - **Purpose**: Sets up menus, wires bricks to actions.
 - **Files**: `menumanagerbrick.h`, `menumanagerbrick.cpp`
 
+### 5. BoldBrick
+- **Purpose**: Toggles bold formatting on selected text.
+- **Files**: `boldbrick.h`, `boldbrick.cpp`
+
 ## Notes
-- **Current Features**: Save to .txt, insert images, basic menus.
-- **Next Steps**: BoldBrick, SDI polish, more formats.
-- **Future**: Toolbar, tables, spellcheck.
+- **Current Features**: Save to .txt, insert images, bold text, basic menus.
+- **Next Steps**: ToolBarBrick, NewFileBrick, SDI polish.
+- **Future**: More formats, tables, spellcheck.
