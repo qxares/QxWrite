@@ -3,6 +3,7 @@
 #include <QTextEdit>
 #include <QFile>
 #include <QTextStream>
+#include <QDir>
 #include <QDebug>
 
 SaveBrick::SaveBrick(QTextEdit *edit, DialogBrick *dialog, QObject *parent)
