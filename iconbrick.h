@@ -8,11 +8,14 @@
 class IconBrick : public QObject {
     Q_OBJECT
 public:
-    explicit IconBrick(QObject *parent = nullptr);
-    QIcon getIcon(const QString &name);
+    IconBrick(QObject *parent = nullptr);
+    QIcon loadIcon(const QString &name);
+    void registerIcons();
 
 private:
-    QMap<QString, QIcon> iconCache;
+    QMap<QString, QString> iconMap; // name -> path
+    QIcon fallbackIcon;
 };
 
 #endif // ICONBRICK_H
+

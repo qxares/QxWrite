@@ -16,17 +16,17 @@ ToolBarBrick::ToolBarBrick(QToolBar *toolBar, QTextEdit *edit, InsertBrick *inse
     : QObject(parent), toolBar(toolBar), targetEdit(edit), insertBrick(insert), saveBrick(save), boldBrick(bold), newFileBrick(newFile), italicBrick(italic), openFileBrick(openFile), iconBrick(icon), fontBrick(font) {
     qDebug() << "ToolBarBrick initialized, toolBar:" << toolBar << ", target edit:" << edit;
 
-    toolBar->addAction(iconBrick->loadIcon(":/icons/icons/file-plus.png"), tr("New"), newFileBrick, &NewFileBrick::newFile);
-    toolBar->addAction(iconBrick->loadIcon(":/icons/icons/open.png"), tr("Open"), openFileBrick, &OpenFileBrick::openFile);
-    toolBar->addAction(iconBrick->loadIcon(":/icons/icons/save.png"), tr("Save"), saveBrick, &SaveBrick::save);
+    toolBar->addAction(iconBrick->loadIcon("new"), tr("New"), newFileBrick, &NewFileBrick::newFile);
+    toolBar->addAction(iconBrick->loadIcon("open"), tr("Open"), openFileBrick, &OpenFileBrick::openFile);
+    toolBar->addAction(iconBrick->loadIcon("save"), tr("Save"), saveBrick, &SaveBrick::save);
     toolBar->addSeparator();
-    QAction *boldAct = toolBar->addAction(iconBrick->loadIcon(":/icons/icons/bold.png"), tr("Bold"), boldBrick, &BoldBrick::toggleBold);
+    QAction *boldAct = toolBar->addAction(iconBrick->loadIcon("bold"), tr("Bold"), boldBrick, &BoldBrick::toggleBold);
     boldAct->setCheckable(true);
-    QAction *italicAct = toolBar->addAction(iconBrick->loadIcon(":/icons/icons/italic.png"), tr("Italic"), italicBrick, &ItalicBrick::toggleItalic);
+    QAction *italicAct = toolBar->addAction(iconBrick->loadIcon("italic"), tr("Italic"), italicBrick, &ItalicBrick::toggleItalic);
     italicAct->setCheckable(true);
-    toolBar->addAction(iconBrick->loadIcon(":/icons/icons/font.png"), tr("Font"), fontBrick, &FontBrick::showFontDialog);
+    toolBar->addAction(iconBrick->loadIcon("font"), tr("Font"), fontBrick, &FontBrick::showFontDialog);
     toolBar->addSeparator();
-    toolBar->addAction(iconBrick->loadIcon(":/icons/icons/image.png"), tr("Insert Image"), insertBrick, &InsertBrick::insertImage);
+    toolBar->addAction(iconBrick->loadIcon("image"), tr("Insert Image"), insertBrick, &InsertBrick::insertImage);
 
     connect(targetEdit, &QTextEdit::cursorPositionChanged, this, &ToolBarBrick::updateToggleStates);
     updateToggleStates();
