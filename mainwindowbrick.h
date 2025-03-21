@@ -16,12 +16,13 @@ class OpenFileBrick;
 class ToolBarBrick;
 class IconBrick;
 class DialogBrick;
+class FontBrick;
 
 class MainWindowBrick : public QMainWindow {
     Q_OBJECT
 public:
     MainWindowBrick(QWidget *parent = nullptr);
-    virtual ~MainWindowBrick() = default; // Virtual destructor
+    virtual ~MainWindowBrick() = default;
 
 private:
     QTextEdit *edit;
@@ -35,6 +36,7 @@ private:
     ToolBarBrick *toolBarBrick;
     IconBrick *iconBrick;
     DialogBrick *dialogBrick;
+    FontBrick *fontBrick;
 };
 
 #endif // MAINWINDOWBRICK_H

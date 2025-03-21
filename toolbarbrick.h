@@ -4,7 +4,6 @@
 #include <QObject>
 class QToolBar;
 class QTextEdit;
-class QAction;
 class InsertBrick;
 class SaveBrick;
 class BoldBrick;
@@ -12,11 +11,12 @@ class NewFileBrick;
 class ItalicBrick;
 class OpenFileBrick;
 class IconBrick;
+class FontBrick;
 
 class ToolBarBrick : public QObject {
     Q_OBJECT
 public:
-    ToolBarBrick(QToolBar *toolBar, QTextEdit *edit, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile, IconBrick *iconBrick, QObject *parent = nullptr);
+    ToolBarBrick(QToolBar *toolBar, QTextEdit *edit, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile, IconBrick *icon, FontBrick *font, QObject *parent = nullptr);
 
 private slots:
     void updateToggleStates();
@@ -31,8 +31,7 @@ private:
     ItalicBrick *italicBrick;
     OpenFileBrick *openFileBrick;
     IconBrick *iconBrick;
-    QAction *boldAct;
-    QAction *italicAct;
+    FontBrick *fontBrick;
 };
 
 #endif // TOOLBARBRICK_H

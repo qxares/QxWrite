@@ -1,10 +1,9 @@
-QT       += core gui widgets printsupport
+QT += core gui widgets printsupport
 
 TARGET = QxWrite
 TEMPLATE = app
 
-SOURCES += \
-    main.cpp \
+SOURCES += main.cpp \
     mainwindowbrick.cpp \
     insertbrick.cpp \
     savebrick.cpp \
@@ -15,10 +14,10 @@ SOURCES += \
     italicbrick.cpp \
     openfilebrick.cpp \
     iconbrick.cpp \
-    dialogbrick.cpp
+    dialogbrick.cpp \
+    fontbrick.cpp
 
-HEADERS += \
-    mainwindowbrick.h \
+HEADERS += mainwindowbrick.h \
     insertbrick.h \
     savebrick.h \
     menumanagerbrick.h \
@@ -28,8 +27,8 @@ HEADERS += \
     italicbrick.h \
     openfilebrick.h \
     iconbrick.h \
-    dialogbrick.h
+    dialogbrick.h \
+    fontbrick.h
 
-RESOURCES += \
-    icons.qrc
+RESOURCES += icons.qrc
 
