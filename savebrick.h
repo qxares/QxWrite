@@ -8,7 +8,7 @@ class QTextEdit;
 class SaveBrick : public QObject {
     Q_OBJECT
 public:
-    explicit SaveBrick(QObject *parent = nullptr);
+    explicit SaveBrick(QTextEdit *edit, QObject *parent = nullptr);
 
 public slots:
     void save();

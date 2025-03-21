@@ -5,14 +5,14 @@ TEMPLATE = app
 
 SOURCES += \
     main.cpp \
-    qxwrite.cpp \
+    mainwindowbrick.cpp \
     insertbrick.cpp \
     savebrick.cpp \
-    generalmanagerbrick.cpp
+    menumanagerbrick.cpp
 
 HEADERS += \
-    qxwrite.h \
+    mainwindowbrick.h \
     insertbrick.h \
     savebrick.h \
-    generalmanagerbrick.h
+    menumanagerbrick.h
 

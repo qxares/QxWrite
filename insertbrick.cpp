@@ -3,20 +3,18 @@
 #include <QTextCursor>
 #include <QTextImageFormat>
 #include <QTextDocument>
+#include <QTextEdit>
 #include <QDebug>
 
-InsertBrick::InsertBrick(QObject *parent)
-    : QObject(parent), targetEdit(nullptr) {
-    if (auto *window = qobject_cast<QMainWindow*>(parent)) {
-        targetEdit = window->findChild<QTextEdit*>();
-    }
+InsertBrick::InsertBrick(QTextEdit *edit, QObject *parent)
+    : QObject(parent), targetEdit(edit) {
     qDebug() << "InsertBrick initialized, target edit:" << targetEdit;
 }
 
 void InsertBrick::insertImage() {
     qDebug() << "InsertBrick: insertImage triggered";
     if (!targetEdit) {
-        qDebug() << "No target QTextEdit found!";
+        qDebug() << "No target QTextEdit provided!";
         return;
     }
     QString fileName = QFileDialog::getOpenFileName(nullptr, tr("Select Image"), "/home/ares/Pictures", tr("Image Files (*.png *.jpg *.bmp)"));

@@ -8,7 +8,7 @@ class QTextEdit;
 class InsertBrick : public QObject {
     Q_OBJECT
 public:
-    explicit InsertBrick(QObject *parent = nullptr);
+    explicit InsertBrick(QTextEdit *edit, QObject *parent = nullptr);
 
 public slots:
     void insertImage();
