@@ -16,6 +16,7 @@ void IconBrick::registerIcons() {
     iconMap["font"] = ":/icons/icons/font.svg";
     iconMap["image"] = ":/icons/icons/image.svg";
     iconMap["color"] = ":/icons/icons/color.svg";
+    iconMap["test-color"] = ":/icons/icons/eye-dropper.svg";
     qDebug() << "IconBrick: Registered" << iconMap.size() << "icons";
 }
 
