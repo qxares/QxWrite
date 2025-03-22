@@ -5,7 +5,7 @@
 #include <QDebug>
 
 ColorBrick::ColorBrick(QTextEdit *edit, QObject *parent)
-    : QObject(parent), targetEdit(edit), colorAct(new QAction(tr("Color"), this)) {
+    : QObject(parent), targetEdit(edit), colorAct(new QAction(tr("Color"), this)), currentColor(Qt::black) {
     qDebug() << "ColorBrick initialized, target edit:" << edit;
     colorAct->setToolTip(tr("Change text color"));
     connect(colorAct, &QAction::triggered, this, &ColorBrick::showColorDialog);
@@ -13,11 +13,17 @@ ColorBrick::ColorBrick(QTextEdit *edit, QObject *parent)
 
 void ColorBrick::showColorDialog() {
     qDebug() << "ColorBrick: showColorDialog triggered";
-    QColor color = QColorDialog::getColor(Qt::black, targetEdit->window(), tr("Select Text Color"));
+    QColor color = QColorDialog::getColor(currentColor, targetEdit->window(), tr("Select Text Color"));
     if (color.isValid()) {
+        currentColor = color;
         QTextCursor cursor = targetEdit->textCursor();
-        QString html = QString("<span style=\"color:%1\">%2</span>").arg(color.name(), cursor.selectedText().isEmpty() ? " " : cursor.selectedText());
-        cursor.insertHtml(html);
+        if (cursor.hasSelection()) {
+            QString html = QString("<span style=\"color:%1\">%2</span>").arg(color.name(), cursor.selectedText());
+            cursor.insertHtml(html);
+        }
+        QTextCharFormat format;
+        format.setForeground(color);
+        targetEdit->setCurrentCharFormat(format);
         qDebug() << "ColorBrick: Applied color:" << color.name();
     } else {
         qDebug() << "ColorBrick: Color dialog canceled";

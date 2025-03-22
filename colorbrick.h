@@ -2,6 +2,7 @@
 #define COLORBRICK_H
 
 #include <QObject>
+#include <QColor>
 class QTextEdit;
 class QAction;
 
@@ -17,6 +18,7 @@ public slots:
 private:
     QTextEdit *targetEdit;
     QAction *colorAct;
+    QColor currentColor;
 };
 
 #endif // COLORBRICK_H
