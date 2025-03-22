@@ -1,0 +1,24 @@
+# QxWrite Bricks
+
+- **MainWindowBrick**: Core window setup, ties all bricks together.
+  - Status: Done (March 21, 2025)
+- **InsertBrick**: Basic text insertion functionality.
+  - Status: Done (March 21, 2025)
+- **SaveBrick**: Saves text to files with .txt extension.
+  - Status: Done, dialog display pending (March 21, 2025)
+- **OpenFileBrick**: Opens files with .txt filter default.
+  - Status: Done (March 21, 2025)
+- **BoldBrick**: Applies bold formatting.
+  - Status: Done (March 21, 2025)
+- **ItalicBrick**: Applies italic formatting.
+  - Status: Done (March 21, 2025)
+- **NewFileBrick**: Creates a new empty document.
+  - Status: Done (March 21, 2025)
+- **MenuManagerBrick**: Sets up menus.
+  - Status: Done (March 21, 2025)
+- **ToolBarBrick**: Manages toolbar with icons and toggles.
+  - Status: Done (March 21, 2025)
+- **IconBrick**: Loads icons for toolbar.
+  - Status: Done (March 21, 2025)
+- **DialogBrick**: (Planned) Unified file dialog management.
+  - Status: Next up!
