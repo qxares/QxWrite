@@ -12,11 +12,12 @@ class ItalicBrick;
 class OpenFileBrick;
 class IconBrick;
 class FontBrick;
+class ColorBrick;
 
 class ToolBarBrick : public QObject {
     Q_OBJECT
 public:
-    ToolBarBrick(QToolBar *toolBar, QTextEdit *edit, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile, IconBrick *icon, FontBrick *font, QObject *parent = nullptr);
+    ToolBarBrick(QToolBar *toolBar, QTextEdit *edit, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile, IconBrick *icon, FontBrick *font, ColorBrick *color, QObject *parent = nullptr);
 
 private slots:
     void updateToggleStates();
@@ -32,6 +33,7 @@ private:
     OpenFileBrick *openFileBrick;
     IconBrick *iconBrick;
     FontBrick *fontBrick;
+    ColorBrick *colorBrick;
 };
 
 #endif // TOOLBARBRICK_H

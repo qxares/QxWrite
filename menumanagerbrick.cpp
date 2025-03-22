@@ -13,9 +13,10 @@
 #include "italicbrick.h"
 #include "openfilebrick.h"
 #include "fontbrick.h"
+#include "colorbrick.h"
 
-MenuManagerBrick::MenuManagerBrick(QMenuBar *menuBar, QTextEdit *edit, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile, FontBrick *font, QObject *parent)
-    : QObject(parent), menuBar(menuBar), targetEdit(edit), insertBrick(insert), saveBrick(save), boldBrick(bold), newFileBrick(newFile), italicBrick(italic), openFileBrick(openFile), fontBrick(font), boldAct(nullptr), italicAct(nullptr) {
+MenuManagerBrick::MenuManagerBrick(QMenuBar *menuBar, QTextEdit *edit, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile, FontBrick *font, ColorBrick *color, QObject *parent)
+    : QObject(parent), menuBar(menuBar), targetEdit(edit), insertBrick(insert), saveBrick(save), boldBrick(bold), newFileBrick(newFile), italicBrick(italic), openFileBrick(openFile), fontBrick(font), colorBrick(color), boldAct(nullptr), italicAct(nullptr) {
     qDebug() << "MenuManagerBrick initialized, menuBar:" << menuBar;
 
     QMenu *fileMenu = menuBar->addMenu(tr("&File"));
@@ -31,6 +32,7 @@ MenuManagerBrick::MenuManagerBrick(QMenuBar *menuBar, QTextEdit *edit, InsertBri
     italicAct = editMenu->addAction(tr("&Italic"), italicBrick, &ItalicBrick::toggleItalic);
     italicAct->setCheckable(true);
     editMenu->addAction(fontBrick->getFontAction());
+    editMenu->addAction(colorBrick->getColorAction());
 
     QMenu *insertMenu = menuBar->addMenu(tr("&Insert"));
     insertMenu->addAction(tr("&Image"), insertBrick, &InsertBrick::insertImage);

@@ -12,11 +12,12 @@ class NewFileBrick;
 class ItalicBrick;
 class OpenFileBrick;
 class FontBrick;
+class ColorBrick;
 
 class MenuManagerBrick : public QObject {
     Q_OBJECT
 public:
-    MenuManagerBrick(QMenuBar *menuBar, QTextEdit *edit, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile, FontBrick *font, QObject *parent = nullptr);
+    MenuManagerBrick(QMenuBar *menuBar, QTextEdit *edit, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile, FontBrick *font, ColorBrick *color, QObject *parent = nullptr);
 
 private slots:
     void updateToggleStates();
@@ -31,6 +32,7 @@ private:
     ItalicBrick *italicBrick;
     OpenFileBrick *openFileBrick;
     FontBrick *fontBrick;
+    ColorBrick *colorBrick;
     QAction *boldAct;
     QAction *italicAct;
 };

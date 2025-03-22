@@ -17,6 +17,7 @@ class ToolBarBrick;
 class IconBrick;
 class DialogBrick;
 class FontBrick;
+class ColorBrick;
 
 class MainWindowBrick : public QMainWindow {
     Q_OBJECT
@@ -37,6 +38,7 @@ private:
     IconBrick *iconBrick;
     DialogBrick *dialogBrick;
     FontBrick *fontBrick;
+    ColorBrick *colorBrick;
 };
 
 #endif // MAINWINDOWBRICK_H

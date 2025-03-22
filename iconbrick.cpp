@@ -14,6 +14,7 @@ void IconBrick::registerIcons() {
     iconMap["italic"] = ":/icons/icons/italic.png";
     iconMap["font"] = ":/icons/icons/font.png";
     iconMap["image"] = ":/icons/icons/image.png";
+    iconMap["color"] = ":/icons/icons/color.png";
     qDebug() << "IconBrick: Registered" << iconMap.size() << "icons";
 }
 

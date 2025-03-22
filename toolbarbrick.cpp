@@ -11,9 +11,10 @@
 #include "openfilebrick.h"
 #include "iconbrick.h"
 #include "fontbrick.h"
+#include "colorbrick.h"
 
-ToolBarBrick::ToolBarBrick(QToolBar *toolBar, QTextEdit *edit, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile, IconBrick *icon, FontBrick *font, QObject *parent)
-    : QObject(parent), toolBar(toolBar), targetEdit(edit), insertBrick(insert), saveBrick(save), boldBrick(bold), newFileBrick(newFile), italicBrick(italic), openFileBrick(openFile), iconBrick(icon), fontBrick(font) {
+ToolBarBrick::ToolBarBrick(QToolBar *toolBar, QTextEdit *edit, InsertBrick *insert, SaveBrick *save, BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile, IconBrick *icon, FontBrick *font, ColorBrick *color, QObject *parent)
+    : QObject(parent), toolBar(toolBar), targetEdit(edit), insertBrick(insert), saveBrick(save), boldBrick(bold), newFileBrick(newFile), italicBrick(italic), openFileBrick(openFile), iconBrick(icon), fontBrick(font), colorBrick(color) {
     qDebug() << "ToolBarBrick initialized, toolBar:" << toolBar << ", target edit:" << edit;
 
     toolBar->addAction(iconBrick->loadIcon("new"), tr("New"), newFileBrick, &NewFileBrick::newFile);
@@ -25,6 +26,7 @@ ToolBarBrick::ToolBarBrick(QToolBar *toolBar, QTextEdit *edit, InsertBrick *inse
     QAction *italicAct = toolBar->addAction(iconBrick->loadIcon("italic"), tr("Italic"), italicBrick, &ItalicBrick::toggleItalic);
     italicAct->setCheckable(true);
     toolBar->addAction(iconBrick->loadIcon("font"), tr("Font"), fontBrick, &FontBrick::showFontDialog);
+    toolBar->addAction(iconBrick->loadIcon("color"), tr("Color"), colorBrick, &ColorBrick::showColorDialog);
     toolBar->addSeparator();
     toolBar->addAction(iconBrick->loadIcon("image"), tr("Insert Image"), insertBrick, &InsertBrick::insertImage);
 

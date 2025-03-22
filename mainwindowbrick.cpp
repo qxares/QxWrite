@@ -10,6 +10,7 @@
 #include "iconbrick.h"
 #include "dialogbrick.h"
 #include "fontbrick.h"
+#include "colorbrick.h"
 #include <QTextEdit>
 #include <QMenuBar>
 #include <QToolBar>
@@ -29,14 +30,15 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     openFileBrick = new OpenFileBrick(edit, dialogBrick, this);
     iconBrick = new IconBrick(this);
     fontBrick = new FontBrick(edit, this);
+    colorBrick = new ColorBrick(edit, this);
 
     QMenuBar *menuBar = new QMenuBar(this);
     setMenuBar(menuBar);
-    menuManagerBrick = new MenuManagerBrick(menuBar, edit, insertBrick, saveBrick, boldBrick, newFileBrick, italicBrick, openFileBrick, fontBrick, this);
+    menuManagerBrick = new MenuManagerBrick(menuBar, edit, insertBrick, saveBrick, boldBrick, newFileBrick, italicBrick, openFileBrick, fontBrick, colorBrick, this);
 
     QToolBar *toolBar = new QToolBar(this);
     addToolBar(toolBar);
-    toolBarBrick = new ToolBarBrick(toolBar, edit, insertBrick, saveBrick, boldBrick, newFileBrick, italicBrick, openFileBrick, iconBrick, fontBrick, this);
+    toolBarBrick = new ToolBarBrick(toolBar, edit, insertBrick, saveBrick, boldBrick, newFileBrick, italicBrick, openFileBrick, iconBrick, fontBrick, colorBrick, this);
 
     QWidget *centralWidget = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout(centralWidget);
