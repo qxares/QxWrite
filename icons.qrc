@@ -1,11 +1,12 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource prefix="/icons">
-    <file>icons/file-plus.png</file>
-    <file>icons/open.png</file>
-    <file>icons/save.png</file>
-    <file>icons/bold.png</file>
-    <file>icons/italic.png</file>
-    <file>icons/font.png</file>
-    <file>icons/image.png</file>
-</qresource>
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/file-plus.svg</file>
+        <file>icons/open.svg</file>
+        <file>icons/save.svg</file>
+        <file>icons/bold.svg</file>
+        <file>icons/italic.svg</file>
+        <file>icons/font.svg</file>
+        <file>icons/image.svg</file>
+        <file>icons/color.svg</file>
+    </qresource>
 </RCC>

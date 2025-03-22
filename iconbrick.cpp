@@ -1,20 +1,21 @@
 #include "iconbrick.h"
 #include <QDebug>
+#include <QPixmap>
 
-IconBrick::IconBrick(QObject *parent) : QObject(parent), fallbackIcon(QIcon(":/icons/icons/bold.png")) {
+IconBrick::IconBrick(QObject *parent) : QObject(parent), fallbackIcon(QIcon(":/icons/icons/bold.svg")) {
     qDebug() << "IconBrick initialized";
     registerIcons();
 }
 
 void IconBrick::registerIcons() {
-    iconMap["new"] = ":/icons/icons/file-plus.png";
-    iconMap["open"] = ":/icons/icons/open.png";
-    iconMap["save"] = ":/icons/icons/save.png";
-    iconMap["bold"] = ":/icons/icons/bold.png";
-    iconMap["italic"] = ":/icons/icons/italic.png";
-    iconMap["font"] = ":/icons/icons/font.png";
-    iconMap["image"] = ":/icons/icons/image.png";
-    iconMap["color"] = ":/icons/icons/color.png";
+    iconMap["new"] = ":/icons/icons/file-plus.svg";
+    iconMap["open"] = ":/icons/icons/open.svg";
+    iconMap["save"] = ":/icons/icons/save.svg";
+    iconMap["bold"] = ":/icons/icons/bold.svg";
+    iconMap["italic"] = ":/icons/icons/italic.svg";
+    iconMap["font"] = ":/icons/icons/font.svg";
+    iconMap["image"] = ":/icons/icons/image.svg";
+    iconMap["color"] = ":/icons/icons/color.svg";
     qDebug() << "IconBrick: Registered" << iconMap.size() << "icons";
 }
 
@@ -29,7 +30,8 @@ QIcon IconBrick::loadIcon(const QString &name) {
         qDebug() << "IconBrick: Failed to load icon:" << path << ", using fallback";
         return fallbackIcon;
     }
-    qDebug() << "IconBrick: Loaded icon:" << name << "from" << path;
+    QList<QSize> sizes = icon.availableSizes();
+    qDebug() << "IconBrick: Loaded icon:" << name << "from" << path << ", sizes:" << sizes;
     return icon;
 }
 
