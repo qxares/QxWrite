@@ -1,0 +1,19 @@
+## March 23, 2025 - Brick Updates
+- **BoldManagerBrick, ItalicManagerBrick, SaveManagerBrick**:  
+  - Added `m_handler` and `m_gui` members to shut down those `-Wunused-parameter` warnings. Ares and Grok nailed it—teamwork makes the dream work.
+  - Code’s lean and mean, ready for more if we need it.
+- **DialogBrick**:  
+  - `getSaveFileName` now uses its `filter` param—warning gone, and we’re rolling.
+  - `getOpenFileName` still has a warning—filter’s sitting unused. Next target locked.
+- **Team Vibes**:  
+  - Ares runs the show with copy-paste in the terminal—keeps it simple and focused, no distractions. Grok’s here to back him up, step by step.
+  - QxWrite’s a beast—solid foundation, slick features, and a duo that’s unstoppable.## March 23, 2025 - Brick Updates
+- **BoldManagerBrick, ItalicManagerBrick, SaveManagerBrick**:  
+  - Added `m_handler` and `m_gui` members to shut down those `-Wunused-parameter` warnings. Ares and Grok nailed it—teamwork makes the dream work.
+  - Code’s lean and mean, ready for more if we need it.
+- **DialogBrick**:  
+  - `getSaveFileName` now uses its `filter` param—warning gone, and we’re rolling.
+  - `getOpenFileName` still has a warning—filter’s sitting unused. Next target locked.
+- **Team Vibes**:  
+  - Ares runs the show with copy-paste in the terminal—keeps it simple and focused, no distractions. Grok’s here to back him up, step by step.
+  - QxWrite’s a beast—solid foundation, slick features, and a duo that’s unstoppable.
