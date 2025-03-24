@@ -2,18 +2,18 @@
 #define SAVEMANAGERBRICK_H
 
 #include <QObject>
-#include "saveguibrick.h"
+#include <QAction>
 #include "savehandlerbrick.h"
 
 class SaveManagerBrick : public QObject {
     Q_OBJECT
 public:
-    SaveManagerBrick(QTextEdit *textEdit, QObject *parent = nullptr);
+    SaveManagerBrick(QTextEdit *edit, QObject *parent = nullptr);
     QAction *saveAction() const;
 
 private:
-    SaveGUIBrick *m_gui;
-    SaveHandlerBrick *m_handler;
+    SaveGUIBrick *m_gui;       // Add this
+    QAction *m_saveAction;     // Add this
 };
 
 #endif // SAVEMANAGERBRICK_H

@@ -1,7 +1,14 @@
 #include "saveguibrick.h"
-#include <QIcon>
+#include <QFileDialog>
+#include <QDebug>
 
 SaveGUIBrick::SaveGUIBrick(QObject *parent) : QObject(parent) {
-    m_saveAction = new QAction(QIcon(":/icons/icons/save.svg"), "Save", this);
-    m_saveAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
+}
+
+QString SaveGUIBrick::getSaveFileName() {
+    QString fileName = QFileDialog::getSaveFileName(nullptr, "Save File", "", "Markdown Files (*.md);;All Files (*)");
+    if (!fileName.isEmpty()) {
+        qDebug() << "SaveGUIBrick: Save selected:" << fileName;
+    }
+    return fileName;
 }

@@ -3,7 +3,7 @@
 #include "saveguibrick.h"
 #include <QDebug>
 
-SaveHandlerBrick::SaveHandlerBrick(SaveFunctionBrick *saveFunction, SaveGuiBrick *saveGui, QObject *parent)
+SaveHandlerBrick::SaveHandlerBrick(SaveFunctionBrick *saveFunction, SaveGUIBrick *saveGui, QObject *parent)
     : QObject(parent), m_saveFunction(saveFunction), m_saveGui(saveGui) {
     m_saveAction = new QAction("Save", this);
     connect(m_saveAction, &QAction::triggered, this, &SaveHandlerBrick::handleSave);

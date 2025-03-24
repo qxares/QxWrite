@@ -750,9 +750,9 @@ moc_mainwindowbrick.cpp: mainwindowbrick.h \
 		toolbarbrick.h \
 		insertbrick.h \
 		savemanagerbrick.h \
-		saveguibrick.h \
 		savehandlerbrick.h \
 		savefunctionbrick.h \
+		saveguibrick.h \
 		boldbrick.h \
 		newfilebrick.h \
 		italicbrick.h \
@@ -773,9 +773,9 @@ moc_insertbrick.cpp: insertbrick.h \
 moc_menumanagerbrick.cpp: menumanagerbrick.h \
 		insertbrick.h \
 		savemanagerbrick.h \
-		saveguibrick.h \
 		savehandlerbrick.h \
 		savefunctionbrick.h \
+		saveguibrick.h \
 		boldbrick.h \
 		newfilebrick.h \
 		italicbrick.h \
@@ -799,9 +799,9 @@ moc_newfilebrick.cpp: newfilebrick.h \
 moc_toolbarbrick.cpp: toolbarbrick.h \
 		insertbrick.h \
 		savemanagerbrick.h \
-		saveguibrick.h \
 		savehandlerbrick.h \
 		savefunctionbrick.h \
+		saveguibrick.h \
 		boldbrick.h \
 		newfilebrick.h \
 		italicbrick.h \
@@ -861,9 +861,9 @@ moc_saveguibrick.cpp: saveguibrick.h \
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include saveguibrick.h -o moc_saveguibrick.cpp
 
 moc_savemanagerbrick.cpp: savemanagerbrick.h \
-		saveguibrick.h \
 		savehandlerbrick.h \
 		savefunctionbrick.h \
+		saveguibrick.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include savemanagerbrick.h -o moc_savemanagerbrick.cpp
@@ -888,9 +888,9 @@ main.o: main.cpp mainwindowbrick.h \
 		toolbarbrick.h \
 		insertbrick.h \
 		savemanagerbrick.h \
-		saveguibrick.h \
 		savehandlerbrick.h \
 		savefunctionbrick.h \
+		saveguibrick.h \
 		boldbrick.h \
 		newfilebrick.h \
 		italicbrick.h \
@@ -905,9 +905,9 @@ mainwindowbrick.o: mainwindowbrick.cpp mainwindowbrick.h \
 		toolbarbrick.h \
 		insertbrick.h \
 		savemanagerbrick.h \
-		saveguibrick.h \
 		savehandlerbrick.h \
 		savefunctionbrick.h \
+		saveguibrick.h \
 		boldbrick.h \
 		newfilebrick.h \
 		italicbrick.h \
@@ -915,7 +915,8 @@ mainwindowbrick.o: mainwindowbrick.cpp mainwindowbrick.h \
 		iconbrick.h \
 		fontbrick.h \
 		colorbrick.h \
-		menumanagerbrick.h
+		menumanagerbrick.h \
+		dialogbrick.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindowbrick.o mainwindowbrick.cpp
 
 insertbrick.o: insertbrick.cpp insertbrick.h
@@ -924,9 +925,9 @@ insertbrick.o: insertbrick.cpp insertbrick.h
 menumanagerbrick.o: menumanagerbrick.cpp menumanagerbrick.h \
 		insertbrick.h \
 		savemanagerbrick.h \
-		saveguibrick.h \
 		savehandlerbrick.h \
 		savefunctionbrick.h \
+		saveguibrick.h \
 		boldbrick.h \
 		newfilebrick.h \
 		italicbrick.h \
@@ -944,9 +945,9 @@ newfilebrick.o: newfilebrick.cpp newfilebrick.h
 toolbarbrick.o: toolbarbrick.cpp toolbarbrick.h \
 		insertbrick.h \
 		savemanagerbrick.h \
-		saveguibrick.h \
 		savehandlerbrick.h \
 		savefunctionbrick.h \
+		saveguibrick.h \
 		boldbrick.h \
 		newfilebrick.h \
 		italicbrick.h \
@@ -987,9 +988,9 @@ saveguibrick.o: saveguibrick.cpp saveguibrick.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o saveguibrick.o saveguibrick.cpp
 
 savemanagerbrick.o: savemanagerbrick.cpp savemanagerbrick.h \
-		saveguibrick.h \
 		savehandlerbrick.h \
-		savefunctionbrick.h
+		savefunctionbrick.h \
+		saveguibrick.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o savemanagerbrick.o savemanagerbrick.cpp
 
 qrc_icons.o: qrc_icons.cpp 

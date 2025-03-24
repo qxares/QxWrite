@@ -2,16 +2,15 @@
 #define SAVEGUIBRICK_H
 
 #include <QObject>
-#include <QAction>
+#include <QString>
 
 class SaveGUIBrick : public QObject {
     Q_OBJECT
 public:
-    SaveGUIBrick(QObject *parent = nullptr);
-    QAction *saveAction() const { return m_saveAction; }
+    explicit SaveGUIBrick(QObject *parent = nullptr);
+    QString getSaveFileName();  // Add this
 
 private:
-    QAction *m_saveAction;
 };
 
 #endif // SAVEGUIBRICK_H

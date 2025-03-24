@@ -3,6 +3,7 @@
 #include <QToolBar>
 #include <QMenuBar>
 #include <QDebug>
+#include "dialogbrick.h"  // Add this
 
 MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     qDebug() << "MainWindowBrick starting...";

@@ -5,8 +5,8 @@
 SaveManagerBrick::SaveManagerBrick(QTextEdit *edit, QObject *parent)
     : QObject(parent) {
     SaveFunctionBrick *function = new SaveFunctionBrick(edit, this);
-    SaveGuiBrick *gui = new SaveGuiBrick(this);
-    SaveHandlerBrick *handler = new SaveHandlerBrick(function, gui, this);
+    m_gui = new SaveGUIBrick(this);  // Fix typo, use m_gui
+    SaveHandlerBrick *handler = new SaveHandlerBrick(function, m_gui, this);
     m_saveAction = handler->saveAction();
     qDebug() << "SaveManagerBrick initialized";
 }

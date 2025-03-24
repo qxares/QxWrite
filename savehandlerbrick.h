@@ -9,7 +9,7 @@
 class SaveHandlerBrick : public QObject {
     Q_OBJECT
 public:
-    SaveHandlerBrick(SaveFunctionBrick *saveFunction, SaveGuiBrick *saveGui, QObject *parent = nullptr);
+    SaveHandlerBrick(SaveFunctionBrick *saveFunction, SaveGUIBrick *saveGui, QObject *parent = nullptr);
     QAction *saveAction() const;
 
 private slots:
@@ -17,7 +17,7 @@ private slots:
 
 private:
     SaveFunctionBrick *m_saveFunction;
-    SaveGuiBrick *m_saveGui;
+    SaveGUIBrick *m_saveGui;
     QAction *m_saveAction;
 };
 
