@@ -2,21 +2,23 @@
 #define SAVEHANDLERBRICK_H
 
 #include <QObject>
+#include <QAction>
 #include "savefunctionbrick.h"
-#include "dialogbrick.h"
+#include "saveguibrick.h"
 
 class SaveHandlerBrick : public QObject {
     Q_OBJECT
 public:
-    SaveHandlerBrick(QTextEdit *textEdit, SaveFunctionBrick *function, DialogBrick *dialog, QObject *parent = nullptr);
+    SaveHandlerBrick(SaveFunctionBrick *saveFunction, SaveGuiBrick *saveGui, QObject *parent = nullptr);
+    QAction *saveAction() const;
 
-public slots:
+private slots:
     void handleSave();
 
 private:
-    QTextEdit *m_textEdit;
     SaveFunctionBrick *m_saveFunction;
-    DialogBrick *m_dialog;
+    SaveGuiBrick *m_saveGui;
+    QAction *m_saveAction;
 };
 
 #endif // SAVEHANDLERBRICK_H

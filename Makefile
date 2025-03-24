@@ -753,7 +753,6 @@ moc_mainwindowbrick.cpp: mainwindowbrick.h \
 		saveguibrick.h \
 		savehandlerbrick.h \
 		savefunctionbrick.h \
-		dialogbrick.h \
 		boldbrick.h \
 		newfilebrick.h \
 		italicbrick.h \
@@ -777,7 +776,6 @@ moc_menumanagerbrick.cpp: menumanagerbrick.h \
 		saveguibrick.h \
 		savehandlerbrick.h \
 		savefunctionbrick.h \
-		dialogbrick.h \
 		boldbrick.h \
 		newfilebrick.h \
 		italicbrick.h \
@@ -804,7 +802,6 @@ moc_toolbarbrick.cpp: toolbarbrick.h \
 		saveguibrick.h \
 		savehandlerbrick.h \
 		savefunctionbrick.h \
-		dialogbrick.h \
 		boldbrick.h \
 		newfilebrick.h \
 		italicbrick.h \
@@ -853,7 +850,7 @@ moc_savefunctionbrick.cpp: savefunctionbrick.h \
 
 moc_savehandlerbrick.cpp: savehandlerbrick.h \
 		savefunctionbrick.h \
-		dialogbrick.h \
+		saveguibrick.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include savehandlerbrick.h -o moc_savehandlerbrick.cpp
@@ -867,7 +864,6 @@ moc_savemanagerbrick.cpp: savemanagerbrick.h \
 		saveguibrick.h \
 		savehandlerbrick.h \
 		savefunctionbrick.h \
-		dialogbrick.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include savemanagerbrick.h -o moc_savemanagerbrick.cpp
@@ -895,7 +891,6 @@ main.o: main.cpp mainwindowbrick.h \
 		saveguibrick.h \
 		savehandlerbrick.h \
 		savefunctionbrick.h \
-		dialogbrick.h \
 		boldbrick.h \
 		newfilebrick.h \
 		italicbrick.h \
@@ -913,7 +908,6 @@ mainwindowbrick.o: mainwindowbrick.cpp mainwindowbrick.h \
 		saveguibrick.h \
 		savehandlerbrick.h \
 		savefunctionbrick.h \
-		dialogbrick.h \
 		boldbrick.h \
 		newfilebrick.h \
 		italicbrick.h \
@@ -933,7 +927,6 @@ menumanagerbrick.o: menumanagerbrick.cpp menumanagerbrick.h \
 		saveguibrick.h \
 		savehandlerbrick.h \
 		savefunctionbrick.h \
-		dialogbrick.h \
 		boldbrick.h \
 		newfilebrick.h \
 		italicbrick.h \
@@ -954,7 +947,6 @@ toolbarbrick.o: toolbarbrick.cpp toolbarbrick.h \
 		saveguibrick.h \
 		savehandlerbrick.h \
 		savefunctionbrick.h \
-		dialogbrick.h \
 		boldbrick.h \
 		newfilebrick.h \
 		italicbrick.h \
@@ -988,7 +980,6 @@ savefunctionbrick.o: savefunctionbrick.cpp savefunctionbrick.h
 
 savehandlerbrick.o: savehandlerbrick.cpp savehandlerbrick.h \
 		savefunctionbrick.h \
-		dialogbrick.h \
 		saveguibrick.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o savehandlerbrick.o savehandlerbrick.cpp
 
@@ -998,8 +989,7 @@ saveguibrick.o: saveguibrick.cpp saveguibrick.h
 savemanagerbrick.o: savemanagerbrick.cpp savemanagerbrick.h \
 		saveguibrick.h \
 		savehandlerbrick.h \
-		savefunctionbrick.h \
-		dialogbrick.h
+		savefunctionbrick.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o savemanagerbrick.o savemanagerbrick.cpp
 
 qrc_icons.o: qrc_icons.cpp 
