@@ -1,23 +1,16 @@
 #include "boldbrick.h"
-#include <QTextEdit>
-#include <QTextCharFormat>
 #include <QDebug>
 
 BoldBrick::BoldBrick(QTextEdit *edit, QObject *parent)
-    : QObject(parent), targetEdit(edit) {
-    qDebug() << "BoldBrick initialized, target edit:" << targetEdit;
+    : QObject(parent), m_edit(edit) {
+    qDebug() << "BoldBrick initialized, target edit:" << m_edit;
+    boldAct = new QAction("Bold", this);
+    connect(boldAct, &QAction::triggered, this, &BoldBrick::toggleBold);
 }
 
-void BoldBrick::toggleBold(bool checked) {
-    qDebug() << "BoldBrick: toggleBold triggered, checked:" << checked;
-    if (!targetEdit) {
-        qDebug() << "No target QTextEdit provided!";
-        return;
-    }
-    QTextCursor cursor = targetEdit->textCursor();
-    QTextCharFormat format;
-    format.setFontWeight(checked ? QFont::Bold : QFont::Normal);
-    cursor.mergeCharFormat(format);
-    targetEdit->setTextCursor(cursor);
-    emit boldToggled(checked);
+void BoldBrick::toggleBold() {
+    qDebug() << "BoldBrick: toggleBold triggered, checked:" << boldAct->isChecked();
+    QTextCharFormat fmt;
+    fmt.setFontWeight(boldAct->isChecked() ? QFont::Bold : QFont::Normal);
+    m_edit->mergeCurrentCharFormat(fmt);
 }

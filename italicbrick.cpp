@@ -1,23 +1,16 @@
 #include "italicbrick.h"
-#include <QTextEdit>
-#include <QTextCharFormat>
 #include <QDebug>
 
 ItalicBrick::ItalicBrick(QTextEdit *edit, QObject *parent)
-    : QObject(parent), targetEdit(edit) {
-    qDebug() << "ItalicBrick initialized, target edit:" << targetEdit;
+    : QObject(parent), m_edit(edit) {
+    qDebug() << "ItalicBrick initialized, target edit:" << m_edit;
+    italicAct = new QAction("Italic", this);
+    connect(italicAct, &QAction::triggered, this, &ItalicBrick::toggleItalic);
 }
 
-void ItalicBrick::toggleItalic(bool checked) {
-    qDebug() << "ItalicBrick: toggleItalic triggered, checked:" << checked;
-    if (!targetEdit) {
-        qDebug() << "No target QTextEdit provided!";
-        return;
-    }
-    QTextCursor cursor = targetEdit->textCursor();
-    QTextCharFormat format;
-    format.setFontItalic(checked);
-    cursor.mergeCharFormat(format);
-    targetEdit->setTextCursor(cursor);
-    emit italicToggled(checked);
+void ItalicBrick::toggleItalic() {
+    qDebug() << "ItalicBrick: toggleItalic triggered, checked:" << italicAct->isChecked();
+    QTextCharFormat fmt;
+    fmt.setFontItalic(italicAct->isChecked());
+    m_edit->mergeCurrentCharFormat(fmt);
 }
