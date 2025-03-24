@@ -2,7 +2,8 @@
 #include <QTextEdit>
 #include <QFile>
 #include <QTextStream>
-#include <QDir>  // Added this
+#include <QDir>
+#include <QMessageBox>  // Added this
 #include <QDebug>
 #include "dialogbrick.h"
 
@@ -15,6 +16,7 @@ void OpenFileBrick::openFile() {
     qDebug() << "OpenFileBrick: openFile triggered";
     if (!targetEdit) {
         qDebug() << "No target QTextEdit provided!";
+        QMessageBox::critical(nullptr, "Error", "No target QTextEdit provided!");
         return;
     }
     QString fileName = dialogBrick->getOpenFileName(tr("Open File"), QDir::homePath(), tr("Text Files (*.txt);;All Files (*)"));
@@ -24,7 +26,8 @@ void OpenFileBrick::openFile() {
     }
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "OpenFileBrick: Failed to open file:" << fileName;
+        qDebug() << "OpenFileBrick: Failed to open file:" << fileName << "Error:" << file.errorString();
+        QMessageBox::critical(targetEdit->window(), "Error", "Failed to open file: " + file.errorString());
         return;
     }
     QTextStream in(&file);

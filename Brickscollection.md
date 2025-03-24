@@ -57,12 +57,12 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
 ### BoldBrick
 - **Purpose**: Applies bold formatting.
 - **Features**: Toggles bold on selected text.
-- **Status**: Implemented, needs testing.
+- **Status**: Fully implemented and tested. Toggles bold formatting correctly.
 
 ### ItalicBrick
 - **Purpose**: Applies italic formatting.
 - **Features**: Toggles italic on selected text.
-- **Status**: Implemented, needs testing.
+- **Status**: Fully implemented and tested. Toggles italic formatting correctly.
 
 ### NewFileBrick
 - **Purpose**: Creates new documents.
@@ -71,9 +71,9 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
 
 ### OpenFileBrick
 - **Purpose**: Opens text files.
-- **Features**: Uses `DialogBrick` to select `.txt`, `.md`, etc.
+- **Features**: Uses `DialogBrick` to select `.txt`, `.md`, etc. Supports rich text via `setHtml()`.
 - **Status**: Fully implemented. "File > Open" opens a custom dialog and loads files (e.g., `test45.txt`).
-- **Recent Changes**: Fixed menu connect bug for `openFile()` by adding `public slots:` and using modern `connect()` syntax.
+- **Recent Changes**: Fixed menu connect bug for `openFile()` by ensuring it’s under `public slots:` and using modern `connect()` syntax. Verified fix—connect error resolved. Added error handling with `QMessageBox` for failed file opens.
 
 ### SaveManagerBrick
 - **Purpose**: Manages save operations.
@@ -87,8 +87,8 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
 
 ### SaveFunctionBrick
 - **Purpose**: Core save logic.
-- **Features**: Writes text to file.
-- **Status**: Implemented.
+- **Features**: Writes text to file. Supports rich text via `toHtml()`.
+- **Status**: Implemented. Added error handling with `QMessageBox` for failed file saves.
 
 ### SaveHandlerBrick
 - **Purpose**: Initiates save process.
@@ -103,25 +103,23 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
 ### FontBrick
 - **Purpose**: Changes font.
 - **Features**: Opens font dialog, applies to text.
-- **Status**: Implemented, needs testing.
+- **Status**: Fully implemented and tested. Applies selected font (e.g., "Ubuntu Sans").
 
 ### ColorBrick
 - **Purpose**: Changes text color.
 - **Features**: Opens color dialog, applies to text.
-- **Status**: Implemented, needs testing.
+- **Status**: Fully implemented and tested. Applies selected color (e.g., "#e01b24").
 
 ### DialogBrick
 - **Purpose**: Custom file dialog with three-pane navigation.
 - **Features**: 
-  - Left: Drive list (root dirs, 200px min width).
+  - Left: File list with filter support, includes directories and `..` for navigation.
   - Middle: Directory tree.
-  - Right: File list with filter support.
+  - Right: Drive list (root dirs, 200px min width).
   - Filename input with QLineEdit and extension dropdown via QComboBox.
   - Size: 700x500.
-- **Status**: Fully implemented. Supports open/save operations.
-- **Recent Changes**: Added `lastDir` to persist directory, updated `getOpenFileName()` debug log to show `Open cancelled`.
+- **Status**: Fully implemented. Supports open/save operations with navigation to parent directories and subdirectories.
+- **Recent Changes**: Added `lastDir` to persist directory, updated `getOpenFileName()` debug log to show `Open cancelled`. Added parent directory (`..`) and subdirectory navigation in file list, fixed visibility of directories by adjusting name filter behavior, resolved variable shadowing error in `getSaveFileName` and `getOpenFileName`, fixed `..` visibility in file view (left pane), added root directory check to prevent navigation above `/`.
 
 ## Next Steps
-- Test formatting bricks (`BoldBrick`, `ItalicBrick`, `FontBrick`, `ColorBrick`).
-- Add error handling (e.g., show a `QMessageBox` if file operations fail).
 - Consider adding "Recent Files" to the `DialogBrick` for quicker access.
