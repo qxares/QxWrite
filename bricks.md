@@ -1,7 +1,30 @@
 # QxWrite Brick Documentation
 
+## Brick Architecture
+Every action, no matter how simple or small, follows this 4-brick structure:
+
+1. **Function Brick**
+   - **Purpose**: Creates the core function (e.g., bolding text, saving a file).
+   - **Role**: Pure logic—takes inputs, delivers outputs, no side effects.
+
+2. **Handler Brick**
+   - **Purpose**: Manages interaction if an action requires multiple bricks.
+   - **Role**: Coordinates Function Bricks, handles dependencies, sequences execution.
+
+3. **GUI Brick**
+   - **Purpose**: Controls and provides the GUI output (e.g., buttons, dialogs).
+   - **Role**: Displays UI, emits signals—keeps logic light.
+
+4. **Manager Brick**
+   - **Purpose**: Ensures the action runs smoothly and does what it’s supposed to.
+   - **Role**: Supervises, validates, logs, and catches errors.
+
+### Special Brick: GUI Manager Brick
+- **Purpose**: Regulates all GUI functions for consistency.
+- **Role**: Centralizes toolbar/menu layout, ensures everything looks sharp.
+
 ## Overview
-QxWrite is a modular text editor built with Qt, using a "brick" system for features.
+QxWrite is a modular text editor built with Qt, using the brick system for features.
 
 ## Bricks
 
@@ -18,7 +41,7 @@ QxWrite is a modular text editor built with Qt, using a "brick" system for featu
 ### ToolBarBrick
 - **Purpose**: Builds and manages toolbar.
 - **Features**: Adds actions with icons for text formatting and file ops.
-- **Status**: Implemented, 8 actions set up.
+- **Status**: Implemented, 8 actions set up. (Note: May evolve into GUI Manager subtype.)
 
 ### MenuManagerBrick
 - **Purpose**: Constructs menu bar.
@@ -78,15 +101,9 @@ QxWrite is a modular text editor built with Qt, using a "brick" system for featu
 ### DialogBrick
 - **Purpose**: Custom file dialog with three-pane navigation.
 - **Features**: 
-  - Left: Drive list (root dirs, 150px wide).
+  - Left: Drive list (root dirs, 200px min width).
   - Middle: Directory tree.
   - Right: File list with filter support.
-  - Size: 600x400.
-- **Status**: Implemented, navigation and selection working.### DialogBrick
-- **Purpose**: Custom file dialog with three-pane navigation (drives, directories, files).
-- **Features**: 
-  - Left: Drive list (root dirs).
-  - Middle: Directory tree.
-  - Right: File list with filter support.
-  - Size: 600x400.
-- **Status**: Implemented, navigation and selection working.
+  - Filename input with QLineEdit and extension dropdown via QComboBox.
+  - Size: 700x500.
+- **Status**: Implemented, fully functional for open/save.
