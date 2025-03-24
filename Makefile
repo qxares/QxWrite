@@ -988,7 +988,8 @@ savefunctionbrick.o: savefunctionbrick.cpp savefunctionbrick.h
 
 savehandlerbrick.o: savehandlerbrick.cpp savehandlerbrick.h \
 		savefunctionbrick.h \
-		dialogbrick.h
+		dialogbrick.h \
+		saveguibrick.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o savehandlerbrick.o savehandlerbrick.cpp
 
 saveguibrick.o: saveguibrick.cpp saveguibrick.h
