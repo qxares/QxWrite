@@ -146,7 +146,7 @@ QString DialogBrick::getSaveFileName(const QString &caption, const QString &dir,
             return filePath;
         }
     }
-    qDebug() << "DialogBrick: Save selected: \"\"";
+    qDebug() << "DialogBrick: Save cancelled";
     return QString();
 }
 
@@ -281,6 +281,6 @@ QString DialogBrick::getOpenFileName(const QString &caption, const QString &dir,
         qDebug() << "DialogBrick: Open selected:" << filePath;
         return filePath;
     }
-    qDebug() << "DialogBrick: Open selected: \"\"";
+    qDebug() << "DialogBrick: Open cancelled";  // Updated for clarity
     return QString();
 }

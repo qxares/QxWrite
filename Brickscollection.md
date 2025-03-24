@@ -46,7 +46,8 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
 ### MenuManagerBrick
 - **Purpose**: Constructs menu bar.
 - **Features**: File, Edit, Format menus with actions.
-- **Status**: Implemented, connect bug with `OpenFileBrick::openFile()` pending.
+- **Status**: Fully implemented. Supports "File > New," "File > Open," "File > Save," "File > Save As," "Format > Bold/Italic/Font/Color," and "Insert > Image."
+- **Recent Changes**: Fixed connect bug with `OpenFileBrick::openFile()` using modern `connect()` syntax. Added "File > Save As" action.
 
 ### InsertBrick
 - **Purpose**: Inserts images into text.
@@ -56,31 +57,42 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
 ### BoldBrick
 - **Purpose**: Applies bold formatting.
 - **Features**: Toggles bold on selected text.
-- **Status**: Implemented.
+- **Status**: Implemented, needs testing.
 
 ### ItalicBrick
 - **Purpose**: Applies italic formatting.
 - **Features**: Toggles italic on selected text.
-- **Status**: Implemented.
+- **Status**: Implemented, needs testing.
 
 ### NewFileBrick
 - **Purpose**: Creates new documents.
 - **Features**: Clears text edit for a fresh start.
-- **Status**: Implemented.
+- **Status**: Implemented, fully functional (confirmed via debug log).
 
 ### OpenFileBrick
 - **Purpose**: Opens text files.
 - **Features**: Uses `DialogBrick` to select `.txt`, `.md`, etc.
-- **Status**: Implemented, menu connect bug (`openFile()`) to fix.
+- **Status**: Fully implemented. "File > Open" opens a custom dialog and loads files (e.g., `test45.txt`).
+- **Recent Changes**: Fixed menu connect bug for `openFile()` by adding `public slots:` and using modern `connect()` syntax.
 
 ### SaveManagerBrick
 - **Purpose**: Manages save operations.
-- **Features**: Delegates to `SaveFunctionBrick`, `SaveGuiBrick`, etc.
-- **Status**: Implemented.
+- **Features**: Delegates to `SaveFunctionBrick`, `SaveHandlerBrick`, and `SaveGuiBrick`. Supports "File > Save" and "File > Save As".
+- **Status**: Fully implemented. "File > Save" and "File > Save As" both functional (e.g., saved `test 0001.txt`).
+- **Architecture**:
+  - **SaveFunctionBrick**: Writes the file.
+  - **SaveHandlerBrick**: Decides when to prompt for a file path.
+  - **SaveGuiBrick**: Shows the file dialog via `DialogBrick`.
+  - **SaveManagerBrick**: Coordinates the save process, logs actions.
 
 ### SaveFunctionBrick
 - **Purpose**: Core save logic.
 - **Features**: Writes text to file.
+- **Status**: Implemented.
+
+### SaveHandlerBrick
+- **Purpose**: Initiates save process.
+- **Features**: Coordinates with `SaveGuiBrick` to get file path.
 - **Status**: Implemented.
 
 ### SaveGuiBrick
@@ -91,12 +103,12 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
 ### FontBrick
 - **Purpose**: Changes font.
 - **Features**: Opens font dialog, applies to text.
-- **Status**: Implemented.
+- **Status**: Implemented, needs testing.
 
 ### ColorBrick
 - **Purpose**: Changes text color.
 - **Features**: Opens color dialog, applies to text.
-- **Status**: Implemented.
+- **Status**: Implemented, needs testing.
 
 ### DialogBrick
 - **Purpose**: Custom file dialog with three-pane navigation.
@@ -106,4 +118,10 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
   - Right: File list with filter support.
   - Filename input with QLineEdit and extension dropdown via QComboBox.
   - Size: 700x500.
-- **Status**: Implemented, fully functional for open/save.
+- **Status**: Fully implemented. Supports open/save operations.
+- **Recent Changes**: Added `lastDir` to persist directory, updated `getOpenFileName()` debug log to show `Open cancelled`.
+
+## Next Steps
+- Test formatting bricks (`BoldBrick`, `ItalicBrick`, `FontBrick`, `ColorBrick`).
+- Add error handling (e.g., show a `QMessageBox` if file operations fail).
+- Consider adding "Recent Files" to the `DialogBrick` for quicker access.

@@ -9,9 +9,10 @@ MenuManagerBrick::MenuManagerBrick(QMenuBar *menuBar, QTextEdit *edit, InsertBri
     qDebug() << "MenuManagerBrick initialized, menuBar:" << menuBar;
 
     QMenu *fileMenu = m_menuBar->addMenu("File");
+    QAction *openAction = fileMenu->addAction("Open");
     fileMenu->addAction("New", newFile, SLOT(newFile()));
-    fileMenu->addAction("Open", openFile, SLOT(openFile()));
     fileMenu->addAction(save->saveAction());
+    fileMenu->addAction(save->saveAsAction());  // Add this
 
     QMenu *formatMenu = m_menuBar->addMenu("Format");
     formatMenu->addAction(bold->boldAction());
@@ -24,6 +25,8 @@ MenuManagerBrick::MenuManagerBrick(QMenuBar *menuBar, QTextEdit *edit, InsertBri
 
     bold->boldAction()->setCheckable(true);
     italic->italicAction()->setCheckable(true);
+
+    connect(openAction, &QAction::triggered, openFile, &OpenFileBrick::openFile);
 
     connect(bold->boldAction(), &QAction::toggled, this, [=](bool checked) {
         qDebug() << "Menu toggle states updated - Bold:" << checked << ", Italic:" << italic->italicAction()->isChecked();

@@ -1,15 +1,23 @@
 #include "saveguibrick.h"
-#include "dialogbrick.h"  // Add this
+#include "dialogbrick.h"
 #include <QDebug>
 
-SaveGUIBrick::SaveGUIBrick(QObject *parent) : QObject(parent) {
+SaveGUIBrick::SaveGUIBrick(QTextEdit *edit, QObject *parent)
+    : QObject(parent), m_edit(edit), m_currentFilePath("") {
+    m_dialog = new DialogBrick(this);
+    qDebug() << "SaveGUIBrick initialized";
 }
 
-QString SaveGUIBrick::getSaveFileName() {
-    DialogBrick dialog;
-    QString fileName = dialog.getSaveFileName("Save File", "", "Markdown Files (*.md);;All Files (*)");
-    if (!fileName.isEmpty()) {
-        qDebug() << "SaveGUIBrick: Save selected:" << fileName;
+void SaveGUIBrick::save(bool forcePrompt) {
+    if (forcePrompt || m_currentFilePath.isEmpty()) {
+        QString filePath = m_dialog->getSaveFileName("Save As", "", "Text Files (*.txt);;Markdown Files (*.md);;All Files (*)");
+        if (!filePath.isEmpty()) {
+            m_currentFilePath = filePath;
+            emit fileSelected(m_currentFilePath);
+        } else {
+            qDebug() << "SaveGUIBrick: Save cancelled";
+        }
+    } else {
+        emit fileSelected(m_currentFilePath);
     }
-    return fileName;
 }

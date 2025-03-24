@@ -7,9 +7,12 @@
 class DialogBrick : public QObject {
     Q_OBJECT
 public:
-    explicit DialogBrick(QObject *parent = nullptr);
-    QString getSaveFileName(const QString &title, const QString &dir, const QString &filter);
-    QString getOpenFileName(const QString &title, const QString &dir, const QString &filter);
+    DialogBrick(QObject *parent = nullptr);
+    QString getSaveFileName(const QString &caption, const QString &dir, const QString &filter);
+    QString getOpenFileName(const QString &caption, const QString &dir, const QString &filter);
+
+private:
+    QString lastDir;  // Add this
 };
 
 #endif // DIALOGBRICK_H

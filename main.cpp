@@ -1,5 +1,5 @@
-#include "mainwindowbrick.h"
 #include <QApplication>
+#include "mainwindowbrick.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);

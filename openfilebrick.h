@@ -9,6 +9,8 @@ class OpenFileBrick : public QObject {
     Q_OBJECT
 public:
     OpenFileBrick(QTextEdit *edit, DialogBrick *dialog, QObject *parent = nullptr);
+
+public slots:  // Add this
     void openFile();
 
 private:
