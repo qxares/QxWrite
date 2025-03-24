@@ -2,44 +2,37 @@
 #define MAINWINDOWBRICK_H
 
 #include <QMainWindow>
-
-class QTextEdit;
-class QMenuBar;
-class QToolBar;
-class InsertBrick;
-class SaveBrick;
-class MenuManagerBrick;
-class BoldBrick;
-class NewFileBrick;
-class ItalicBrick;
-class OpenFileBrick;
-class ToolBarBrick;
-class IconBrick;
-class DialogBrick;
-class FontBrick;
-class ColorBrick;
+#include "toolbarbrick.h"
+#include "menumanagerbrick.h"
+#include "savemanagerbrick.h"
+#include "insertbrick.h"
+#include "boldbrick.h"
+#include "newfilebrick.h"
+#include "italicbrick.h"
+#include "openfilebrick.h"
+#include "iconbrick.h"
+#include "fontbrick.h"
+#include "colorbrick.h"
 
 class MainWindowBrick : public QMainWindow {
     Q_OBJECT
 public:
-    MainWindowBrick(QWidget *parent = nullptr);
-    virtual ~MainWindowBrick() = default;
+    explicit MainWindowBrick(QWidget *parent = nullptr);
+    ~MainWindowBrick();
 
 private:
-    QTextEdit *edit;
-    InsertBrick *insertBrick;
-    SaveBrick *saveBrick;
+    QTextEdit *textEdit;
+    ToolBarBrick *toolBarBrick;
     MenuManagerBrick *menuManagerBrick;
+    SaveManagerBrick *saveManagerBrick;
+    InsertBrick *insertBrick;
     BoldBrick *boldBrick;
     NewFileBrick *newFileBrick;
     ItalicBrick *italicBrick;
     OpenFileBrick *openFileBrick;
-    ToolBarBrick *toolBarBrick;
     IconBrick *iconBrick;
-    DialogBrick *dialogBrick;
     FontBrick *fontBrick;
     ColorBrick *colorBrick;
 };
 
 #endif // MAINWINDOWBRICK_H
-
