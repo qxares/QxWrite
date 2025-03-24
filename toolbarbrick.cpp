@@ -1,33 +1,52 @@
 #include "toolbarbrick.h"
+#include <QToolBar>
 #include <QDebug>
 
-ToolBarBrick::ToolBarBrick(QToolBar *toolBar, QTextEdit *edit, InsertBrick *insert, SaveManagerBrick *save,
-                           BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile,
-                           IconBrick *icon, FontBrick *font, ColorBrick *color, QObject *parent)
-    : QObject(parent), m_toolBar(toolBar), m_edit(edit) {
-    qDebug() << "ToolBarBrick initialized, toolBar:" << toolBar << ", target edit:" << edit;
+ToolBarBrick::ToolBarBrick(QToolBar *toolBar, QTextEdit *edit,
+                           InsertBrick *insertBrick, SaveManagerBrick *saveManagerBrick,
+                           BoldBrick *boldBrick, NewFileBrick *newFileBrick,
+                           ItalicBrick *italicBrick, OpenFileBrick *openFileBrick,
+                           IconBrick *iconBrick, FontBrick *fontBrick,
+                           ColorBrick *colorBrick, QObject *parent)
+    : QObject(parent) {
+    QAction *newAct = new QAction("New", this);
+    newAct->setIcon(iconBrick->getIcon("new"));
+    connect(newAct, &QAction::triggered, newFileBrick, &NewFileBrick::newFile);
+    toolBar->addAction(newAct);
 
-    m_toolBar->addAction(icon->loadIcon("new"), "New", newFile, SLOT(newFile()));
-    m_toolBar->addAction(icon->loadIcon("open"), "Open", openFile, SLOT(openFile()));
-    m_toolBar->addAction(save->saveAction());
-    m_toolBar->addAction(bold->boldAction());
-    m_toolBar->addAction(italic->italicAction());
-    m_toolBar->addAction(font->getFontAction());
-    m_toolBar->addAction(color->getColorAction());
-    m_toolBar->addAction(icon->loadIcon("image"), "Image", insert, SLOT(insertImage()));
+    QAction *openAct = new QAction("Open", this);
+    openAct->setIcon(iconBrick->getIcon("open"));
+    connect(openAct, &QAction::triggered, openFileBrick, &OpenFileBrick::openFile);
+    toolBar->addAction(openAct);
 
-    bold->boldAction()->setCheckable(true);
-    italic->italicAction()->setCheckable(true);
+    QAction *saveAct = saveManagerBrick->saveAction();
+    saveAct->setIcon(iconBrick->getIcon("save"));
+    toolBar->addAction(saveAct);
 
-    connect(bold->boldAction(), &QAction::toggled, this, [=](bool checked) {
-        qDebug() << "Toggle states updated - Bold:" << checked << ", Italic:" << italic->italicAction()->isChecked();
-    });
-    connect(italic->italicAction(), &QAction::toggled, this, [=](bool checked) {
-        qDebug() << "Toggle states updated - Bold:" << bold->boldAction()->isChecked() << ", Italic:" << checked;
-    });
+    QAction *boldAct = boldBrick->boldAction();
+    boldAct->setIcon(iconBrick->getIcon("bold"));
+    toolBar->addAction(boldAct);
+
+    QAction *italicAct = italicBrick->italicAction();
+    italicAct->setIcon(iconBrick->getIcon("italic"));
+    toolBar->addAction(italicAct);
+
+    QAction *fontAct = fontBrick->getFontAction();
+    fontAct->setIcon(iconBrick->getIcon("font"));
+    toolBar->addAction(fontAct);
+
+    QAction *colorAct = colorBrick->getColorAction();
+    colorAct->setIcon(iconBrick->getIcon("color"));
+    toolBar->addAction(colorAct);
+
+    QAction *imageAct = new QAction("Insert Image", this);
+    imageAct->setIcon(iconBrick->getIcon("image"));
+    connect(imageAct, &QAction::triggered, insertBrick, &InsertBrick::insertImage);
+    toolBar->addAction(imageAct);
 
     qDebug() << "Toolbar set up with icons and toggles.";
 }
 
 ToolBarBrick::~ToolBarBrick() {
+    // Empty is fine—QObject cleans up children
 }

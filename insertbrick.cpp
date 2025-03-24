@@ -1,33 +1,25 @@
 #include "insertbrick.h"
-#include <QFileDialog>
+#include <QTextEdit>
 #include <QTextCursor>
 #include <QTextImageFormat>
-#include <QTextDocument>
-#include <QTextEdit>
 #include <QDebug>
+#include "dialogbrick.h"
 
-InsertBrick::InsertBrick(QTextEdit *edit, QObject *parent)
-    : QObject(parent), targetEdit(edit) {
-    qDebug() << "InsertBrick initialized, target edit:" << targetEdit;
+InsertBrick::InsertBrick(QTextEdit *edit, DialogBrick *dialog, QObject *parent)
+    : QObject(parent), targetEdit(edit), dialogBrick(dialog) {
+    qDebug() << "InsertBrick initialized, target edit:" << edit;
 }
 
 void InsertBrick::insertImage() {
-    qDebug() << "InsertBrick: insertImage triggered";
-    if (!targetEdit) {
-        qDebug() << "No target QTextEdit provided!";
-        return;
-    }
-    QString fileName = QFileDialog::getOpenFileName(nullptr, tr("Select Image"), "/home/ares/Pictures", tr("Image Files (*.png *.jpg *.bmp)"));
-    qDebug() << "Selected file:" << fileName;
+    QString fileName = dialogBrick->getOpenFileName(
+        "Insert Image", "", "Images (*.png *.jpg *.jpeg *.gif *.bmp)");
     if (!fileName.isEmpty()) {
-        QTextDocument *doc = targetEdit->document();
-        QUrl url = QUrl::fromLocalFile(fileName);
-        doc->addResource(QTextDocument::ImageResource, url, QPixmap(fileName));
         QTextCursor cursor = targetEdit->textCursor();
         QTextImageFormat format;
-        format.setName(url.toString());
+        format.setName(fileName);
         cursor.insertImage(format);
-        qDebug() << "Image inserted:" << fileName;
-        emit inserted(url);
+        qDebug() << "InsertBrick: Image inserted:" << fileName;
+    } else {
+        qDebug() << "InsertBrick: No image selected";
     }
 }
