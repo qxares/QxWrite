@@ -3,17 +3,15 @@
 #include <QTextStream>
 #include <QDebug>
 
-SaveFunctionBrick::SaveFunctionBrick() {}
+SaveFunctionBrick::SaveFunctionBrick(QTextEdit *edit, QObject *parent)
+    : QObject(parent), m_edit(edit) {}
 
-bool SaveFunctionBrick::saveFile(const QString &fileName, QTextEdit *textEdit) {
+void SaveFunctionBrick::save(const QString &fileName) {
     QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qDebug() << "SaveFunctionBrick: Failed to open file:" << fileName;
-        return false;
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        out << m_edit->toHtml();
+        file.close();
+        qDebug() << "SaveFunctionBrick: File saved:" << fileName;
     }
-    QTextStream out(&file);
-    out << textEdit->toHtml();
-    file.close();
-    qDebug() << "SaveFunctionBrick: File saved:" << fileName;
-    return true;
 }

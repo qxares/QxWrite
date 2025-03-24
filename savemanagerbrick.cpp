@@ -1,15 +1,16 @@
 #include "savemanagerbrick.h"
-#include "savefunctionbrick.h"
-#include "dialogbrick.h"
+#include "savehandlerbrick.h"
+#include <QDebug>
 
-SaveManagerBrick::SaveManagerBrick(QTextEdit *textEdit, QObject *parent) : QObject(parent) {
-    SaveFunctionBrick *function = new SaveFunctionBrick(this);
-    DialogBrick *dialog = new DialogBrick(this);
-    m_gui = new SaveGUIBrick(this);
-    m_handler = new SaveHandlerBrick(textEdit, function, dialog, this);
-    connect(m_gui->saveAction(), &QAction::triggered, m_handler, &SaveHandlerBrick::handleSave);
+SaveManagerBrick::SaveManagerBrick(QTextEdit *edit, QObject *parent)
+    : QObject(parent) {
+    SaveFunctionBrick *function = new SaveFunctionBrick(edit, this);
+    SaveGuiBrick *gui = new SaveGuiBrick(this);
+    SaveHandlerBrick *handler = new SaveHandlerBrick(function, gui, this);
+    m_saveAction = handler->saveAction();
+    qDebug() << "SaveManagerBrick initialized";
 }
 
 QAction *SaveManagerBrick::saveAction() const {
-    return m_gui->saveAction();
+    return m_saveAction;
 }
