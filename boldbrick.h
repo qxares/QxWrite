@@ -2,22 +2,21 @@
 #define BOLDBRICK_H
 
 #include <QObject>
-
-class QTextEdit;
+#include <QTextEdit>
+#include <QAction>
 
 class BoldBrick : public QObject {
     Q_OBJECT
 public:
-    explicit BoldBrick(QTextEdit *edit, QObject *parent = nullptr);
+    BoldBrick(QTextEdit *edit, QObject *parent = nullptr);
+    QAction *boldAction() const { return boldAct; }
 
 public slots:
-    void toggleBold(bool checked);
-
-signals:
-    void boldToggled(bool checked);
+    void toggleBold();
 
 private:
-    QTextEdit *targetEdit;
+    QTextEdit *m_edit;
+    QAction *boldAct;
 };
 
 #endif // BOLDBRICK_H

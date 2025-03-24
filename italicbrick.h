@@ -2,22 +2,21 @@
 #define ITALICBRICK_H
 
 #include <QObject>
-
-class QTextEdit;
+#include <QTextEdit>
+#include <QAction>
 
 class ItalicBrick : public QObject {
     Q_OBJECT
 public:
-    explicit ItalicBrick(QTextEdit *edit, QObject *parent = nullptr);
+    ItalicBrick(QTextEdit *edit, QObject *parent = nullptr);
+    QAction *italicAction() const { return italicAct; }
 
 public slots:
-    void toggleItalic(bool checked);
-
-signals:
-    void italicToggled(bool checked);
+    void toggleItalic();
 
 private:
-    QTextEdit *targetEdit;
+    QTextEdit *m_edit;
+    QAction *italicAct;
 };
 
 #endif // ITALICBRICK_H
