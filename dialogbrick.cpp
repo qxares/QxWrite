@@ -14,24 +14,6 @@
 #include <QDebug>
 
 DialogBrick::DialogBrick(QObject *parent) : QObject(parent), lastDir("/home/ares") {
-    driveModel = new QFileSystemModel(this);
-    driveModel->setRootPath("/");
-    driveModel->setFilter(QDir::Dirs | QDir::NoDotAndDotDot);  // Exclude '.' and '..' in drive view (right pane)
-
-    dirModel = new QFileSystemModel(this);
-    dirModel->setRootPath(lastDir);
-    dirModel->setFilter(QDir::Dirs | QDir::NoDotAndDotDot);  // Exclude '.' and '..' in directory view (middle pane)
-
-    fileModel = new QFileSystemModel(this);
-    fileModel->setRootPath(lastDir);
-    fileModel->setFilter(QDir::Files | QDir::AllDirs | QDir::NoDot);  // Include '..' but exclude '.' in file view (left pane)
-
-    fileView = new QListView();  // Left pane: File list
-    dirView = new QTreeView();   // Middle pane: Directory tree
-    driveView = new QTreeView(); // Right pane: Drive list
-    fileTypeCombo = new QComboBox();
-    fileNameEdit = new QLineEdit();
-
     qDebug() << "DialogBrick initialized with lastDir:" << lastDir;
 }
 
@@ -40,6 +22,25 @@ QString DialogBrick::getSaveFileName(const QString &caption, const QString &dir,
     dialog.setWindowTitle(caption.isEmpty() ? "Save File" : caption);
     dialog.setModal(true);
     dialog.setFixedSize(700, 500);
+
+    QFileSystemModel *driveModel = new QFileSystemModel(&dialog);
+    driveModel->setRootPath("/");
+    driveModel->setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
+
+    QFileSystemModel *dirModel = new QFileSystemModel(&dialog);
+    QString startDir = dir.isEmpty() ? lastDir : dir;
+    dirModel->setRootPath(startDir);
+    dirModel->setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
+
+    QFileSystemModel *fileModel = new QFileSystemModel(&dialog);
+    fileModel->setRootPath(startDir);
+    fileModel->setFilter(QDir::Files | QDir::AllDirs | QDir::NoDot);
+
+    QTreeView *driveView = new QTreeView(&dialog);
+    QTreeView *dirView = new QTreeView(&dialog);
+    QListView *fileView = new QListView(&dialog);
+    QComboBox *fileTypeCombo = new QComboBox(&dialog);
+    QLineEdit *fileNameEdit = new QLineEdit(&dialog);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(&dialog);
     QHBoxLayout *paneLayout = new QHBoxLayout;
@@ -55,8 +56,6 @@ QString DialogBrick::getSaveFileName(const QString &caption, const QString &dir,
     driveView->hideColumn(3);
 
     // Directory Pane (Middle)
-    QString startDir = dir.isEmpty() ? lastDir : dir;
-    dirModel->setRootPath(startDir);
     dirView->setModel(dirModel);
     dirView->setRootIndex(dirModel->index(startDir));
     dirView->hideColumn(1);
@@ -64,58 +63,49 @@ QString DialogBrick::getSaveFileName(const QString &caption, const QString &dir,
     dirView->hideColumn(3);
 
     // File Pane (Left)
-    fileModel->setRootPath(startDir);
     QStringList filters = filter.mid(filter.indexOf("(") + 1, filter.indexOf(")") - filter.indexOf("(") - 1).split(" ");
     fileModel->setNameFilters(filters);
-    fileModel->setNameFilterDisables(true);  // Ensure non-matching entries (like directories) are visible but disabled
+    fileModel->setNameFilterDisables(true);
     fileView->setModel(fileModel);
     fileView->setRootIndex(fileModel->index(startDir));
 
-    // Debug: Log what QFileSystemModel is showing in the file view (left pane)
+    // Debug: Log file view contents
     QStringList fileEntries;
     for (int i = 0; i < fileModel->rowCount(fileView->rootIndex()); ++i) {
-        QModelIndex index = fileModel->index(i, 0, fileView->rootIndex());
-        fileEntries << fileModel->fileName(index);
+        fileEntries << fileModel->fileName(fileModel->index(i, 0, fileView->rootIndex()));
     }
     qDebug() << "DialogBrick: File view (left pane) contents in" << startDir << ":" << fileEntries;
 
-    // Filename Input
+    // UI Elements
     QLabel *fileNameLabel = new QLabel("File name:", &dialog);
     fileNameEdit->setPlaceholderText("Enter filename");
-
-    // Extension Dropdown
     QLabel *fileTypeLabel = new QLabel("Save as type:", &dialog);
     QStringList extensions = filters;
-    for (QString &ext : extensions) {
-        ext = ext.mid(1); // Remove leading '*'
-    }
+    for (QString &ext : extensions) ext = ext.mid(1);
     fileTypeCombo->addItems(extensions);
     fileTypeCombo->setCurrentIndex(0);
 
-    // Buttons
     QPushButton *saveButton = new QPushButton("Save", &dialog);
     QPushButton *cancelButton = new QPushButton("Cancel", &dialog);
 
-    // Layout Setup (File view on left, dir view in middle, drive view on right)
-    paneLayout->addWidget(fileView);  // Left: File list
-    paneLayout->addWidget(dirView);   // Middle: Directory tree
-    paneLayout->addWidget(driveView); // Right: Drive list
-
+    // Layout
+    paneLayout->addWidget(fileView);  // Left: Files
+    paneLayout->addWidget(dirView);   // Middle: Dirs
+    paneLayout->addWidget(driveView); // Right: Drives
     inputLayout->addWidget(fileNameLabel);
     inputLayout->addWidget(fileNameEdit);
     inputLayout->addWidget(fileTypeLabel);
     inputLayout->addWidget(fileTypeCombo);
-
     buttonLayout->addStretch();
     buttonLayout->addWidget(saveButton);
     buttonLayout->addWidget(cancelButton);
-
     mainLayout->addLayout(paneLayout);
     mainLayout->addLayout(inputLayout);
     mainLayout->addSpacing(10);
     mainLayout->addLayout(buttonLayout);
 
     // Connections
+    QString selectedFile;
     connect(driveView, &QTreeView::clicked, [&](const QModelIndex &index) {
         QString path = driveModel->filePath(index);
         dirModel->setRootPath(path);
@@ -124,14 +114,6 @@ QString DialogBrick::getSaveFileName(const QString &caption, const QString &dir,
         fileView->setRootIndex(fileModel->index(path));
         lastDir = path;
         qDebug() << "DialogBrick: Drive view (right pane) clicked, navigated to:" << path;
-
-        // Debug: Log file view contents after navigation
-        QStringList fileEntries;
-        for (int i = 0; i < fileModel->rowCount(fileView->rootIndex()); ++i) {
-            QModelIndex idx = fileModel->index(i, 0, fileView->rootIndex());
-            fileEntries << fileModel->fileName(idx);
-        }
-        qDebug() << "DialogBrick: File view (left pane) contents after drive navigation:" << fileEntries;
     });
 
     connect(dirView, &QTreeView::clicked, [&](const QModelIndex &index) {
@@ -140,94 +122,41 @@ QString DialogBrick::getSaveFileName(const QString &caption, const QString &dir,
         fileView->setRootIndex(fileModel->index(path));
         lastDir = path;
         qDebug() << "DialogBrick: Directory view (middle pane) clicked, navigated to:" << path;
-
-        // Debug: Log file view contents after navigation
-        QStringList fileEntries;
-        for (int i = 0; i < fileModel->rowCount(fileView->rootIndex()); ++i) {
-            QModelIndex idx = fileModel->index(i, 0, fileView->rootIndex());
-            fileEntries << fileModel->fileName(idx);
-        }
-        qDebug() << "DialogBrick: File view (left pane) contents after dir navigation:" << fileEntries;
-    });
-
-    connect(fileView, &QListView::clicked, [&](const QModelIndex &index) {
-        if (index.isValid()) {
-            QString fileName = fileModel->fileName(index);
-            QFileInfo fileInfo(fileModel->filePath(index));
-            if (fileInfo.isFile()) {
-                fileNameEdit->setText(fileName.section('.', 0, -2)); // Strip extension
-                QString ext = "." + fileName.section('.', -1);
-                int extIndex = fileTypeCombo->findText(ext);
-                if (extIndex != -1) fileTypeCombo->setCurrentIndex(extIndex);
-                qDebug() << "DialogBrick: File clicked in file view (left pane):" << fileName;
-            }
-        }
     });
 
     connect(fileView, &QListView::doubleClicked, [&](const QModelIndex &index) {
-        if (index.isValid()) {
-            QString path = fileModel->filePath(index);
-            QFileInfo fileInfo(path);
-            if (fileInfo.isDir()) {
-                if (fileInfo.fileName() == "..") {
-                    // Navigate to parent directory
-                    QDir dir(fileModel->filePath(fileView->rootIndex()));
-                    if (dir.cdUp()) {  // Check if we can go up (won't work at root)
-                        QString parentPath = dir.absolutePath();
-                        fileModel->setRootPath(parentPath);
-                        fileView->setRootIndex(fileModel->index(parentPath));
-                        dirModel->setRootPath(parentPath);
-                        dirView->setRootIndex(dirModel->index(parentPath));
-                        lastDir = parentPath;
-                        qDebug() << "DialogBrick: Navigated to parent directory:" << parentPath;
-                    } else {
-                        qDebug() << "DialogBrick: Already at root directory, cannot navigate up";
-                    }
-                } else {
-                    // Navigate into subdirectory
-                    fileModel->setRootPath(path);
-                    fileView->setRootIndex(fileModel->index(path));
-                    dirModel->setRootPath(path);
-                    dirView->setRootIndex(dirModel->index(path));
-                    lastDir = path;
-                    qDebug() << "DialogBrick: Navigated to subdirectory:" << path;
-                }
-                fileNameEdit->clear();
-
-                // Debug: Log file view contents after navigation
-                QStringList fileEntries;
-                for (int i = 0; i < fileModel->rowCount(fileView->rootIndex()); ++i) {
-                    QModelIndex idx = fileModel->index(i, 0, fileView->rootIndex());
-                    fileEntries << fileModel->fileName(idx);
-                }
-                qDebug() << "DialogBrick: File view (left pane) contents after navigation:" << fileEntries;
-            } else {
-                lastDir = fileModel->rootPath();
-                dialog.accept();
-                qDebug() << "DialogBrick: File double-clicked, accepting:" << path;
-            }
+        QString path = fileModel->filePath(index);
+        QFileInfo fileInfo(path);
+        if (fileInfo.isDir()) {
+            fileModel->setRootPath(path);
+            fileView->setRootIndex(fileModel->index(path));
+            dirModel->setRootPath(path);
+            dirView->setRootIndex(dirModel->index(path));
+            lastDir = path;
+            qDebug() << "DialogBrick: Navigated to subdirectory:" << path;
+        } else {
+            selectedFile = path;
+            dialog.accept();
+            qDebug() << "DialogBrick: File double-clicked, accepting:" << path;
         }
     });
 
     connect(saveButton, &QPushButton::clicked, [&]() {
         QString fileName = fileNameEdit->text().trimmed();
         if (!fileName.isEmpty()) {
-            lastDir = fileModel->rootPath();
+            QString ext = fileTypeCombo->currentText();
+            if (!fileName.endsWith(ext)) fileName += ext;
+            selectedFile = QDir(lastDir).filePath(fileName);
             dialog.accept();
         }
     });
 
     connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
 
-    if (dialog.exec() == QDialog::Accepted) {
-        QString fileName = fileNameEdit->text().trimmed();
-        if (!fileName.isEmpty()) {
-            QString ext = fileTypeCombo->currentText();
-            if (!fileName.endsWith(ext)) fileName += ext;
-            QString filePath = QDir(lastDir).filePath(fileName);
-            qDebug() << "DialogBrick: Save selected:" << filePath;
-            return filePath;
-        }
+    if (dialog.exec() == QDialog::Accepted && !selectedFile.isEmpty()) {
+        lastDir = QFileInfo(selectedFile).absolutePath();
+        qDebug() << "DialogBrick: Save selected:" << selectedFile;
+        return selectedFile;
     }
     qDebug() << "DialogBrick: Save cancelled";
     return QString();
@@ -239,6 +168,25 @@ QString DialogBrick::getOpenFileName(const QString &caption, const QString &dir,
     dialog.setModal(true);
     dialog.setFixedSize(700, 500);
 
+    QFileSystemModel *driveModel = new QFileSystemModel(&dialog);
+    driveModel->setRootPath("/");
+    driveModel->setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
+
+    QFileSystemModel *dirModel = new QFileSystemModel(&dialog);
+    QString startDir = dir.isEmpty() ? lastDir : dir;
+    dirModel->setRootPath(startDir);
+    dirModel->setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
+
+    QFileSystemModel *fileModel = new QFileSystemModel(&dialog);
+    fileModel->setRootPath(startDir);
+    fileModel->setFilter(QDir::Files | QDir::AllDirs | QDir::NoDot);
+
+    QTreeView *driveView = new QTreeView(&dialog);
+    QTreeView *dirView = new QTreeView(&dialog);
+    QListView *fileView = new QListView(&dialog);
+    QComboBox *fileTypeCombo = new QComboBox(&dialog);
+    QLineEdit *fileNameEdit = new QLineEdit(&dialog);
+
     QVBoxLayout *mainLayout = new QVBoxLayout(&dialog);
     QHBoxLayout *paneLayout = new QHBoxLayout;
     QHBoxLayout *inputLayout = new QHBoxLayout;
@@ -253,8 +201,6 @@ QString DialogBrick::getOpenFileName(const QString &caption, const QString &dir,
     driveView->hideColumn(3);
 
     // Directory Pane (Middle)
-    QString startDir = dir.isEmpty() ? lastDir : dir;
-    dirModel->setRootPath(startDir);
     dirView->setModel(dirModel);
     dirView->setRootIndex(dirModel->index(startDir));
     dirView->hideColumn(1);
@@ -262,58 +208,49 @@ QString DialogBrick::getOpenFileName(const QString &caption, const QString &dir,
     dirView->hideColumn(3);
 
     // File Pane (Left)
-    fileModel->setRootPath(startDir);
     QStringList filters = filter.mid(filter.indexOf("(") + 1, filter.indexOf(")") - filter.indexOf("(") - 1).split(" ");
     fileModel->setNameFilters(filters);
-    fileModel->setNameFilterDisables(true);  // Ensure non-matching entries (like directories) are visible but disabled
+    fileModel->setNameFilterDisables(true);
     fileView->setModel(fileModel);
     fileView->setRootIndex(fileModel->index(startDir));
 
-    // Debug: Log what QFileSystemModel is showing in the file view (left pane)
+    // Debug: Log file view contents
     QStringList fileEntries;
     for (int i = 0; i < fileModel->rowCount(fileView->rootIndex()); ++i) {
-        QModelIndex index = fileModel->index(i, 0, fileView->rootIndex());
-        fileEntries << fileModel->fileName(index);
+        fileEntries << fileModel->fileName(fileModel->index(i, 0, fileView->rootIndex()));
     }
     qDebug() << "DialogBrick: File view (left pane) contents in" << startDir << ":" << fileEntries;
 
-    // Filename Input (read-only for open dialog)
+    // UI Elements
     QLabel *fileNameLabel = new QLabel("File name:", &dialog);
     fileNameEdit->setReadOnly(true);
-
-    // Extension Dropdown
     QLabel *fileTypeLabel = new QLabel("Files of type:", &dialog);
     QStringList extensions = filters;
-    for (QString &ext : extensions) {
-        ext = ext.mid(1); // Remove '*'
-    }
+    for (QString &ext : extensions) ext = ext.mid(1);
     fileTypeCombo->addItems(extensions);
     fileTypeCombo->setCurrentIndex(0);
 
-    // Buttons
     QPushButton *openButton = new QPushButton("Open", &dialog);
     QPushButton *cancelButton = new QPushButton("Cancel", &dialog);
 
-    // Layout Setup (File view on left, dir view in middle, drive view on right)
-    paneLayout->addWidget(fileView);  // Left: File list
-    paneLayout->addWidget(dirView);   // Middle: Directory tree
-    paneLayout->addWidget(driveView); // Right: Drive list
-
+    // Layout
+    paneLayout->addWidget(fileView);  // Left: Files
+    paneLayout->addWidget(dirView);   // Middle: Dirs
+    paneLayout->addWidget(driveView); // Right: Drives
     inputLayout->addWidget(fileNameLabel);
     inputLayout->addWidget(fileNameEdit);
     inputLayout->addWidget(fileTypeLabel);
     inputLayout->addWidget(fileTypeCombo);
-
     buttonLayout->addStretch();
     buttonLayout->addWidget(openButton);
     buttonLayout->addWidget(cancelButton);
-
     mainLayout->addLayout(paneLayout);
     mainLayout->addLayout(inputLayout);
     mainLayout->addSpacing(10);
     mainLayout->addLayout(buttonLayout);
 
     // Connections
+    QString selectedFile;
     connect(driveView, &QTreeView::clicked, [&](const QModelIndex &index) {
         QString path = driveModel->filePath(index);
         dirModel->setRootPath(path);
@@ -322,14 +259,6 @@ QString DialogBrick::getOpenFileName(const QString &caption, const QString &dir,
         fileView->setRootIndex(fileModel->index(path));
         lastDir = path;
         qDebug() << "DialogBrick: Drive view (right pane) clicked, navigated to:" << path;
-
-        // Debug: Log file view contents after navigation
-        QStringList fileEntries;
-        for (int i = 0; i < fileModel->rowCount(fileView->rootIndex()); ++i) {
-            QModelIndex idx = fileModel->index(i, 0, fileView->rootIndex());
-            fileEntries << fileModel->fileName(idx);
-        }
-        qDebug() << "DialogBrick: File view (left pane) contents after drive navigation:" << fileEntries;
     });
 
     connect(dirView, &QTreeView::clicked, [&](const QModelIndex &index) {
@@ -338,98 +267,54 @@ QString DialogBrick::getOpenFileName(const QString &caption, const QString &dir,
         fileView->setRootIndex(fileModel->index(path));
         lastDir = path;
         qDebug() << "DialogBrick: Directory view (middle pane) clicked, navigated to:" << path;
-
-        // Debug: Log file view contents after navigation
-        QStringList fileEntries;
-        for (int i = 0; i < fileModel->rowCount(fileView->rootIndex()); ++i) {
-            QModelIndex idx = fileModel->index(i, 0, fileView->rootIndex());
-            fileEntries << fileModel->fileName(idx);
-        }
-        qDebug() << "DialogBrick: File view (left pane) contents after dir navigation:" << fileEntries;
     });
 
     connect(fileView, &QListView::clicked, [&](const QModelIndex &index) {
         if (index.isValid()) {
-            QString fileName = fileModel->fileName(index);
             QFileInfo fileInfo(fileModel->filePath(index));
             if (fileInfo.isFile()) {
-                fileNameEdit->setText(fileName);
-                qDebug() << "DialogBrick: File clicked in file view (left pane):" << fileName;
+                fileNameEdit->setText(fileModel->fileName(index));
+                qDebug() << "DialogBrick: File clicked in file view (left pane):" << fileModel->fileName(index);
             }
         }
     });
 
     connect(fileView, &QListView::doubleClicked, [&](const QModelIndex &index) {
-        if (index.isValid()) {
-            QString path = fileModel->filePath(index);
-            QFileInfo fileInfo(path);
-            if (fileInfo.isDir()) {
-                if (fileInfo.fileName() == "..") {
-                    // Navigate to parent directory
-                    QDir dir(fileModel->filePath(fileView->rootIndex()));
-                    if (dir.cdUp()) {  // Check if we can go up (won't work at root)
-                        QString parentPath = dir.absolutePath();
-                        fileModel->setRootPath(parentPath);
-                        fileView->setRootIndex(fileModel->index(parentPath));
-                        dirModel->setRootPath(parentPath);
-                        dirView->setRootIndex(dirModel->index(parentPath));
-                        lastDir = parentPath;
-                        qDebug() << "DialogBrick: Navigated to parent directory:" << parentPath;
-                    } else {
-                        qDebug() << "DialogBrick: Already at root directory, cannot navigate up";
-                    }
-                } else {
-                    // Navigate into subdirectory
-                    fileModel->setRootPath(path);
-                    fileView->setRootIndex(fileModel->index(path));
-                    dirModel->setRootPath(path);
-                    dirView->setRootIndex(dirModel->index(path));
-                    lastDir = path;
-                    qDebug() << "DialogBrick: Navigated to subdirectory:" << path;
-                }
-                fileNameEdit->clear();
-
-                // Debug: Log file view contents after navigation
-                QStringList fileEntries;
-                for (int i = 0; i < fileModel->rowCount(fileView->rootIndex()); ++i) {
-                    QModelIndex idx = fileModel->index(i, 0, fileView->rootIndex());
-                    fileEntries << fileModel->fileName(idx);
-                }
-                qDebug() << "DialogBrick: File view (left pane) contents after navigation:" << fileEntries;
-            } else {
-                lastDir = fileModel->rootPath();
-                dialog.accept();
-                qDebug() << "DialogBrick: File double-clicked, accepting:" << path;
-            }
+        QString path = fileModel->filePath(index);
+        QFileInfo fileInfo(path);
+        if (fileInfo.isDir()) {
+            fileModel->setRootPath(path);
+            fileView->setRootIndex(fileModel->index(path));
+            dirModel->setRootPath(path);
+            dirView->setRootIndex(dirModel->index(path));
+            lastDir = path;
+            fileNameEdit->clear();
+            qDebug() << "DialogBrick: Navigated to subdirectory:" << path;
+        } else {
+            selectedFile = path;
+            dialog.accept();
+            qDebug() << "DialogBrick: File double-clicked, accepting:" << path;
         }
     });
 
     connect(fileTypeCombo, &QComboBox::currentTextChanged, [&](const QString &text) {
         fileModel->setNameFilters({QString("*%1").arg(text)});
         qDebug() << "DialogBrick: File type filter changed to:" << text;
-
-        // Debug: Log file view contents after filter change
-        QStringList fileEntries;
-        for (int i = 0; i < fileModel->rowCount(fileView->rootIndex()); ++i) {
-            QModelIndex idx = fileModel->index(i, 0, fileView->rootIndex());
-            fileEntries << fileModel->fileName(idx);
-        }
-        qDebug() << "DialogBrick: File view (left pane) contents after filter change:" << fileEntries;
     });
 
     connect(openButton, &QPushButton::clicked, [&]() {
         if (fileView->currentIndex().isValid()) {
-            lastDir = fileModel->rootPath();
+            selectedFile = fileModel->filePath(fileView->currentIndex());
             dialog.accept();
         }
     });
 
     connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
 
-    if (dialog.exec() == QDialog::Accepted && fileView->currentIndex().isValid()) {
-        QString filePath = fileModel->filePath(fileView->currentIndex());
-        qDebug() << "DialogBrick: Open selected:" << filePath;
-        return filePath;
+    if (dialog.exec() == QDialog::Accepted && !selectedFile.isEmpty()) {
+        lastDir = QFileInfo(selectedFile).absolutePath();
+        qDebug() << "DialogBrick: Open selected:" << selectedFile;
+        return selectedFile;
     }
     qDebug() << "DialogBrick: Open cancelled";
     return QString();
