@@ -8,8 +8,12 @@ DialogBrick::DialogBrick(QObject *parent) : QObject(parent) {
 }
 
 QString DialogBrick::getOpenFileName(QWidget *parent, const QString &caption, const QString &dir, const QString &filter) {
-    qDebug() << "DialogBrick: getOpenFileName called, parent:" << parent << ", caption:" << caption << ", dir:" << dir << ", filter:" << filter;
+    qDebug() << "DialogBrick: getOpenFileName called, parent:" << parent << ", caption:" << caption << ", dir:" << (dir.isEmpty() ? lastDir : dir) << ", filter:" << filter;
+    if (!parent) {
+        qDebug() << "DialogBrick: Parent is null, proceeding with nullptr";
+    }
     QString selectedFile = QFileDialog::getOpenFileName(parent, caption, dir.isEmpty() ? lastDir : dir, filter);
+    qDebug() << "DialogBrick: getOpenFileName returned, selectedFile:" << selectedFile;
     if (!selectedFile.isEmpty()) {
         lastDir = QFileInfo(selectedFile).absolutePath();
         qDebug() << "DialogBrick: Selected file:" << selectedFile << ", updated lastDir:" << lastDir;
@@ -20,8 +24,12 @@ QString DialogBrick::getOpenFileName(QWidget *parent, const QString &caption, co
 }
 
 QString DialogBrick::getSaveFileName(QWidget *parent, const QString &caption, const QString &dir, const QString &filter) {
-    qDebug() << "DialogBrick: getSaveFileName called, parent:" << parent << ", caption:" << caption << ", dir:" << dir << ", filter:" << filter;
+    qDebug() << "DialogBrick: getSaveFileName called, parent:" << parent << ", caption:" << caption << ", dir:" << (dir.isEmpty() ? lastDir : dir) << ", filter:" << filter;
+    if (!parent) {
+        qDebug() << "DialogBrick: Parent is null, proceeding with nullptr";
+    }
     QString selectedFile = QFileDialog::getSaveFileName(parent, caption, dir.isEmpty() ? lastDir : dir, filter);
+    qDebug() << "DialogBrick: getSaveFileName returned, selectedFile:" << selectedFile;
     if (!selectedFile.isEmpty()) {
         lastDir = QFileInfo(selectedFile).absolutePath();
         qDebug() << "DialogBrick: Selected save file:" << selectedFile << ", updated lastDir:" << lastDir;
