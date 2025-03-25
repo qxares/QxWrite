@@ -3,27 +3,29 @@
 
 #include <QObject>
 #include <QMenuBar>
-#include <QTextEdit>
 #include "insertbrick.h"
 #include "savemanagerbrick.h"
 #include "boldbrick.h"
 #include "newfilebrick.h"
 #include "italicbrick.h"
 #include "openfilebrick.h"
+#include "iconbrick.h"
 #include "fontbrick.h"
 #include "colorbrick.h"
+#include "alignbrick.h"  // Added
 
 class MenuManagerBrick : public QObject {
     Q_OBJECT
 public:
-    MenuManagerBrick(QMenuBar *menuBar, QTextEdit *edit, InsertBrick *insert, SaveManagerBrick *save,
-                     BoldBrick *bold, NewFileBrick *newFile, ItalicBrick *italic, OpenFileBrick *openFile,
-                     FontBrick *font, ColorBrick *color, QObject *parent = nullptr);
-    ~MenuManagerBrick();
+    MenuManagerBrick(QWidget *parent = nullptr);
+    void setupMenus(IconBrick *iconBrick, NewFileBrick *newFileBrick, OpenFileBrick *openFileBrick,
+                    SaveManagerBrick *saveManager, BoldBrick *boldBrick, ItalicBrick *italicBrick,
+                    FontBrick *fontBrick, ColorBrick *colorBrick, InsertBrick *insertBrick,
+                    AlignBrick *alignLeftBrick, AlignBrick *alignCenterBrick, AlignBrick *alignRightBrick);  // Added
+    QMenuBar* getMenuBar();
 
 private:
-    QMenuBar *m_menuBar;
-    QTextEdit *m_edit;
+    QMenuBar *menuBar;
 };
 
 #endif // MENUMANAGERBRICK_H

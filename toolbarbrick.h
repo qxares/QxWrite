@@ -2,6 +2,7 @@
 #define TOOLBARBRICK_H
 
 #include <QObject>
+#include <QToolBar>
 #include "insertbrick.h"
 #include "savemanagerbrick.h"
 #include "boldbrick.h"
@@ -11,20 +12,22 @@
 #include "iconbrick.h"
 #include "fontbrick.h"
 #include "colorbrick.h"
+#include "alignbrick.h"
 
-class QToolBar;
 class QTextEdit;
 
 class ToolBarBrick : public QObject {
     Q_OBJECT
 public:
-    ToolBarBrick(QToolBar *toolBar, QTextEdit *edit,
-                 InsertBrick *insertBrick, SaveManagerBrick *saveManagerBrick,
-                 BoldBrick *boldBrick, NewFileBrick *newFileBrick,
-                 ItalicBrick *italicBrick, OpenFileBrick *openFileBrick,
-                 IconBrick *iconBrick, FontBrick *fontBrick,
-                 ColorBrick *colorBrick, QObject *parent = nullptr);
-    ~ToolBarBrick() override;  // Add this
+    ToolBarBrick(QWidget *parent = nullptr);  // Changed to QWidget*
+    void setupToolBar(IconBrick *iconBrick, NewFileBrick *newFileBrick, OpenFileBrick *openFileBrick,
+                      SaveManagerBrick *saveManager, BoldBrick *boldBrick, ItalicBrick *italicBrick,
+                      FontBrick *fontBrick, ColorBrick *colorBrick, InsertBrick *insertBrick,
+                      AlignBrick *alignLeftBrick, AlignBrick *alignCenterBrick, AlignBrick *alignRightBrick);
+    QToolBar* getToolBar();
+
+private:
+    QToolBar *toolBar;
 };
 
 #endif // TOOLBARBRICK_H

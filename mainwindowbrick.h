@@ -2,45 +2,46 @@
 #define MAINWINDOWBRICK_H
 
 #include <QMainWindow>
+#include "menumanagerbrick.h"
+#include "toolbarbrick.h"
+#include "insertbrick.h"
+#include "savemanagerbrick.h"
+#include "boldbrick.h"
+#include "newfilebrick.h"
+#include "italicbrick.h"
+#include "openfilebrick.h"
+#include "iconbrick.h"
+#include "fontbrick.h"
+#include "colorbrick.h"
+#include "dialogbrick.h"
+#include "alignbrick.h"  // Added
 
 class QTextEdit;
-class QToolBar;
-class QMenuBar;
-class InsertBrick;
-class SaveManagerBrick;
-class BoldBrick;
-class NewFileBrick;
-class ItalicBrick;
-class OpenFileBrick;
-class IconBrick;
 class ToolBarBrick;
-class MenuManagerBrick;
-class FontBrick;
-class ColorBrick;
-class DialogBrick;  // Add this
 
 class MainWindowBrick : public QMainWindow {
     Q_OBJECT
 public:
-    explicit MainWindowBrick(QWidget *parent = nullptr);
-    ~MainWindowBrick() override = default;
+    MainWindowBrick(QWidget *parent = nullptr);
+    ~MainWindowBrick();
 
 private:
     QTextEdit *textEdit;
-    QToolBar *toolBar;
-    QMenuBar *menuBar;
-    IconBrick *iconBrick;
-    SaveManagerBrick *saveManagerBrick;
+    MenuManagerBrick *menuManager;
+    ToolBarBrick *toolBar;
     InsertBrick *insertBrick;
+    SaveManagerBrick *saveManager;
     BoldBrick *boldBrick;
     NewFileBrick *newFileBrick;
     ItalicBrick *italicBrick;
     OpenFileBrick *openFileBrick;
+    IconBrick *iconBrick;
     FontBrick *fontBrick;
     ColorBrick *colorBrick;
-    ToolBarBrick *toolBarBrick;
-    MenuManagerBrick *menuManagerBrick;
-    DialogBrick *dialogBrick;  // Add this
+    DialogBrick *dialogBrick;
+    AlignBrick *alignLeftBrick;    // Added
+    AlignBrick *alignCenterBrick;  // Added
+    AlignBrick *alignRightBrick;   // Added
 };
 
 #endif // MAINWINDOWBRICK_H
