@@ -2,30 +2,29 @@
 #define TOOLBARBRICK_H
 
 #include <QObject>
-#include <QToolBar>
-#include "iconbrick.h"
-#include "newfilebrick.h"
-#include "openfilebrick.h"
+#include "insertbrick.h"
 #include "savemanagerbrick.h"
 #include "boldbrick.h"
+#include "newfilebrick.h"
 #include "italicbrick.h"
+#include "openfilebrick.h"
+#include "iconbrick.h"
 #include "fontbrick.h"
 #include "colorbrick.h"
-#include "insertbrick.h"
-#include "alignbrick.h"  // Add this include
+
+class QToolBar;
+class QTextEdit;
 
 class ToolBarBrick : public QObject {
     Q_OBJECT
 public:
-    explicit ToolBarBrick(QObject *parent = nullptr);
-    void setupToolBar(IconBrick *iconBrick, NewFileBrick *newFileBrick, OpenFileBrick *openFileBrick,
-                      SaveManagerBrick *saveManager, BoldBrick *boldBrick, ItalicBrick *italicBrick,
-                      FontBrick *fontBrick, ColorBrick *colorBrick, InsertBrick *insertBrick,
-                      AlignBrick *alignLeftBrick, AlignBrick *alignCenterBrick, AlignBrick *alignRightBrick);
-    QToolBar *getToolBar();
-
-private:
-    QToolBar *toolBar;
+    ToolBarBrick(QToolBar *toolBar, QTextEdit *edit,
+                 InsertBrick *insertBrick, SaveManagerBrick *saveManagerBrick,
+                 BoldBrick *boldBrick, NewFileBrick *newFileBrick,
+                 ItalicBrick *italicBrick, OpenFileBrick *openFileBrick,
+                 IconBrick *iconBrick, FontBrick *fontBrick,
+                 ColorBrick *colorBrick, QObject *parent = nullptr);
+    ~ToolBarBrick() override;  // Add this
 };
 
 #endif // TOOLBARBRICK_H
