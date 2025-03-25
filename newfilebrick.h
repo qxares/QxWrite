@@ -2,19 +2,13 @@
 #define NEWFILEBRICK_H
 
 #include <QObject>
-
-class QTextEdit;
+#include <QTextEdit>
 
 class NewFileBrick : public QObject {
     Q_OBJECT
 public:
-    explicit NewFileBrick(QTextEdit *edit, QObject *parent = nullptr);
-
-public slots:
+    NewFileBrick(QTextEdit *edit, QObject *parent = nullptr);
     void newFile();
-
-signals:
-    void newFileCreated();
 
 private:
     QTextEdit *targetEdit;

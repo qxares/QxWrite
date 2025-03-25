@@ -2,17 +2,14 @@
 #define INSERTBRICK_H
 
 #include <QObject>
+#include <QTextEdit>
 
-class QTextEdit;
 class DialogBrick;
 
 class InsertBrick : public QObject {
     Q_OBJECT
 public:
-    InsertBrick(QTextEdit *edit, DialogBrick *dialog, QObject *parent = nullptr);
-    ~InsertBrick() override = default;
-
-public slots:
+    InsertBrick(QTextEdit *edit, QObject *parent = nullptr);
     void insertImage();
 
 private:

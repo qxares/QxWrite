@@ -2,17 +2,13 @@
 #include <QTextEdit>
 #include <QDebug>
 
-NewFileBrick::NewFileBrick(QTextEdit *edit, QObject *parent)
+NewFileBrick::NewFileBrick(QTextEdit *edit, QObject *parent) 
     : QObject(parent), targetEdit(edit) {
     qDebug() << "NewFileBrick initialized, target edit:" << targetEdit;
 }
 
 void NewFileBrick::newFile() {
-    qDebug() << "NewFileBrick: newFile triggered";
-    if (!targetEdit) {
-        qDebug() << "No target QTextEdit provided!";
-        return;
-    }
+    qDebug() << "NewFileBrick: Creating new document";
     targetEdit->clear();
-    emit newFileCreated();
+    targetEdit->setDocumentTitle("Untitled");
 }
