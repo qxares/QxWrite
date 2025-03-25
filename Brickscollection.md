@@ -35,19 +35,21 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
 
 ### IconBrick
 - **Purpose**: Manages toolbar/menu icons.
-- **Features**: Loads 8 SVG icons (new, open, save, bold, italic, font, color, image).
+- **Features**: Loads 11 SVG icons (new, open, save, bold, italic, font, color, image, align-left, align-center, align-right).
 - **Status**: Implemented, icons registered and loaded.
+- **Recent Changes**: Added icons for text alignment (align-left, align-center, align-right).
 
 ### ToolBarBrick
 - **Purpose**: Builds and manages toolbar.
-- **Features**: Adds actions with icons for text formatting and file ops.
-- **Status**: Implemented, 8 actions set up. (Note: May evolve into GUI Manager subtype.)
+- **Features**: Adds actions with icons for text formatting, file ops, and alignment.
+- **Status**: Implemented, 11 actions set up. (Note: May evolve into GUI Manager subtype.)
+- **Recent Changes**: Added toolbar buttons for left, center, and right alignment.
 
 ### MenuManagerBrick
 - **Purpose**: Constructs menu bar.
-- **Features**: File, Edit, Format menus with actions.
-- **Status**: Fully implemented. Supports "File > New," "File > Open," "File > Save," "File > Save As," "Format > Bold/Italic/Font/Color," and "Insert > Image."
-- **Recent Changes**: Fixed connect bug with `OpenFileBrick::openFile()` using modern `connect()` syntax. Added "File > Save As" action.
+- **Features**: File, Edit, Format menus with actions, including alignment options.
+- **Status**: Fully implemented. Supports "File > New," "File > Open," "File > Save," "File > Save As," "Format > Bold/Italic/Font/Color/Align Left/Align Center/Align Right," and "Insert > Image."
+- **Recent Changes**: Fixed connect bug with `OpenFileBrick::openFile()` using modern `connect()` syntax. Added "File > Save As" action. Added alignment options to "Format" menu.
 
 ### InsertBrick
 - **Purpose**: Inserts images into text.
@@ -119,7 +121,13 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
   - Filename input with QLineEdit and extension dropdown via QComboBox.
   - Size: 700x500.
 - **Status**: Fully implemented. Supports open/save operations with navigation to parent directories and subdirectories.
-- **Recent Changes**: Added `lastDir` to persist directory, updated `getOpenFileName()` debug log to show `Open cancelled`. Added parent directory (`..`) and subdirectory navigation in file list, fixed visibility of directories by adjusting name filter behavior, resolved variable shadowing error in `getSaveFileName` and `getOpenFileName`, fixed `..` visibility in file view (left pane), added root directory check to prevent navigation above `/`.
+- **Recent Changes**: Added `lastDir` to persist directory, updated `getOpenFileName()` debug log to show `Open cancelled`. Added parent directory (`..`) and subdirectory navigation in file list, fixed visibility of directories by adjusting name filter behavior, resolved variable shadowing error in `getSaveFileName` and `getOpenFileName`, fixed `..` visibility in file view (left pane), added root directory check to prevent navigation above `/`, fixed root directory listing to show all directories by including system dirs.
+
+### AlignBrick
+- **Purpose**: Applies text alignment (left, center, right).
+- **Features**: Toggles alignment for the current text block.
+- **Status**: Fully implemented and tested. Supports left, center, and right alignment via toolbar and "Format" menu.
 
 ## Next Steps
 - Consider adding "Recent Files" to the `DialogBrick` for quicker access.
+- Explore additional features like undo/redo, word count, or spell check.
