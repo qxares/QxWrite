@@ -1,15 +1,6 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>icons/file-plus.svg</file>
-        <file>icons/open.svg</file>
-        <file>icons/save.svg</file>
-        <file>icons/bold.svg</file>
-        <file>icons/italic.svg</file>
-        <file>icons/font.svg</file>
-        <file>icons/color.svg</file>
-        <file>icons/image.svg</file>
-        <file>icons/align-left.svg</file>    <!-- Added -->
-        <file>icons/align-center.svg</file>  <!-- Added -->
-        <file>icons/align-right.svg</file>   <!-- Added -->
+        <file>icons/new.png</file>
+        <file>icons/open.png</file>
     </qresource>
 </RCC>
