@@ -2,18 +2,19 @@
 #define DOCUMENTWINDOW_H
 
 #include <QMainWindow>
-#include <QTextEdit>
-#include "imagescenemanager.h"
+
+class QTextEdit;
+class OpenFileBrick;
 
 class DocumentWindow : public QMainWindow {
     Q_OBJECT
 public:
-    explicit DocumentWindow(ImageSceneManager *sceneManager, QWidget *parent = nullptr);
-    QTextEdit *getTextEdit() const { return textEdit; }
+    explicit DocumentWindow(QWidget *parent = nullptr);
 
 private:
+    void setupUI();
     QTextEdit *textEdit;
-    ImageSceneManager *sceneManager;
+    OpenFileBrick *openFileBrick;
 };
 
 #endif // DOCUMENTWINDOW_H

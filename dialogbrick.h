@@ -3,15 +3,16 @@
 
 #include <QObject>
 #include <QString>
+#include <QWidget>
 
 class DialogBrick : public QObject {
     Q_OBJECT
 public:
-    DialogBrick(QObject *parent = nullptr);
-    QString getSaveFileName(const QString &caption, const QString &dir, const QString &filter);
-    QString getOpenFileName(const QString &caption, const QString &dir, const QString &filter);
+    explicit DialogBrick(QObject *parent = nullptr);
+    QString getOpenFileName(QWidget *parent, const QString &caption = "", const QString &dir = "", const QString &filter = "");
+
 private:
-    QString lastDir;  // Persists the last directory
+    QString lastDir;
 };
 
 #endif // DIALOGBRICK_H
