@@ -3,20 +3,15 @@
 
 #include <QObject>
 #include <QTextEdit>
-#include <QAction>
 
 class BoldBrick : public QObject {
     Q_OBJECT
 public:
-    BoldBrick(QTextEdit *edit, QObject *parent = nullptr);
-    QAction *boldAction() const { return boldAct; }
-
-public slots:
-    void toggleBold();
+    explicit BoldBrick(QTextEdit *edit, QObject *parent = nullptr);
+    void applyBold();
 
 private:
-    QTextEdit *m_edit;
-    QAction *boldAct;
+    QTextEdit *m_textEdit;
 };
 
 #endif // BOLDBRICK_H

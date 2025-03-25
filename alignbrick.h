@@ -7,13 +7,11 @@
 class AlignBrick : public QObject {
     Q_OBJECT
 public:
-    enum Alignment { AlignLeft, AlignCenter, AlignRight };
-    AlignBrick(QTextEdit *edit, Alignment align, QObject *parent = nullptr);
-    void align();
+    explicit AlignBrick(QTextEdit *edit, QObject *parent = nullptr);
+    void align(Qt::Alignment alignment);
 
 private:
-    QTextEdit *textEdit;
-    Alignment alignment;
+    QTextEdit *m_textEdit;
 };
 
 #endif // ALIGNBRICK_H

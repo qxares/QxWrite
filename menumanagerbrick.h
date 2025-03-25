@@ -2,20 +2,24 @@
 #define MENUMANAGERBRICK_H
 
 #include <QObject>
-
-class QMenuBar;
-class IconBrick;
+#include <QMenuBar>
+#include <QAction>
 
 class MenuManagerBrick : public QObject {
     Q_OBJECT
 public:
     explicit MenuManagerBrick(QWidget *parent = nullptr);
-    QMenuBar* getMenuBar();
+    void setupMenus(QAction *newAction, QAction *openAction, QAction *saveAction,
+                    QAction *boldAction, QAction *italicAction, QAction *fontAction,
+                    QAction *colorAction, QAction *imageAction, QAction *alignLeftAction,
+                    QAction *alignCenterAction, QAction *alignRightAction);
+    QMenuBar* getMenuBar() const;
 
 private:
-    void setupMenus();
     QMenuBar *menuBar;
-    IconBrick *iconBrick;
+    QMenu *fileMenu;
+    QMenu *editMenu;
+    QMenu *formatMenu;
 };
 
 #endif // MENUMANAGERBRICK_H

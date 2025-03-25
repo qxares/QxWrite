@@ -2,24 +2,16 @@
 #define COLORBRICK_H
 
 #include <QObject>
-#include <QColor>
-class QTextEdit;
-class QAction;
+#include <QTextEdit>
 
 class ColorBrick : public QObject {
     Q_OBJECT
 public:
-    ColorBrick(QTextEdit *edit, QObject *parent = nullptr);
-    QAction* getColorAction() const { return colorAct; }
-
-public slots:
-    void showColorDialog();
+    explicit ColorBrick(QTextEdit *edit, QObject *parent = nullptr);
+    void changeColor();
 
 private:
-    QTextEdit *targetEdit;
-    QAction *colorAct;
-    QColor currentColor;
+    QTextEdit *m_textEdit;
 };
 
 #endif // COLORBRICK_H
-

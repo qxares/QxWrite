@@ -3,20 +3,15 @@
 
 #include <QObject>
 #include <QTextEdit>
-#include <QAction>
 
 class ItalicBrick : public QObject {
     Q_OBJECT
 public:
-    ItalicBrick(QTextEdit *edit, QObject *parent = nullptr);
-    QAction *italicAction() const { return italicAct; }
-
-public slots:
-    void toggleItalic();
+    explicit ItalicBrick(QTextEdit *edit, QObject *parent = nullptr);
+    void applyItalic();
 
 private:
-    QTextEdit *m_edit;
-    QAction *italicAct;
+    QTextEdit *m_textEdit;
 };
 
 #endif // ITALICBRICK_H

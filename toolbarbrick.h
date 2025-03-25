@@ -16,6 +16,15 @@ private:
     QToolBar *toolBar;
     QAction *newAction;
     QAction *openAction;
+    QAction *saveAction;
+    QAction *boldAction;
+    QAction *italicAction;
+    QAction *fontAction;
+    QAction *colorAction;
+    QAction *imageAction;
+    QAction *alignLeftAction;
+    QAction *alignCenterAction;
+    QAction *alignRightAction;
 };
 
 #endif // TOOLBARBRICK_H

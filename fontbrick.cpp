@@ -1,32 +1,22 @@
 #include "fontbrick.h"
-#include <QTextEdit>
 #include <QFontDialog>
-#include <QAction>
 #include <QDebug>
 
-FontBrick::FontBrick(QTextEdit *edit, QObject *parent)
-    : QObject(parent), targetEdit(edit), fontAct(new QAction(tr("Font"), this)) {
-    qDebug() << "FontBrick initialized, target edit:" << edit;
-    fontAct->setToolTip(tr("Change font and size"));
-    connect(fontAct, &QAction::triggered, this, &FontBrick::showFontDialog);
+FontBrick::FontBrick(QTextEdit *edit, QObject *parent) : QObject(parent), m_textEdit(edit) {
+    qDebug() << "FontBrick initialized with textEdit:" << m_textEdit;
 }
 
-void FontBrick::showFontDialog() {
-    qDebug() << "FontBrick: showFontDialog triggered";
-    bool ok;
-    QFont font = QFontDialog::getFont(&ok, targetEdit->currentFont(), targetEdit->window(), tr("Select Font"));
-    if (ok) {
-        QTextCursor cursor = targetEdit->textCursor();
-        if (!cursor.hasSelection()) {
-            targetEdit->setCurrentFont(font);
+void FontBrick::changeFont() {
+    if (m_textEdit) {
+        bool ok;
+        QFont font = QFontDialog::getFont(&ok, m_textEdit->currentFont(), m_textEdit->parentWidget());
+        if (ok) {
+            m_textEdit->setCurrentFont(font);
+            qDebug() << "FontBrick: Changed font to" << font.family();
         } else {
-            QTextCharFormat format;
-            format.setFont(font);
-            cursor.mergeCharFormat(format);
+            qDebug() << "FontBrick: Font dialog cancelled";
         }
-        qDebug() << "FontBrick: Applied font:" << font.family() << ", size:" << font.pointSize();
     } else {
-        qDebug() << "FontBrick: Font dialog canceled";
+        qDebug() << "FontBrick: No text edit available";
     }
 }
-

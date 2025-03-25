@@ -13,8 +13,8 @@ public:
     void openFile();
 
 private:
-    QTextEdit *textEdit;
-    DialogBrick *dialogBrick;
+    QTextEdit *m_textEdit;
+    DialogBrick *m_dialog;
 };
 
 #endif // OPENFILEBRICK_H

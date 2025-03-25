@@ -2,9 +2,7 @@
 #define DIALOGBRICK_H
 
 #include <QObject>
-#include <QString>
-
-class QWidget;
+#include <QStringList>
 
 class DialogBrick : public QObject {
     Q_OBJECT

@@ -2,22 +2,16 @@
 #define FONTBRICK_H
 
 #include <QObject>
-class QTextEdit;
-class QAction;
+#include <QTextEdit>
 
 class FontBrick : public QObject {
     Q_OBJECT
 public:
-    FontBrick(QTextEdit *edit, QObject *parent = nullptr);
-    QAction* getFontAction() const { return fontAct; }
-
-public slots:
-    void showFontDialog();
+    explicit FontBrick(QTextEdit *edit, QObject *parent = nullptr);
+    void changeFont();
 
 private:
-    QTextEdit *targetEdit;
-    QAction *fontAct;
+    QTextEdit *m_textEdit;
 };
 
 #endif // FONTBRICK_H
-
