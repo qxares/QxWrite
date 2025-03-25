@@ -8,6 +8,7 @@ SOURCES += \
     boldbrick.cpp \
     colorbrick.cpp \
     dialogbrick.cpp \
+    documentwindow.cpp \  # Added for new architecture
     fontbrick.cpp \
     iconbrick.cpp \
     insertbrick.cpp \
@@ -22,12 +23,13 @@ SOURCES += \
     savehandlerbrick.cpp \
     savemanagerbrick.cpp \
     toolbarbrick.cpp \
-    alignbrick.cpp  # Added
+    alignbrick.cpp
 
 HEADERS += \
     boldbrick.h \
     colorbrick.h \
     dialogbrick.h \
+    documentwindow.h \    # Added for new architecture
     fontbrick.h \
     iconbrick.h \
     insertbrick.h \
@@ -41,7 +43,7 @@ HEADERS += \
     savehandlerbrick.h \
     savemanagerbrick.h \
     toolbarbrick.h \
-    alignbrick.h  # Added
+    alignbrick.h
 
 RESOURCES += \
     icons.qrc
