@@ -1,45 +1,30 @@
 #include "toolbarbrick.h"
-#include "iconbrick.h"
-#include "boldbrick.h"
-#include "italicbrick.h"
-#include "fontbrick.h"
-#include "colorbrick.h"
-#include "insertbrick.h"
-#include "saveguibrick.h"
 #include <QToolBar>
-#include <QTextEdit>
+#include <QAction>
 #include <QDebug>
 
 ToolBarBrick::ToolBarBrick(QWidget *parent) : QObject(parent) {
-    toolBar = new QToolBar(parent);
-    iconBrick = new IconBrick(this);
-    qDebug() << "IconBrick initialized";
+    toolBar = new QToolBar("Main Toolbar", parent);
+    toolBar->setMovable(false);
 
-    setupToolBar();
+    newAction = new QAction(QIcon(":/icons/new.png"), "New", this);
+    newAction->setToolTip("New Document");
+    toolBar->addAction(newAction);
+
+    openAction = new QAction(QIcon(":/icons/open.png"), "Open", this);
+    openAction->setToolTip("Open Document");
+    toolBar->addAction(openAction);
+
+    qDebug() << "ToolBarBrick initialized with toolbar:" << toolBar;
 }
 
-QToolBar* ToolBarBrick::getToolBar() {
+QToolBar* ToolBarBrick::getToolBar() const {
     return toolBar;
 }
 
-QAction* ToolBarBrick::getAction(const QString &name) {
-    return actions.value(name, nullptr);
-}
-
-void ToolBarBrick::setupToolBar() {
-    actions["new"] = toolBar->addAction(iconBrick->getIcon("new"), "New");
-    actions["open"] = toolBar->addAction(iconBrick->getIcon("open"), "Open");
-    actions["save"] = toolBar->addAction(iconBrick->getIcon("save"), "Save");
-    toolBar->addSeparator();
-    actions["bold"] = toolBar->addAction(iconBrick->getIcon("bold"), "Bold");
-    actions["italic"] = toolBar->addAction(iconBrick->getIcon("italic"), "Italic");
-    actions["font"] = toolBar->addAction(iconBrick->getIcon("font"), "Font");
-    actions["color"] = toolBar->addAction(iconBrick->getIcon("color"), "Color");
-    toolBar->addSeparator();
-    actions["image"] = toolBar->addAction(iconBrick->getIcon("image"), "Insert Image");
-
-    actions["bold"]->setCheckable(true);
-    actions["italic"]->setCheckable(true);
-
-    qDebug() << "Toolbar set up with icons and toggles.";
+QAction* ToolBarBrick::getAction(const QString &name) const {
+    if (name == "new") return newAction;
+    if (name == "open") return openAction;
+    qDebug() << "ToolBarBrick: Action" << name << "not found";
+    return nullptr;
 }

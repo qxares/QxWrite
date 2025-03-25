@@ -47,6 +47,23 @@ void MainWindowBrick::setupUI() {
         qDebug() << "MainWindowBrick: Toolbar New action not found";
     }
 
+    // Connect toolbar "Open"
+    QAction *openAction = toolbarBrick->getAction("open");
+    if (openAction) {
+        QObject::disconnect(openAction, &QAction::triggered, nullptr, nullptr);
+        connect(openAction, &QAction::triggered, this, [=]() {
+            qDebug() << "MainWindowBrick: Triggering Open in current DocumentWindow (Toolbar)";
+            OpenFileBrick *openBrick = documentWindow->findChild<OpenFileBrick*>();
+            if (openBrick) {
+                openBrick->openFile();
+            } else {
+                qDebug() << "MainWindowBrick: Failed to find OpenFileBrick in DocumentWindow";
+            }
+        });
+    } else {
+        qDebug() << "MainWindowBrick: Toolbar Open action not found";
+    }
+
     // Connect menu "New" and "Open"
     QList<QAction*> menuActions = menuManagerBrick->getMenuBar()->findChildren<QAction*>();
     for (QAction *action : menuActions) {
