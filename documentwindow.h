@@ -1,19 +1,23 @@
 #ifndef DOCUMENTWINDOW_H
 #define DOCUMENTWINDOW_H
 
-#include <QMainWindow>
+#include <QWidget>
 
 class QTextEdit;
+class NewFileBrick;
 class OpenFileBrick;
 
-class DocumentWindow : public QMainWindow {
+class DocumentWindow : public QWidget {
     Q_OBJECT
 public:
     explicit DocumentWindow(QWidget *parent = nullptr);
+    ~DocumentWindow();
+    QTextEdit* getTextEdit() const;
+    void clear();
 
 private:
-    void setupUI();
     QTextEdit *textEdit;
+    NewFileBrick *newFileBrick;
     OpenFileBrick *openFileBrick;
 };
 
