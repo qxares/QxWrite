@@ -2,21 +2,15 @@
 #define SAVEHANDLERBRICK_H
 
 #include <QObject>
-#include "savefunctionbrick.h"
-#include "saveguibrick.h"
 
-class QTextEdit;
+class SaveFunctionBrick;
+class SaveGUIBrick;
 
 class SaveHandlerBrick : public QObject {
     Q_OBJECT
 public:
-    SaveHandlerBrick(SaveFunctionBrick *saveFunction, SaveGUIBrick *saveGui, QObject *parent = nullptr);
-
-public slots:
-    void save();  // Add this slot for "Save"
-
-signals:
-    void saveRequested(bool forcePrompt);  // Add this signal to request a file path
+    explicit SaveHandlerBrick(SaveFunctionBrick *saveFunction, SaveGUIBrick *saveGui, QObject *parent = nullptr);
+    void handleSave();
 
 private:
     SaveFunctionBrick *m_saveFunction;

@@ -2,16 +2,17 @@
 #define SAVEFUNCTIONBRICK_H
 
 #include <QObject>
-#include <QTextEdit>
+
+class QTextEdit;
 
 class SaveFunctionBrick : public QObject {
     Q_OBJECT
 public:
-    SaveFunctionBrick(QTextEdit *edit, QObject *parent = nullptr);
+    explicit SaveFunctionBrick(QTextEdit *edit, QObject *parent = nullptr);
     void save(const QString &fileName);
 
 private:
-    QTextEdit *m_edit;
+    QTextEdit *m_textEdit;
 };
 
 #endif // SAVEFUNCTIONBRICK_H

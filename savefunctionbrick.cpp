@@ -2,27 +2,21 @@
 #include <QTextEdit>
 #include <QFile>
 #include <QTextStream>
-#include <QMessageBox>  // Added this
 #include <QDebug>
 
-SaveFunctionBrick::SaveFunctionBrick(QTextEdit *edit, QObject *parent)
-    : QObject(parent), m_edit(edit) {
+SaveFunctionBrick::SaveFunctionBrick(QTextEdit *edit, QObject *parent) 
+    : QObject(parent), m_textEdit(edit) {
+    qDebug() << "SaveFunctionBrick initialized";
 }
 
-void SaveFunctionBrick::save(const QString &filePath) {
-    if (!m_edit) {
-        qDebug() << "SaveFunctionBrick: No target QTextEdit provided!";
-        QMessageBox::critical(nullptr, "Error", "No target QTextEdit provided!");
-        return;
-    }
-    QFile file(filePath);
+void SaveFunctionBrick::save(const QString &fileName) {
+    QFile file(fileName);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&file);
-        out << m_edit->toHtml();
+        out << m_textEdit->toPlainText();
         file.close();
-        qDebug() << "SaveFunctionBrick: File saved:" << filePath;
+        qDebug() << "SaveFunctionBrick: Saved to" << fileName;
     } else {
-        qDebug() << "SaveFunctionBrick: Failed to save file:" << filePath << "Error:" << file.errorString();
-        QMessageBox::critical(m_edit->window(), "Error", "Failed to save file: " + file.errorString());
+        qDebug() << "SaveFunctionBrick: Failed to save to" << fileName;
     }
 }
