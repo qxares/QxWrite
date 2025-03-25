@@ -1,88 +1,67 @@
 #include "mainwindowbrick.h"
-#include "documentwindow.h"
 #include "toolbarbrick.h"
 #include "menumanagerbrick.h"
 #include "newfilebrick.h"
 #include "openfilebrick.h"
-#include <QAction>
-#include <QMenuBar>
-#include <QList>
+#include "savemanagerbrick.h"
+// #include "SyntaxHighlighter.h"  // Commented out until we add it
+#include "boldbrick.h"
+#include "italicbrick.h"
+#include "fontbrick.h"
+#include "colorbrick.h"
+#include "insertbrick.h"
+#include "alignbrick.h"
+#include "documentwindow.h"
 #include <QDebug>
 
 MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     qDebug() << "MainWindowBrick starting...";
-    setupUI();
-    qDebug() << "MainWindowBrick ready.";
-}
-
-MainWindowBrick::~MainWindowBrick() {
-    delete toolbarBrick;
-    delete menuManagerBrick;
-    delete documentWindow;
-}
-
-void MainWindowBrick::setupUI() {
-    toolbarBrick = new ToolBarBrick(this);
-    addToolBar(toolbarBrick->getToolBar());
-
-    menuManagerBrick = new MenuManagerBrick(this);
-    setMenuBar(menuManagerBrick->getMenuBar());
 
     documentWindow = new DocumentWindow(this);
     setCentralWidget(documentWindow);
 
-    // NewFileBrick setup
-    NewFileBrick *newFileBrick = documentWindow->findChild<NewFileBrick*>();
-    if (!newFileBrick) {
-        qDebug() << "MainWindowBrick: Failed to find NewFileBrick in DocumentWindow";
-        return;
-    }
+    toolBarBrick = new ToolBarBrick(this);
+    addToolBar(toolBarBrick->getToolBar());
 
-    // Connect toolbar "New"
-    QAction *newAction = toolbarBrick->getAction("new");
-    if (newAction) {
-        QObject::disconnect(newAction, &QAction::triggered, nullptr, nullptr);
-        connect(newAction, &QAction::triggered, newFileBrick, &NewFileBrick::newFile);
-    } else {
-        qDebug() << "MainWindowBrick: Toolbar New action not found";
-    }
+    menuManagerBrick = new MenuManagerBrick(this);
+    setMenuBar(menuManagerBrick->getMenuBar());
 
-    // Connect toolbar "Open"
-    QAction *openAction = toolbarBrick->getAction("open");
-    if (openAction) {
-        QObject::disconnect(openAction, &QAction::triggered, nullptr, nullptr);
-        connect(openAction, &QAction::triggered, this, [=]() {
-            qDebug() << "MainWindowBrick: Triggering Open in current DocumentWindow (Toolbar)";
-            OpenFileBrick *openBrick = documentWindow->findChild<OpenFileBrick*>();
-            if (openBrick) {
-                openBrick->openFile();
-            } else {
-                qDebug() << "MainWindowBrick: Failed to find OpenFileBrick in DocumentWindow";
-            }
-        });
-    } else {
-        qDebug() << "MainWindowBrick: Toolbar Open action not found";
-    }
+    newFileBrick = new NewFileBrick(documentWindow->getTextEdit(), this);
+    openFileBrick = new OpenFileBrick(documentWindow->getTextEdit(), this);
+    saveManagerBrick = new SaveManagerBrick(documentWindow->getTextEdit(), this);
+    boldBrick = new BoldBrick(documentWindow->getTextEdit(), this);
+    italicBrick = new ItalicBrick(documentWindow->getTextEdit(), this);
+    fontBrick = new FontBrick(documentWindow->getTextEdit(), this);
+    colorBrick = new ColorBrick(documentWindow->getTextEdit(), this);
+    insertBrick = new InsertBrick(documentWindow->getTextEdit(), this);
+    alignBrick = new AlignBrick(documentWindow->getTextEdit(), this);
 
-    // Connect menu "New" and "Open"
-    QList<QAction*> menuActions = menuManagerBrick->getMenuBar()->findChildren<QAction*>();
-    for (QAction *action : menuActions) {
-        if (action->text() == "New") {
-            QObject::disconnect(action, &QAction::triggered, nullptr, nullptr);
-            connect(action, &QAction::triggered, newFileBrick, &NewFileBrick::newFile);
-        } else if (action->text() == "Open") {
-            QObject::disconnect(action, &QAction::triggered, nullptr, nullptr);
-            connect(action, &QAction::triggered, this, [=]() {
-                qDebug() << "MainWindowBrick: Triggering Open in current DocumentWindow (Menu)";
-                OpenFileBrick *openBrick = documentWindow->findChild<OpenFileBrick*>();
-                if (openBrick) {
-                    openBrick->openFile();
-                } else {
-                    qDebug() << "MainWindowBrick: Failed to find OpenFileBrick in DocumentWindow";
-                }
-            });
-        }
-    }
+    menuManagerBrick->setupMenus(
+        toolBarBrick->getAction("new"), toolBarBrick->getAction("open"), toolBarBrick->getAction("save"),
+        toolBarBrick->getAction("bold"), toolBarBrick->getAction("italic"), toolBarBrick->getAction("font"),
+        toolBarBrick->getAction("color"), toolBarBrick->getAction("image"), toolBarBrick->getAction("alignLeft"),
+        toolBarBrick->getAction("alignCenter"), toolBarBrick->getAction("alignRight")
+    );
 
-    resize(800, 600);
+    connect(toolBarBrick->getAction("new"), &QAction::triggered, newFileBrick, &NewFileBrick::newFile);
+    connect(toolBarBrick->getAction("open"), &QAction::triggered, this, [this]() {
+        qDebug() << "MainWindowBrick: Triggering Open in current DocumentWindow (Toolbar)";
+        openFileBrick->openFile();
+    });
+    connect(toolBarBrick->getAction("save"), &QAction::triggered, saveManagerBrick, &SaveManagerBrick::triggerSave);
+    connect(toolBarBrick->getAction("bold"), &QAction::triggered, boldBrick, &BoldBrick::applyBold);
+    connect(toolBarBrick->getAction("italic"), &QAction::triggered, italicBrick, &ItalicBrick::applyItalic);
+    connect(toolBarBrick->getAction("font"), &QAction::triggered, fontBrick, &FontBrick::changeFont);
+    connect(toolBarBrick->getAction("color"), &QAction::triggered, colorBrick, &ColorBrick::changeColor);
+    connect(toolBarBrick->getAction("image"), &QAction::triggered, insertBrick, &InsertBrick::insertImage);
+    connect(toolBarBrick->getAction("alignLeft"), &QAction::triggered, this, [this]() { alignBrick->align(Qt::AlignLeft); });
+    connect(toolBarBrick->getAction("alignCenter"), &QAction::triggered, this, [this]() { alignBrick->align(Qt::AlignCenter); });
+    connect(toolBarBrick->getAction("alignRight"), &QAction::triggered, this, [this]() { alignBrick->align(Qt::AlignRight); });
+
+    // Set fixed initial size
+    resize(800, 600);  // Locked in at 800x600—adjust if needed
+
+    qDebug() << "MainWindowBrick ready.";
 }
+
+MainWindowBrick::~MainWindowBrick() {}
