@@ -1,52 +1,32 @@
 #include "toolbarbrick.h"
-#include <QToolBar>
 #include <QDebug>
 
-ToolBarBrick::ToolBarBrick(QToolBar *toolBar, QTextEdit *edit,
-                           InsertBrick *insertBrick, SaveManagerBrick *saveManagerBrick,
-                           BoldBrick *boldBrick, NewFileBrick *newFileBrick,
-                           ItalicBrick *italicBrick, OpenFileBrick *openFileBrick,
-                           IconBrick *iconBrick, FontBrick *fontBrick,
-                           ColorBrick *colorBrick, QObject *parent)
-    : QObject(parent) {
-    QAction *newAct = new QAction("New", this);
-    newAct->setIcon(iconBrick->getIcon("new"));
-    connect(newAct, &QAction::triggered, newFileBrick, &NewFileBrick::newFile);
-    toolBar->addAction(newAct);
+ToolBarBrick::ToolBarBrick(QObject *parent) : QObject(parent) {
+    toolBar = new QToolBar();
+}
 
-    QAction *openAct = new QAction("Open", this);
-    openAct->setIcon(iconBrick->getIcon("open"));
-    connect(openAct, &QAction::triggered, openFileBrick, &OpenFileBrick::openFile);
-    toolBar->addAction(openAct);
-
-    QAction *saveAct = saveManagerBrick->saveAction();
-    saveAct->setIcon(iconBrick->getIcon("save"));
-    toolBar->addAction(saveAct);
-
-    QAction *boldAct = boldBrick->boldAction();
-    boldAct->setIcon(iconBrick->getIcon("bold"));
-    toolBar->addAction(boldAct);
-
-    QAction *italicAct = italicBrick->italicAction();
-    italicAct->setIcon(iconBrick->getIcon("italic"));
-    toolBar->addAction(italicAct);
-
-    QAction *fontAct = fontBrick->getFontAction();
-    fontAct->setIcon(iconBrick->getIcon("font"));
-    toolBar->addAction(fontAct);
-
-    QAction *colorAct = colorBrick->getColorAction();
-    colorAct->setIcon(iconBrick->getIcon("color"));
-    toolBar->addAction(colorAct);
-
-    QAction *imageAct = new QAction("Insert Image", this);
-    imageAct->setIcon(iconBrick->getIcon("image"));
-    connect(imageAct, &QAction::triggered, insertBrick, &InsertBrick::insertImage);
-    toolBar->addAction(imageAct);
+void ToolBarBrick::setupToolBar(IconBrick *iconBrick, NewFileBrick *newFileBrick, OpenFileBrick *openFileBrick,
+                                SaveManagerBrick *saveManager, BoldBrick *boldBrick, ItalicBrick *italicBrick,
+                                FontBrick *fontBrick, ColorBrick *colorBrick, InsertBrick *insertBrick,
+                                AlignBrick *alignLeftBrick, AlignBrick *alignCenterBrick, AlignBrick *alignRightBrick) {
+    toolBar->addAction(iconBrick->getIcon("new"), "New", newFileBrick, &NewFileBrick::newFile);
+    toolBar->addAction(iconBrick->getIcon("open"), "Open", openFileBrick, &OpenFileBrick::openFile);
+    toolBar->addAction(iconBrick->getIcon("save"), "Save", saveManager, &SaveManagerBrick::saveFile);
+    toolBar->addSeparator();
+    toolBar->addAction(iconBrick->getIcon("bold"), "Bold", boldBrick, &BoldBrick::toggleBold);
+    toolBar->addAction(iconBrick->getIcon("italic"), "Italic", italicBrick, &ItalicBrick::toggleItalic);
+    toolBar->addAction(iconBrick->getIcon("font"), "Font", fontBrick, &FontBrick::changeFont);
+    toolBar->addAction(iconBrick->getIcon("color"), "Color", colorBrick, &ColorBrick::changeColor);
+    toolBar->addSeparator();
+    toolBar->addAction(iconBrick->getIcon("align-left"), "Align Left", alignLeftBrick, &AlignBrick::alignText);
+    toolBar->addAction(iconBrick->getIcon("align-center"), "Align Center", alignCenterBrick, &AlignBrick::alignText);
+    toolBar->addAction(iconBrick->getIcon("align-right"), "Align Right", alignRightBrick, &AlignBrick::alignText);
+    toolBar->addSeparator();
+    toolBar->addAction(iconBrick->getIcon("image"), "Insert Image", insertBrick, &InsertBrick::insertImage);
 
     qDebug() << "Toolbar set up with icons and toggles.";
 }
 
-ToolBarBrick::~ToolBarBrick() {
-    // Empty is fine—QObject cleans up children
+QToolBar *ToolBarBrick::getToolBar() {
+    return toolBar;
 }

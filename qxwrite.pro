@@ -1,44 +1,47 @@
-QT       += core gui widgets printsupport
+QT       += core gui
 
-TARGET = QxWrite
-TEMPLATE = app
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
+
+CONFIG += c++17
 
 SOURCES += \
-    main.cpp \
-    mainwindowbrick.cpp \
-    insertbrick.cpp \
-    menumanagerbrick.cpp \
     boldbrick.cpp \
-    newfilebrick.cpp \
-    toolbarbrick.cpp \
-    italicbrick.cpp \
-    openfilebrick.cpp \
-    iconbrick.cpp \
+    colorbrick.cpp \
     dialogbrick.cpp \
     fontbrick.cpp \
-    colorbrick.cpp \
+    iconbrick.cpp \
+    insertbrick.cpp \
+    italicbrick.cpp \
+    main.cpp \
+    mainwindowbrick.cpp \
+    menumanagerbrick.cpp \
+    newfilebrick.cpp \
+    openfilebrick.cpp \
     savefunctionbrick.cpp \
-    savehandlerbrick.cpp \
     saveguibrick.cpp \
-    savemanagerbrick.cpp
+    savehandlerbrick.cpp \
+    savemanagerbrick.cpp \
+    toolbarbrick.cpp \
+    alignbrick.cpp  # Add this
 
 HEADERS += \
-    mainwindowbrick.h \
-    insertbrick.h \
-    menumanagerbrick.h \
     boldbrick.h \
-    newfilebrick.h \
-    toolbarbrick.h \
-    italicbrick.h \
-    openfilebrick.h \
-    iconbrick.h \
+    colorbrick.h \
     dialogbrick.h \
     fontbrick.h \
-    colorbrick.h \
+    iconbrick.h \
+    insertbrick.h \
+    italicbrick.h \
+    mainwindowbrick.h \
+    menumanagerbrick.h \
+    newfilebrick.h \
+    openfilebrick.h \
     savefunctionbrick.h \
-    savehandlerbrick.h \
     saveguibrick.h \
-    savemanagerbrick.h
+    savehandlerbrick.h \
+    savemanagerbrick.h \
+    toolbarbrick.h \
+    alignbrick.h  # Add this
 
 RESOURCES += \
     icons.qrc
