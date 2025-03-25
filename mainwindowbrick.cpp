@@ -1,5 +1,7 @@
 #include "mainwindowbrick.h"
 #include "documentwindow.h"
+#include "toolbarbrick.h"
+#include "menumanagerbrick.h"
 #include <QDebug>
 
 MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
@@ -11,6 +13,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
 MainWindowBrick::~MainWindowBrick() {
     delete toolbarBrick;
     delete menuManagerBrick;
+    delete documentWindow;
 }
 
 void MainWindowBrick::setupUI() {
@@ -20,25 +23,37 @@ void MainWindowBrick::setupUI() {
     menuManagerBrick = new MenuManagerBrick(this);
     setMenuBar(menuManagerBrick->getMenuBar());
 
-    // Connect "New" to spawn a new DocumentWindow
-    connect(toolbarBrick->getAction("new"), &QAction::triggered, this, [=]() {
-        qDebug() << "MainWindowBrick: Spawning new DocumentWindow";
-        DocumentWindow *doc = new DocumentWindow(nullptr);  // Independent window
-        doc->show();
-    });
+    documentWindow = new DocumentWindow(this);
+    setCentralWidget(documentWindow);
 
-    // Connect "Open" to spawn a new DocumentWindow and trigger open
-    connect(toolbarBrick->getAction("open"), &QAction::triggered, this, [=]() {
-        qDebug() << "MainWindowBrick: Spawning DocumentWindow for Open";
-        DocumentWindow *doc = new DocumentWindow(nullptr);  // Independent window
-        doc->show();
-        OpenFileBrick *openBrick = doc->findChild<OpenFileBrick*>();
-        if (openBrick) {
-            openBrick->openFile();
-        } else {
-            qDebug() << "MainWindowBrick: Failed to find OpenFileBrick in DocumentWindow";
-        }
-    });
+    // Connect "New" to clear the embedded DocumentWindow
+    QAction *newAction = toolbarBrick->getAction("new");
+    if (newAction) {
+        disconnect(newAction, nullptr, nullptr, nullptr);  // Clear any old connections
+        connect(newAction, &QAction::triggered, this, [=]() {
+            qDebug() << "MainWindowBrick: Clearing current DocumentWindow for New";
+            documentWindow->clear();
+        });
+    } else {
+        qDebug() << "MainWindowBrick: New action not found";
+    }
 
-    resize(400, 300);
+    // Connect "Open" to trigger open in the embedded DocumentWindow
+    QAction *openAction = toolbarBrick->getAction("open");
+    if (openAction) {
+        disconnect(openAction, nullptr, nullptr, nullptr);  // Clear any old connections
+        connect(openAction, &QAction::triggered, this, [=]() {
+            qDebug() << "MainWindowBrick: Triggering Open in current DocumentWindow";
+            OpenFileBrick *openBrick = documentWindow->findChild<OpenFileBrick*>();
+            if (openBrick) {
+                openBrick->openFile();
+            } else {
+                qDebug() << "MainWindowBrick: Failed to find OpenFileBrick in DocumentWindow";
+            }
+        });
+    } else {
+        qDebug() << "MainWindowBrick: Open action not found";
+    }
+
+    resize(800, 600);
 }

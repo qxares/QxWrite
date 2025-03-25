@@ -1,6 +1,8 @@
 #include "openfilebrick.h"
 #include "dialogbrick.h"
 #include <QTextEdit>
+#include <QFile>
+#include <QTextStream>
 #include <QDebug>
 
 OpenFileBrick::OpenFileBrick(QTextEdit *edit, QObject *parent) : QObject(parent), textEdit(edit) {
@@ -10,7 +12,12 @@ OpenFileBrick::OpenFileBrick(QTextEdit *edit, QObject *parent) : QObject(parent)
 
 void OpenFileBrick::openFile() {
     qDebug() << "OpenFileBrick: openFile triggered";
-    QString fileName = dialogBrick->getOpenFileName(qobject_cast<QWidget*>(parent()), "Open File", "", "Text Files (*.txt *.md);;All Files (*)");
+    QWidget *parentWidget = qobject_cast<QWidget*>(parent());
+    if (!parentWidget) {
+        qDebug() << "OpenFileBrick: Parent widget is null, using nullptr";
+        parentWidget = nullptr;
+    }
+    QString fileName = dialogBrick->getOpenFileName(parentWidget, "Open File", "", "Text Files (*.txt *.md);;All Files (*)");
     if (!fileName.isEmpty()) {
         QFile file(fileName);
         if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {

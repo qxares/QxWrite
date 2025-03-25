@@ -1,7 +1,6 @@
 #include "dialogbrick.h"
 #include <QFileDialog>
 #include <QDebug>
-#include <QDir>
 
 DialogBrick::DialogBrick(QObject *parent) : QObject(parent) {
     lastDir = QDir::homePath();
@@ -9,15 +8,23 @@ DialogBrick::DialogBrick(QObject *parent) : QObject(parent) {
 }
 
 QString DialogBrick::getOpenFileName(QWidget *parent, const QString &caption, const QString &dir, const QString &filter) {
-    QString useDir = dir.isEmpty() ? lastDir : dir;
-    QString fileName = QFileDialog::getOpenFileName(parent, caption, useDir, filter);
-    if (!fileName.isEmpty()) {
-        lastDir = QFileInfo(fileName).absolutePath();
-        qDebug() << "DialogBrick: Selected file:" << fileName;
+    QString selectedFile = QFileDialog::getOpenFileName(parent, caption, dir.isEmpty() ? lastDir : dir, filter);
+    if (!selectedFile.isEmpty()) {
+        lastDir = QFileInfo(selectedFile).absolutePath();
+        qDebug() << "DialogBrick: Selected file:" << selectedFile << ", updated lastDir:" << lastDir;
     } else {
         qDebug() << "DialogBrick: Open cancelled";
     }
-    QDir dirView(useDir);
-    qDebug() << "DialogBrick: File view (left pane) contents in" << useDir << ":" << dirView.entryList(QDir::AllEntries | QDir::NoDot);
-    return fileName;
+    return selectedFile;
+}
+
+QString DialogBrick::getSaveFileName(QWidget *parent, const QString &caption, const QString &dir, const QString &filter) {
+    QString selectedFile = QFileDialog::getSaveFileName(parent, caption, dir.isEmpty() ? lastDir : dir, filter);
+    if (!selectedFile.isEmpty()) {
+        lastDir = QFileInfo(selectedFile).absolutePath();
+        qDebug() << "DialogBrick: Selected save file:" << selectedFile << ", updated lastDir:" << lastDir;
+    } else {
+        qDebug() << "DialogBrick: Save cancelled";
+    }
+    return selectedFile;
 }
