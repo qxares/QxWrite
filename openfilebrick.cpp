@@ -11,7 +11,7 @@ OpenFileBrick::OpenFileBrick(QTextEdit *edit, QObject *parent) : QObject(parent)
 }
 
 void OpenFileBrick::openFile() {
-    qDebug() << "OpenFileBrick: openFile triggered";
+    qDebug() << "OpenFileBrick: openFile triggered, parent:" << parent();
     QWidget *parentWidget = qobject_cast<QWidget*>(parent());
     if (!parentWidget) {
         qDebug() << "OpenFileBrick: Parent widget is null, using nullptr";
