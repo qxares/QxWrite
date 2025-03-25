@@ -2,8 +2,8 @@
 #define SAVEGUIBRICK_H
 
 #include <QObject>
-#include <QTextEdit>
 
+class QTextEdit;
 class DialogBrick;
 
 class SaveGUIBrick : public QObject {
@@ -12,15 +12,14 @@ public:
     explicit SaveGUIBrick(QTextEdit *edit, QObject *parent = nullptr);
 
 public slots:
-    void save(bool forcePrompt);  // Add this slot to handle save requests
+    void save(bool saveAs = false);
 
 signals:
-    void fileSelected(const QString &filePath);  // Add this signal to emit the selected file path
+    void saveRequested(const QString &filePath);
 
 private:
-    QTextEdit *m_edit;
+    QTextEdit *m_textEdit;
     DialogBrick *m_dialog;
-    QString m_currentFilePath;  // Track the current file path
 };
 
 #endif // SAVEGUIBRICK_H

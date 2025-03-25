@@ -1,8 +1,9 @@
 #include "saveguibrick.h"
 #include "dialogbrick.h"
+#include <QTextEdit>
 #include <QDebug>
 
-SaveGUIBrick::SaveGUIBrick(QObject *parent) : QObject(parent) {
+SaveGUIBrick::SaveGUIBrick(QTextEdit *edit, QObject *parent) : QObject(parent), m_textEdit(edit) {
     m_dialog = new DialogBrick(this);
     qDebug() << "SaveGUIBrick initialized";
 }

@@ -1,32 +1,45 @@
 #include "toolbarbrick.h"
+#include "iconbrick.h"
+#include "boldbrick.h"
+#include "italicbrick.h"
+#include "fontbrick.h"
+#include "colorbrick.h"
+#include "insertbrick.h"
+#include "saveguibrick.h"
+#include <QToolBar>
+#include <QTextEdit>
 #include <QDebug>
 
-ToolBarBrick::ToolBarBrick(QWidget *parent) : QObject(parent) {  // Changed to QWidget*
+ToolBarBrick::ToolBarBrick(QWidget *parent) : QObject(parent) {
     toolBar = new QToolBar(parent);
-    qDebug() << "ToolBarBrick initialized, toolBar:" << toolBar;
-}
+    iconBrick = new IconBrick(this);
+    qDebug() << "IconBrick initialized";
 
-void ToolBarBrick::setupToolBar(IconBrick *iconBrick, NewFileBrick *newFileBrick, OpenFileBrick *openFileBrick,
-                                SaveManagerBrick *saveManager, BoldBrick *boldBrick, ItalicBrick *italicBrick,
-                                FontBrick *fontBrick, ColorBrick *colorBrick, InsertBrick *insertBrick,
-                                AlignBrick *alignLeftBrick, AlignBrick *alignCenterBrick, AlignBrick *alignRightBrick) {
-    toolBar->addAction(iconBrick->getIcon("new"), "New", newFileBrick, &NewFileBrick::newFile);
-    toolBar->addAction(iconBrick->getIcon("open"), "Open", openFileBrick, &OpenFileBrick::openFile);
-    toolBar->addAction(iconBrick->getIcon("save"), "Save", saveManager, &SaveManagerBrick::saveAs);
-    toolBar->addSeparator();
-    toolBar->addAction(iconBrick->getIcon("bold"), "Bold", boldBrick, &BoldBrick::toggleBold);
-    toolBar->addAction(iconBrick->getIcon("italic"), "Italic", italicBrick, &ItalicBrick::toggleItalic);
-    toolBar->addAction(iconBrick->getIcon("font"), "Font", fontBrick, &FontBrick::showFontDialog);
-    toolBar->addAction(iconBrick->getIcon("color"), "Color", colorBrick, &ColorBrick::showColorDialog);
-    toolBar->addAction(iconBrick->getIcon("image"), "Insert Image", insertBrick, &InsertBrick::insertImage);
-    toolBar->addSeparator();
-    toolBar->addAction(iconBrick->getIcon("align-left"), "Align Left", alignLeftBrick, &AlignBrick::align);
-    toolBar->addAction(iconBrick->getIcon("align-center"), "Align Center", alignCenterBrick, &AlignBrick::align);
-    toolBar->addAction(iconBrick->getIcon("align-right"), "Align Right", alignRightBrick, &AlignBrick::align);
-
-    qDebug() << "Toolbar set up.";
+    setupToolBar();
 }
 
 QToolBar* ToolBarBrick::getToolBar() {
     return toolBar;
+}
+
+QAction* ToolBarBrick::getAction(const QString &name) {
+    return actions.value(name, nullptr);
+}
+
+void ToolBarBrick::setupToolBar() {
+    actions["new"] = toolBar->addAction(iconBrick->getIcon("new"), "New");
+    actions["open"] = toolBar->addAction(iconBrick->getIcon("open"), "Open");
+    actions["save"] = toolBar->addAction(iconBrick->getIcon("save"), "Save");
+    toolBar->addSeparator();
+    actions["bold"] = toolBar->addAction(iconBrick->getIcon("bold"), "Bold");
+    actions["italic"] = toolBar->addAction(iconBrick->getIcon("italic"), "Italic");
+    actions["font"] = toolBar->addAction(iconBrick->getIcon("font"), "Font");
+    actions["color"] = toolBar->addAction(iconBrick->getIcon("color"), "Color");
+    toolBar->addSeparator();
+    actions["image"] = toolBar->addAction(iconBrick->getIcon("image"), "Insert Image");
+
+    actions["bold"]->setCheckable(true);
+    actions["italic"]->setCheckable(true);
+
+    qDebug() << "Toolbar set up with icons and toggles.";
 }

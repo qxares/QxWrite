@@ -29,7 +29,7 @@ void MainWindowBrick::setupUI() {
     // Connect "New" to clear the embedded DocumentWindow
     QAction *newAction = toolbarBrick->getAction("new");
     if (newAction) {
-        disconnect(newAction, nullptr, nullptr, nullptr);  // Clear any old connections
+        disconnect(newAction, nullptr, nullptr, nullptr);  // Clear all prior connections
         connect(newAction, &QAction::triggered, this, [=]() {
             qDebug() << "MainWindowBrick: Clearing current DocumentWindow for New";
             documentWindow->clear();
@@ -41,7 +41,7 @@ void MainWindowBrick::setupUI() {
     // Connect "Open" to trigger open in the embedded DocumentWindow
     QAction *openAction = toolbarBrick->getAction("open");
     if (openAction) {
-        disconnect(openAction, nullptr, nullptr, nullptr);  // Clear any old connections
+        disconnect(openAction, nullptr, nullptr, nullptr);  // Clear all prior connections
         connect(openAction, &QAction::triggered, this, [=]() {
             qDebug() << "MainWindowBrick: Triggering Open in current DocumentWindow";
             OpenFileBrick *openBrick = documentWindow->findChild<OpenFileBrick*>();
