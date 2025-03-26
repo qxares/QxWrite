@@ -11,7 +11,7 @@ ToolBarBrick::ToolBarBrick(QWidget *parent) : QObject(parent) {
     newAction->setToolTip("New Document");
     if (!newAction->icon().isNull()) qDebug() << "ToolBarBrick: New icon loaded";
     else newAction->setIcon(QIcon::fromTheme("document-new"));
-    toolBar->addAction(newAction);
+    // Removed toolBar->addAction(newAction) to keep the action but not show it
 
     openAction = new QAction(QIcon(":/icons/icons/open.svg"), "Open", this);
     openAction->setToolTip("Open Document");

@@ -14,6 +14,10 @@ void SaveFunctionBrick::save(const QString &fileName) {
         qDebug() << "SaveFunctionBrick: Empty filename, cannot save";
         return;
     }
+    if (!m_textEdit) {
+        qDebug() << "SaveFunctionBrick: No text edit set, cannot save";
+        return;
+    }
     QFile file(fileName);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&file);
@@ -21,6 +25,7 @@ void SaveFunctionBrick::save(const QString &fileName) {
         file.close();
         qDebug() << "SaveFunctionBrick: Saved to" << fileName;
     } else {
-        qDebug() << "SaveFunctionBrick: Failed to save to" << fileName;
+        qDebug() << "SaveFunctionBrick: Failed to save to" << fileName
+                 << "Error:" << file.errorString();
     }
 }
