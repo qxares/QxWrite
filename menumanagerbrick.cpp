@@ -18,7 +18,7 @@ void MenuManagerBrick::setupMenus(QAction *newAction, QAction *openAction, QActi
                                   QAction *boldAction, QAction *italicAction, QAction *fontAction,
                                   QAction *colorAction, QAction *imageAction, QAction *alignLeftAction,
                                   QAction *alignCenterAction, QAction *alignRightAction) {
-    QMenu *newMenu = fileMenu->addMenu("New");
+    QMenu *newMenu = fileMenu->addMenu(QIcon(":/icons/icons/file-plus.svg"), "New");
     QAction *newNote = newMenu->addAction(QIcon(":/icons/icons/file-plus.svg"), "QxNote");
     QAction *newDoc = newMenu->addAction(QIcon(":/icons/icons/file-plus.svg"), "QxDocument");
     QAction *newSheet = newMenu->addAction(QIcon(":/icons/icons/file-plus.svg"), "QxSheet");
