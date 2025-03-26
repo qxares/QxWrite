@@ -18,12 +18,14 @@ void MenuManagerBrick::setupMenus(QAction *newAction, QAction *openAction, QActi
                                   QAction *boldAction, QAction *italicAction, QAction *fontAction,
                                   QAction *colorAction, QAction *imageAction, QAction *alignLeftAction,
                                   QAction *alignCenterAction, QAction *alignRightAction) {
-    QMenu *newMenu = fileMenu->addMenu(QIcon(":/icons/icons/file-plus.svg"), "New");
-    QAction *newNote = newMenu->addAction(QIcon(":/icons/icons/file-plus.svg"), "QxNote");
-    QAction *newDoc = newMenu->addAction(QIcon(":/icons/icons/file-plus.svg"), "QxDocument");
-    QAction *newSheet = newMenu->addAction(QIcon(":/icons/icons/file-plus.svg"), "QxSheet");
+    QAction *newActionMenu = fileMenu->addAction(QIcon(":/icons/icons/plus.svg"), "New");
+    QMenu *newMenu = new QMenu();
+    QAction *newNote = newMenu->addAction(QIcon(":/icons/icons/plus.svg"), "QxNote");
+    QAction *newDoc = newMenu->addAction(QIcon(":/icons/icons/plus.svg"), "QxDocument");
+    QAction *newSheet = newMenu->addAction(QIcon(":/icons/icons/plus.svg"), "QxSheet");
+    newActionMenu->setMenu(newMenu);
 
-    QAction *saveAsAction = fileMenu->addAction(QIcon(":/icons/icons/save-as.svg"), "Save As");
+    QAction *saveAsAction = fileMenu->addAction(QIcon(":/icons/icons/save.svg"), "Save As");
     if (openAction) fileMenu->addAction(openAction);
     if (saveAction) fileMenu->addAction(saveAction);
     if (boldAction) formatMenu->addAction(boldAction);

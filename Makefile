@@ -469,14 +469,13 @@ qrc_icons.cpp: icons.qrc \
 		icons/align-left.svg \
 		icons/new.svg \
 		icons/image.svg \
-		icons/save-as.svg \
 		icons/italic.svg \
 		icons/save.svg \
-		icons/file-plus.svg \
 		icons/open.svg \
 		icons/font.svg \
 		icons/align-right.svg \
 		icons/color.svg \
+		icons/plus.svg \
 		icons/align-center.svg
 	/usr/lib/qt5/bin/rcc -name icons icons.qrc -o qrc_icons.cpp
 
