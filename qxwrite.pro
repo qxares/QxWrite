@@ -1,6 +1,6 @@
 QT       += core gui widgets printsupport
 
-TARGET = qxwrite
+TARGET = QxWrite
 TEMPLATE = app
 
 SOURCES += \
