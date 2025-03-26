@@ -23,6 +23,7 @@ void MenuManagerBrick::setupMenus(QAction *newAction, QAction *openAction, QActi
     QAction *newDoc = newMenu->addAction("QxDocument");
     QAction *newSheet = newMenu->addAction("QxSheet");
 
+    QAction *saveAsAction = fileMenu->addAction("Save As");  // Add Save As
     if (openAction) fileMenu->addAction(openAction);
     if (saveAction) fileMenu->addAction(saveAction);
     if (boldAction) formatMenu->addAction(boldAction);
@@ -38,6 +39,7 @@ void MenuManagerBrick::setupMenus(QAction *newAction, QAction *openAction, QActi
     QObject::connect(newNote, &QAction::triggered, this, [this]() { emit newFileTriggered(0); });
     QObject::connect(newDoc, &QAction::triggered, this, [this]() { emit newFileTriggered(1); });
     QObject::connect(newSheet, &QAction::triggered, this, [this]() { emit newFileTriggered(2); });
+    QObject::connect(saveAsAction, &QAction::triggered, this, [this]() { emit saveAsTriggered(); });
 
     qDebug() << "Menus set up.";
 }
@@ -47,3 +49,5 @@ QMenuBar* MenuManagerBrick::getMenuBar() const {
 }
 
 MenuManagerBrick::~MenuManagerBrick() {}
+
+Q_SIGNAL void MenuManagerBrick::saveAsTriggered();  // Add this signal declaration

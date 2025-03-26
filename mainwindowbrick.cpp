@@ -30,7 +30,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     menuManagerBrick = new MenuManagerBrick(this);
     setMenuBar(menuManagerBrick->getMenuBar());
 
-    newFileBrick = new NewFileBrick(nullptr, this);  // No textEdit yet, handled by DocumentWindow
+    newFileBrick = new NewFileBrick(nullptr, this);
     openFileBrick = new OpenFileBrick(nullptr, this);
     saveManagerBrick = new SaveManagerBrick(nullptr, this);
     boldBrick = new BoldBrick(nullptr, this);
@@ -48,13 +48,19 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     );
 
     connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this](int type) {
-        if (type == 0) this->documentHandler->newDocument(NewFileBrick::Note);
-        else if (type == 1) this->documentHandler->newDocument(NewFileBrick::Document);
-        else if (type == 2) this->documentHandler->newDocument(NewFileBrick::Sheet);
+        documentHandler->newDocument(static_cast<NewFileBrick::DocType>(type));
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::saveAsTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                saveManagerBrick->setTextEdit(docWindow->getTextEdit());
+                saveManagerBrick->triggerSave();
+            }
+        }
     });
     connect(toolBarBrick->getAction("new"), &QAction::triggered, this, [this]() { 
-        this->documentHandler->newDocument(NewFileBrick::Note); 
-    });  // Toolbar defaults to Note
+        documentHandler->newDocument(NewFileBrick::Note); 
+    });
     connect(toolBarBrick->getAction("open"), &QAction::triggered, this, [this]() {
         qDebug() << "MainWindowBrick: Triggering Open in new DocumentWindow (Toolbar)";
         openFileBrick->openFile();
@@ -132,7 +138,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         }
     });
 
-    resize(800, 600);  // Locked in at 800x600—adjust if needed
+    resize(800, 600);
 
     qDebug() << "MainWindowBrick ready.";
 }
