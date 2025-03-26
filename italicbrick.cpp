@@ -1,5 +1,4 @@
 #include "italicbrick.h"
-#include <QTextCharFormat>
 #include <QDebug>
 
 ItalicBrick::ItalicBrick(QTextEdit *edit, QObject *parent) : QObject(parent), m_textEdit(edit) {
@@ -11,8 +10,10 @@ void ItalicBrick::applyItalic() {
         QTextCharFormat format = m_textEdit->currentCharFormat();
         format.setFontItalic(!format.fontItalic());
         m_textEdit->mergeCurrentCharFormat(format);
-        qDebug() << "ItalicBrick: Toggled italic";
-    } else {
-        qDebug() << "ItalicBrick: No text edit available";
     }
+}
+
+void ItalicBrick::setTextEdit(QTextEdit *edit) {
+    m_textEdit = edit;
+    qDebug() << "ItalicBrick: TextEdit updated to:" << m_textEdit;
 }

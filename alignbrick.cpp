@@ -1,5 +1,4 @@
 #include "alignbrick.h"
-#include <QTextEdit>
 #include <QDebug>
 
 AlignBrick::AlignBrick(QTextEdit *edit, QObject *parent) : QObject(parent), m_textEdit(edit) {
@@ -7,10 +6,10 @@ AlignBrick::AlignBrick(QTextEdit *edit, QObject *parent) : QObject(parent), m_te
 }
 
 void AlignBrick::align(Qt::Alignment alignment) {
-    if (m_textEdit) {
-        m_textEdit->setAlignment(alignment);
-        qDebug() << "AlignBrick: Set alignment to" << alignment;
-    } else {
-        qDebug() << "AlignBrick: No text edit available";
-    }
+    if (m_textEdit) m_textEdit->setAlignment(alignment);
+}
+
+void AlignBrick::setTextEdit(QTextEdit *edit) {
+    m_textEdit = edit;
+    qDebug() << "AlignBrick: TextEdit updated to:" << m_textEdit;
 }

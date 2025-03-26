@@ -11,14 +11,18 @@
 #include "insertbrick.h"
 #include "alignbrick.h"
 #include "documentwindow.h"
+#include "documenthandlerbrick.h"
 #include <QDebug>
 #include <QMenu>
+#include <QMdiSubWindow>
 
 MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     qDebug() << "MainWindowBrick starting...";
 
-    documentWindow = new DocumentWindow(this);
-    setCentralWidget(documentWindow);
+    mdiArea = new QMdiArea(this);
+    setCentralWidget(mdiArea);
+
+    documentHandler = new DocumentHandlerBrick(this);
 
     toolBarBrick = new ToolBarBrick(this);
     addToolBar(toolBarBrick->getToolBar());
@@ -26,15 +30,15 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     menuManagerBrick = new MenuManagerBrick(this);
     setMenuBar(menuManagerBrick->getMenuBar());
 
-    newFileBrick = new NewFileBrick(documentWindow->getTextEdit(), this);
-    openFileBrick = new OpenFileBrick(documentWindow->getTextEdit(), this);
-    saveManagerBrick = new SaveManagerBrick(documentWindow->getTextEdit(), this);
-    boldBrick = new BoldBrick(documentWindow->getTextEdit(), this);
-    italicBrick = new ItalicBrick(documentWindow->getTextEdit(), this);
-    fontBrick = new FontBrick(documentWindow->getTextEdit(), this);
-    colorBrick = new ColorBrick(documentWindow->getTextEdit(), this);
-    insertBrick = new InsertBrick(documentWindow->getTextEdit(), this);
-    alignBrick = new AlignBrick(documentWindow->getTextEdit(), this);
+    newFileBrick = new NewFileBrick(nullptr, this);  // No textEdit yet, handled by DocumentWindow
+    openFileBrick = new OpenFileBrick(nullptr, this);
+    saveManagerBrick = new SaveManagerBrick(nullptr, this);
+    boldBrick = new BoldBrick(nullptr, this);
+    italicBrick = new ItalicBrick(nullptr, this);
+    fontBrick = new FontBrick(nullptr, this);
+    colorBrick = new ColorBrick(nullptr, this);
+    insertBrick = new InsertBrick(nullptr, this);
+    alignBrick = new AlignBrick(nullptr, this);
 
     menuManagerBrick->setupMenus(
         toolBarBrick->getAction("new"), toolBarBrick->getAction("open"), toolBarBrick->getAction("save"),
@@ -44,24 +48,89 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     );
 
     connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this](int type) {
-        if (type == 0) documentWindow->newFile(NewFileBrick::Note);
-        else if (type == 1) documentWindow->newFile(NewFileBrick::Document);
-        else if (type == 2) documentWindow->newFile(NewFileBrick::Sheet);
+        if (type == 0) this->documentHandler->newDocument(NewFileBrick::Note);
+        else if (type == 1) this->documentHandler->newDocument(NewFileBrick::Document);
+        else if (type == 2) this->documentHandler->newDocument(NewFileBrick::Sheet);
     });
-    connect(toolBarBrick->getAction("new"), &QAction::triggered, this, [this]() { documentWindow->newFile(NewFileBrick::Note); });  // Toolbar defaults to Note
+    connect(toolBarBrick->getAction("new"), &QAction::triggered, this, [this]() { 
+        this->documentHandler->newDocument(NewFileBrick::Note); 
+    });  // Toolbar defaults to Note
     connect(toolBarBrick->getAction("open"), &QAction::triggered, this, [this]() {
-        qDebug() << "MainWindowBrick: Triggering Open in current DocumentWindow (Toolbar)";
+        qDebug() << "MainWindowBrick: Triggering Open in new DocumentWindow (Toolbar)";
         openFileBrick->openFile();
     });
-    connect(toolBarBrick->getAction("save"), &QAction::triggered, saveManagerBrick, &SaveManagerBrick::triggerSave);
-    connect(toolBarBrick->getAction("bold"), &QAction::triggered, boldBrick, &BoldBrick::applyBold);
-    connect(toolBarBrick->getAction("italic"), &QAction::triggered, italicBrick, &ItalicBrick::applyItalic);
-    connect(toolBarBrick->getAction("font"), &QAction::triggered, fontBrick, &FontBrick::changeFont);
-    connect(toolBarBrick->getAction("color"), &QAction::triggered, colorBrick, &ColorBrick::changeColor);
-    connect(toolBarBrick->getAction("image"), &QAction::triggered, insertBrick, &InsertBrick::insertImage);
-    connect(toolBarBrick->getAction("alignLeft"), &QAction::triggered, this, [this]() { alignBrick->align(Qt::AlignLeft); });
-    connect(toolBarBrick->getAction("alignCenter"), &QAction::triggered, this, [this]() { alignBrick->align(Qt::AlignCenter); });
-    connect(toolBarBrick->getAction("alignRight"), &QAction::triggered, this, [this]() { alignBrick->align(Qt::AlignRight); });
+    connect(toolBarBrick->getAction("save"), &QAction::triggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                saveManagerBrick->setTextEdit(docWindow->getTextEdit());
+                saveManagerBrick->triggerSave();
+            }
+        }
+    });
+    connect(toolBarBrick->getAction("bold"), &QAction::triggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                boldBrick->setTextEdit(docWindow->getTextEdit());
+                boldBrick->applyBold();
+            }
+        }
+    });
+    connect(toolBarBrick->getAction("italic"), &QAction::triggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                italicBrick->setTextEdit(docWindow->getTextEdit());
+                italicBrick->applyItalic();
+            }
+        }
+    });
+    connect(toolBarBrick->getAction("font"), &QAction::triggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                fontBrick->setTextEdit(docWindow->getTextEdit());
+                fontBrick->changeFont();
+            }
+        }
+    });
+    connect(toolBarBrick->getAction("color"), &QAction::triggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                colorBrick->setTextEdit(docWindow->getTextEdit());
+                colorBrick->changeColor();
+            }
+        }
+    });
+    connect(toolBarBrick->getAction("image"), &QAction::triggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                insertBrick->setTextEdit(docWindow->getTextEdit());
+                insertBrick->insertImage();
+            }
+        }
+    });
+    connect(toolBarBrick->getAction("alignLeft"), &QAction::triggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                alignBrick->setTextEdit(docWindow->getTextEdit());
+                alignBrick->align(Qt::AlignLeft);
+            }
+        }
+    });
+    connect(toolBarBrick->getAction("alignCenter"), &QAction::triggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                alignBrick->setTextEdit(docWindow->getTextEdit());
+                alignBrick->align(Qt::AlignCenter);
+            }
+        }
+    });
+    connect(toolBarBrick->getAction("alignRight"), &QAction::triggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                alignBrick->setTextEdit(docWindow->getTextEdit());
+                alignBrick->align(Qt::AlignRight);
+            }
+        }
+    });
 
     resize(800, 600);  // Locked in at 800x600—adjust if needed
 

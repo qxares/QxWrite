@@ -11,6 +11,7 @@ class InsertBrick : public QObject {
 public:
     InsertBrick(QTextEdit *edit, QObject *parent = nullptr);
     void insertImage();
+    void setTextEdit(QTextEdit *edit);  // Added
 
 private:
     QTextEdit *targetEdit;

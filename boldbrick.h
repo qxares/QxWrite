@@ -9,6 +9,7 @@ class BoldBrick : public QObject {
 public:
     explicit BoldBrick(QTextEdit *edit, QObject *parent = nullptr);
     void applyBold();
+    void setTextEdit(QTextEdit *edit);  // Added
 
 private:
     QTextEdit *m_textEdit;

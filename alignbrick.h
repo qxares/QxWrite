@@ -9,6 +9,7 @@ class AlignBrick : public QObject {
 public:
     explicit AlignBrick(QTextEdit *edit, QObject *parent = nullptr);
     void align(Qt::Alignment alignment);
+    void setTextEdit(QTextEdit *edit);  // Added
 
 private:
     QTextEdit *m_textEdit;

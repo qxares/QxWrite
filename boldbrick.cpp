@@ -1,5 +1,4 @@
 #include "boldbrick.h"
-#include <QTextCharFormat>
 #include <QDebug>
 
 BoldBrick::BoldBrick(QTextEdit *edit, QObject *parent) : QObject(parent), m_textEdit(edit) {
@@ -11,8 +10,10 @@ void BoldBrick::applyBold() {
         QTextCharFormat format = m_textEdit->currentCharFormat();
         format.setFontWeight(format.fontWeight() == QFont::Bold ? QFont::Normal : QFont::Bold);
         m_textEdit->mergeCurrentCharFormat(format);
-        qDebug() << "BoldBrick: Toggled bold";
-    } else {
-        qDebug() << "BoldBrick: No text edit available";
     }
+}
+
+void BoldBrick::setTextEdit(QTextEdit *edit) {
+    m_textEdit = edit;
+    qDebug() << "BoldBrick: TextEdit updated to:" << m_textEdit;
 }

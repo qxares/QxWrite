@@ -10,13 +10,11 @@ void FontBrick::changeFont() {
     if (m_textEdit) {
         bool ok;
         QFont font = QFontDialog::getFont(&ok, m_textEdit->currentFont(), m_textEdit->parentWidget());
-        if (ok) {
-            m_textEdit->setCurrentFont(font);
-            qDebug() << "FontBrick: Changed font to" << font.family();
-        } else {
-            qDebug() << "FontBrick: Font dialog cancelled";
-        }
-    } else {
-        qDebug() << "FontBrick: No text edit available";
+        if (ok) m_textEdit->setCurrentFont(font);
     }
+}
+
+void FontBrick::setTextEdit(QTextEdit *edit) {
+    m_textEdit = edit;
+    qDebug() << "FontBrick: TextEdit updated to:" << m_textEdit;
 }

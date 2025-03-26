@@ -13,6 +13,7 @@ class SaveManagerBrick : public QObject {
 public:
     explicit SaveManagerBrick(QTextEdit *edit, QObject *parent = nullptr);
     void triggerSave();
+    void setTextEdit(QTextEdit *edit);  // Added
 
 private:
     QTextEdit *m_textEdit;

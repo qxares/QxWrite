@@ -2,19 +2,20 @@
 #include "savefunctionbrick.h"
 #include "saveguibrick.h"
 #include "savehandlerbrick.h"
-#include <QTextEdit>
 #include <QDebug>
 
-SaveManagerBrick::SaveManagerBrick(QTextEdit *edit, QObject *parent) 
-    : QObject(parent), m_textEdit(edit) {
-    m_function = new SaveFunctionBrick(m_textEdit, this);
-    m_gui = new SaveGUIBrick(m_textEdit, this);
-    m_handler = new SaveHandlerBrick(m_function, m_gui, this);
-
+SaveManagerBrick::SaveManagerBrick(QTextEdit *edit, QObject *parent) : QObject(parent), m_textEdit(edit) {
+    m_function = new SaveFunctionBrick(this);
+    m_gui = new SaveGUIBrick(this);
+    m_handler = new SaveHandlerBrick(this);
     qDebug() << "SaveManagerBrick initialized with textEdit:" << m_textEdit;
 }
 
 void SaveManagerBrick::triggerSave() {
-    qDebug() << "SaveManagerBrick: Triggering save";
-    m_handler->handleSave();
+    if (m_textEdit) m_handler->save(m_textEdit->toPlainText(), m_gui->saveFile());
+}
+
+void SaveManagerBrick::setTextEdit(QTextEdit *edit) {
+    m_textEdit = edit;
+    qDebug() << "SaveManagerBrick: TextEdit updated to:" << m_textEdit;
 }

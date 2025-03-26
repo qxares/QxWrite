@@ -9,6 +9,7 @@ class ColorBrick : public QObject {
 public:
     explicit ColorBrick(QTextEdit *edit, QObject *parent = nullptr);
     void changeColor();
+    void setTextEdit(QTextEdit *edit);  // Added
 
 private:
     QTextEdit *m_textEdit;

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QMainWindow>
+#include <QMdiArea>
 
 class ToolBarBrick;
 class MenuManagerBrick;
@@ -16,6 +17,7 @@ class ColorBrick;
 class InsertBrick;
 class AlignBrick;
 class DocumentWindow;
+class DocumentHandlerBrick;
 
 class MainWindowBrick : public QMainWindow {
     Q_OBJECT
@@ -35,7 +37,8 @@ private:
     ColorBrick *colorBrick;
     InsertBrick *insertBrick;
     AlignBrick *alignBrick;
-    DocumentWindow *documentWindow;
+    QMdiArea *mdiArea;              // Replacing single DocumentWindow
+    DocumentHandlerBrick *documentHandler;
 };
 
 #endif // MAINWINDOWBRICK_H
