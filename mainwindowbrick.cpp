@@ -41,7 +41,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     alignBrick = new AlignBrick(nullptr, this);
 
     menuManagerBrick->setupMenus(
-        toolBarBrick->getAction("new"), toolBarBrick->getAction("open"), toolBarBrick->getAction("save"),
+        toolBarBrick->getAction("open"), toolBarBrick->getAction("save"),
         toolBarBrick->getAction("bold"), toolBarBrick->getAction("italic"), toolBarBrick->getAction("font"),
         toolBarBrick->getAction("color"), toolBarBrick->getAction("image"), toolBarBrick->getAction("alignLeft"),
         toolBarBrick->getAction("alignCenter"), toolBarBrick->getAction("alignRight")

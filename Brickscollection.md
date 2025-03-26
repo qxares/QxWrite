@@ -32,6 +32,7 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
 - **Purpose**: Core application window.
 - **Features**: Sets up 800x600 UI, toolbar, menu bar, and text edit area.
 - **Status**: Fully implemented.
+- **Recent Changes**: Updated `setupMenus` call to match new signature after removing `newAction` parameter (March 2025).
 
 ### IconBrick
 - **Purpose**: Manages toolbar/menu icons.
@@ -48,7 +49,7 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
 - **Purpose**: Constructs menu bar.
 - **Features**: File, Edit, Format menus with actions.
 - **Status**: Fully implemented. Supports "File > New," "File > Open," "File > Save," "File > Save As," "Format > Bold/Italic/Font/Color," and "Insert > Image."
-- **Recent Changes**: Fixed connect bug with `OpenFileBrick::openFile()` using modern `connect()` syntax. Added "File > Save As" action. Attempted to add icons to "New" submenu and "Save As" but reverted due to missing icon file and user preference (March 2025). Added icons to "File > New" and "File > Save As" in the File menu, updated `icons.qrc` to include `save-as.svg` (March 2025). Switched "New" to a `QAction` with a submenu, used `plus.svg` for "New" and `save.svg` for "Save As", updated `icons.qrc` to remove `save-as.svg` and use `plus.svg` (March 2025).
+- **Recent Changes**: Fixed connect bug with `OpenFileBrick::openFile()` using modern `connect()` syntax. Added "File > Save As" action. Attempted to add icons to "New" submenu and "Save As" but reverted due to missing icon file and user preference (March 2025). Added icons to "File > New" and "File > Save As" in the File menu, updated `icons.qrc` to include `save-as.svg` (March 2025). Switched "New" to a `QAction` with a submenu, used `plus.svg` for "New" and `save.svg` for "Save As", updated `icons.qrc` to remove `save-as.svg` and use `plus.svg` (March 2025). Fixed icon visibility by using a stylesheet in `main.cpp` to force menu icons to display (March 2025). Removed stylesheet from `main.cpp`, set icon sizes and visibility directly in `menumanagerbrick.cpp` to restore default menu styling, removed unused `newAction` parameter (March 2025). Reverted icon size and visibility settings in `menumanagerbrick.cpp` to rely on Qt defaults, fixed `setupMenus` declaration in `menumanagerbrick.h` to match implementation (March 2025). Set Qt style to "Fusion" in `main.cpp` to ensure polished menu rendering (March 2025).
 
 ### InsertBrick
 - **Purpose**: Inserts images into text.
@@ -73,7 +74,7 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
 ### OpenFileBrick
 - **Purpose**: Opens text files.
 - **Features**: Uses `DialogBrick` to select `.txt`, `.md`, etc. Supports rich text via `setHtml()`.
-- **Status**: Fully implemented. "File > Open" opens a custom dialog and loads files (e.g., `test45.txt`).
+- **Status**: Fully implemented. "File > New" opens a submenu, "File > Open" opens a custom dialog and loads files (e.g., `test45.txt`).
 - **Recent Changes**: Fixed menu connect bug for `openFile()` by ensuring it’s under `public slots:` and using modern `connect()` syntax. Verified fix—connect error resolved. Added error handling with `QMessageBox` for failed file opens.
 
 ### SaveManagerBrick

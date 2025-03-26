@@ -467,7 +467,6 @@ qrc_icons.cpp: icons.qrc \
 		/usr/lib/qt5/bin/rcc \
 		icons/bold.svg \
 		icons/align-left.svg \
-		icons/new.svg \
 		icons/image.svg \
 		icons/italic.svg \
 		icons/save.svg \

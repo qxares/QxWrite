@@ -14,7 +14,7 @@ MenuManagerBrick::MenuManagerBrick(QWidget *parent) : QObject(parent) {
     qDebug() << "MenuManagerBrick initialized, menuBar:" << menuBar;
 }
 
-void MenuManagerBrick::setupMenus(QAction *newAction, QAction *openAction, QAction *saveAction,
+void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
                                   QAction *boldAction, QAction *italicAction, QAction *fontAction,
                                   QAction *colorAction, QAction *imageAction, QAction *alignLeftAction,
                                   QAction *alignCenterAction, QAction *alignRightAction) {

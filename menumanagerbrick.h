@@ -12,7 +12,7 @@ class MenuManagerBrick : public QObject {
 public:
     explicit MenuManagerBrick(QWidget *parent = nullptr);
     ~MenuManagerBrick();
-    void setupMenus(QAction *newAction, QAction *openAction, QAction *saveAction,
+    void setupMenus(QAction *openAction, QAction *saveAction,
                     QAction *boldAction, QAction *italicAction, QAction *fontAction,
                     QAction *colorAction, QAction *imageAction, QAction *alignLeftAction,
                     QAction *alignCenterAction, QAction *alignRightAction);
