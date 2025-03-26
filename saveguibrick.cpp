@@ -10,12 +10,21 @@ SaveGUIBrick::SaveGUIBrick(QTextEdit *edit, QObject *parent)
     qDebug() << "SaveGUIBrick initialized";
 }
 
+void SaveGUIBrick::setTextEdit(QTextEdit *edit) {
+    m_textEdit = edit;
+    qDebug() << "SaveGUIBrick: TextEdit updated to:" << m_textEdit;
+}
+
 QString SaveGUIBrick::getSaveFileName() {
+    if (!m_textEdit) {
+        qDebug() << "SaveGUIBrick: No text edit set, returning empty filename";
+        return QString();
+    }
     QWidget *parentWidget = m_textEdit->parentWidget();
     QString fileName = m_dialog->getSaveFileName(
         parentWidget,
         "Save File",
-        "",
+        "/home/ares",
         "Text Files (*.txt);;All Files (*)"
     );
     qDebug() << "SaveGUIBrick: Got file name:" << fileName;

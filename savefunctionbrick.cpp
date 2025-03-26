@@ -10,6 +10,10 @@ SaveFunctionBrick::SaveFunctionBrick(QTextEdit *edit, QObject *parent)
 }
 
 void SaveFunctionBrick::save(const QString &fileName) {
+    if (fileName.isEmpty()) {
+        qDebug() << "SaveFunctionBrick: Empty filename, cannot save";
+        return;
+    }
     QFile file(fileName);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&file);

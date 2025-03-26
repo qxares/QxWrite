@@ -11,6 +11,7 @@ class SaveGUIBrick : public QObject {
 public:
     explicit SaveGUIBrick(QTextEdit *edit, QObject *parent = nullptr);
     QString getSaveFileName();
+    void setTextEdit(QTextEdit *edit);  // Added
 
 private:
     QTextEdit *m_textEdit;
