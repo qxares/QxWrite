@@ -2,6 +2,7 @@
 #define DOCUMENTWINDOW_H
 
 #include <QWidget>
+#include "newfilebrick.h"
 
 class QTextEdit;
 class NewFileBrick;
@@ -14,6 +15,7 @@ public:
     ~DocumentWindow();
     QTextEdit* getTextEdit() const;
     void clear();
+    void newFile(NewFileBrick::DocType type);  // New method
 
 private:
     QTextEdit *textEdit;

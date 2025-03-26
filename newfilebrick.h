@@ -7,8 +7,9 @@
 class NewFileBrick : public QObject {
     Q_OBJECT
 public:
+    enum DocType { Note, Document, Sheet };
     NewFileBrick(QTextEdit *edit, QObject *parent = nullptr);
-    void newFile();
+    void newFile(DocType type = Note);  // Default to Note
 
 private:
     QTextEdit *targetEdit;

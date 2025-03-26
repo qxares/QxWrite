@@ -31,3 +31,8 @@ void DocumentWindow::clear() {
     textEdit->clear();
     qDebug() << "DocumentWindow cleared";
 }
+
+void DocumentWindow::newFile(NewFileBrick::DocType type) {
+    newFileBrick->newFile(type);
+    qDebug() << "DocumentWindow: New file created, type:" << type;
+}

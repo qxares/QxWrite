@@ -4,7 +4,6 @@
 #include "newfilebrick.h"
 #include "openfilebrick.h"
 #include "savemanagerbrick.h"
-// #include "SyntaxHighlighter.h"  // Commented out until we add it
 #include "boldbrick.h"
 #include "italicbrick.h"
 #include "fontbrick.h"
@@ -13,6 +12,7 @@
 #include "alignbrick.h"
 #include "documentwindow.h"
 #include <QDebug>
+#include <QMenu>
 
 MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     qDebug() << "MainWindowBrick starting...";
@@ -36,14 +36,24 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     insertBrick = new InsertBrick(documentWindow->getTextEdit(), this);
     alignBrick = new AlignBrick(documentWindow->getTextEdit(), this);
 
+    // Replace single "new" action with a submenu
+    QMenu *newMenu = new QMenu("New", this);
+    QAction *newNote = newMenu->addAction("QxNote");
+    QAction *newDoc = newMenu->addAction("QxDocument");
+    QAction *newSheet = newMenu->addAction("QxSheet");
+    menuManagerBrick->getMenuBar()->addMenu(newMenu);
+
     menuManagerBrick->setupMenus(
-        toolBarBrick->getAction("new"), toolBarBrick->getAction("open"), toolBarBrick->getAction("save"),
+        nullptr, toolBarBrick->getAction("open"), toolBarBrick->getAction("save"),
         toolBarBrick->getAction("bold"), toolBarBrick->getAction("italic"), toolBarBrick->getAction("font"),
         toolBarBrick->getAction("color"), toolBarBrick->getAction("image"), toolBarBrick->getAction("alignLeft"),
         toolBarBrick->getAction("alignCenter"), toolBarBrick->getAction("alignRight")
     );
 
-    connect(toolBarBrick->getAction("new"), &QAction::triggered, newFileBrick, &NewFileBrick::newFile);
+    connect(newNote, &QAction::triggered, this, [this]() { documentWindow->newFile(NewFileBrick::Note); });
+    connect(newDoc, &QAction::triggered, this, [this]() { documentWindow->newFile(NewFileBrick::Document); });
+    connect(newSheet, &QAction::triggered, this, [this]() { documentWindow->newFile(NewFileBrick::Sheet); });
+    connect(toolBarBrick->getAction("new"), &QAction::triggered, this, [this]() { documentWindow->newFile(NewFileBrick::Note); });  // Toolbar defaults to Note
     connect(toolBarBrick->getAction("open"), &QAction::triggered, this, [this]() {
         qDebug() << "MainWindowBrick: Triggering Open in current DocumentWindow (Toolbar)";
         openFileBrick->openFile();
@@ -58,7 +68,6 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     connect(toolBarBrick->getAction("alignCenter"), &QAction::triggered, this, [this]() { alignBrick->align(Qt::AlignCenter); });
     connect(toolBarBrick->getAction("alignRight"), &QAction::triggered, this, [this]() { alignBrick->align(Qt::AlignRight); });
 
-    // Set fixed initial size
     resize(800, 600);  // Locked in at 800x600—adjust if needed
 
     qDebug() << "MainWindowBrick ready.";
