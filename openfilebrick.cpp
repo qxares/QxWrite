@@ -3,6 +3,8 @@
 #include <QTextEdit>
 #include <QFile>
 #include <QTextStream>
+#include <QTextDocument>
+#include <QMessageBox>
 #include <QDebug>
 
 OpenFileBrick::OpenFileBrick(QTextEdit *edit, QObject *parent) 
@@ -35,17 +37,33 @@ void OpenFileBrick::openFile() {
         QFile file(fileName);
         if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             QTextStream in(&file);
+            in.setCodec("UTF-8"); // Ensure UTF-8 encoding
             QString content = in.readAll();
+            file.close();
+
             if (!content.isEmpty()) {
-                m_textEdit->setPlainText(content);
-                qDebug() << "OpenFileBrick: Loaded file:" << fileName;
+                // Try loading as HTML first (for rich text support)
+                QTextDocument doc;
+                doc.setHtml(content);
+                QString plainText = doc.toPlainText();
+                if (!plainText.isEmpty() && plainText != content) {
+                    m_textEdit->setHtml(content);
+                    qDebug() << "OpenFileBrick: Loaded file as HTML:" << fileName;
+                } else {
+                    // Fall back to plain text
+                    m_textEdit->setPlainText(content);
+                    qDebug() << "OpenFileBrick: Loaded file as plain text:" << fileName;
+                }
             } else {
                 qDebug() << "OpenFileBrick: File is empty:" << fileName;
+                QMessageBox::warning(parentWidget, "Open File", "The selected file is empty.");
             }
-            file.close();
         } else {
             qDebug() << "OpenFileBrick: Failed to open file:" << fileName
                      << "Error:" << file.errorString();
+            QMessageBox::critical(parentWidget, "Open File", 
+                                  QString("Failed to open file: %1\nError: %2")
+                                  .arg(fileName).arg(file.errorString()));
         }
     } else {
         qDebug() << "OpenFileBrick: No file selected";

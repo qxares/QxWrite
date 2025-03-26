@@ -75,7 +75,7 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
 - **Purpose**: Opens text files.
 - **Features**: Uses `DialogBrick` to select `.txt`, `.md`, etc. Supports rich text via `setHtml()`.
 - **Status**: Fully implemented. "File > New" opens a submenu, "File > Open" opens a custom dialog and loads files (e.g., `test45.txt`).
-- **Recent Changes**: Fixed menu connect bug for `openFile()` by ensuring it’s under `public slots:` and using modern `connect()` syntax. Verified fix—connect error resolved. Added error handling with `QMessageBox` for failed file opens.
+- **Recent Changes**: Fixed menu connect bug for `openFile()` by ensuring it’s under `public slots:` and using modern `connect()` syntax. Verified fix—connect error resolved. Added error handling with `QMessageBox` for failed file opens. Updated `openFile` to support rich text by trying `setHtml()` first, falling back to plain text, added UTF-8 encoding and improved error handling (March 2025).
 
 ### SaveManagerBrick
 - **Purpose**: Manages save operations.
