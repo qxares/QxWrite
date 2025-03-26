@@ -17,6 +17,10 @@ public:
     void newDocument(NewFileBrick::DocType type);
     void openDocument(OpenFileBrick *openFileBrick); // New method for opening files
 
+private slots:
+    void showContextMenu(QMdiSubWindow *subWindow, const QPoint &pos);  // Handle context menu
+    void moveCascade(QMdiSubWindow *subWindow);  // Move the cascade
+
 private:
     void cascadeWindows(NewFileBrick::DocType type); // Cascade windows of a specific type
     QMdiArea *mdiArea;  // Manage subwindows here
