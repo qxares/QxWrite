@@ -11,14 +11,23 @@ OpenFileBrick::OpenFileBrick(QTextEdit *edit, QObject *parent)
     qDebug() << "OpenFileBrick initialized, target edit:" << m_textEdit;
 }
 
+void OpenFileBrick::setTextEdit(QTextEdit *edit) {
+    m_textEdit = edit;
+    qDebug() << "OpenFileBrick: TextEdit updated to:" << m_textEdit;
+}
+
 void OpenFileBrick::openFile() {
+    if (!m_textEdit) {
+        qDebug() << "OpenFileBrick: No text edit set, cannot open file";
+        return;
+    }
     QWidget *parentWidget = m_textEdit->parentWidget();
     qDebug() << "OpenFileBrick: openFile triggered, parent:" << parentWidget;
 
     QString fileName = m_dialog->getOpenFileName(
         parentWidget,
         "Open File",
-        "",
+        "/home/ares",
         "Text Files (*.txt *.md);;All Files (*)"
     );
 

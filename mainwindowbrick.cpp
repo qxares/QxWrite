@@ -55,22 +55,46 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
             if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
                 saveManagerBrick->setTextEdit(docWindow->getTextEdit());
                 saveManagerBrick->triggerSave();
+            } else {
+                qDebug() << "MainWindowBrick: No active document window for Save As";
             }
+        } else {
+            qDebug() << "MainWindowBrick: No active subwindow for Save As";
         }
     });
     connect(toolBarBrick->getAction("new"), &QAction::triggered, this, [this]() { 
         documentHandler->newDocument(NewFileBrick::Note); 
     });
     connect(toolBarBrick->getAction("open"), &QAction::triggered, this, [this]() {
-        qDebug() << "MainWindowBrick: Triggering Open in new DocumentWindow (Toolbar)";
-        openFileBrick->openFile();
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                qDebug() << "MainWindowBrick: Triggering Open in active DocumentWindow";
+                openFileBrick->setTextEdit(docWindow->getTextEdit());
+                openFileBrick->openFile();
+            } else {
+                qDebug() << "MainWindowBrick: No active document window for Open";
+            }
+        } else {
+            qDebug() << "MainWindowBrick: No active subwindow for Open, creating new";
+            documentHandler->newDocument(NewFileBrick::Document);
+            if (auto *subWindow = mdiArea->activeSubWindow()) {
+                if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                    openFileBrick->setTextEdit(docWindow->getTextEdit());
+                    openFileBrick->openFile();
+                }
+            }
+        }
     });
     connect(toolBarBrick->getAction("save"), &QAction::triggered, this, [this]() {
         if (auto *subWindow = mdiArea->activeSubWindow()) {
             if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
                 saveManagerBrick->setTextEdit(docWindow->getTextEdit());
                 saveManagerBrick->triggerSave();
+            } else {
+                qDebug() << "MainWindowBrick: No active document window for Save";
             }
+        } else {
+            qDebug() << "MainWindowBrick: No active subwindow for Save";
         }
     });
     connect(toolBarBrick->getAction("bold"), &QAction::triggered, this, [this]() {

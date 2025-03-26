@@ -11,6 +11,7 @@ class OpenFileBrick : public QObject {
 public:
     explicit OpenFileBrick(QTextEdit *edit, QObject *parent = nullptr);
     void openFile();
+    void setTextEdit(QTextEdit *edit);  // Added
 
 private:
     QTextEdit *m_textEdit;

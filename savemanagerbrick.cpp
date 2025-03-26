@@ -12,16 +12,21 @@ SaveManagerBrick::SaveManagerBrick(QTextEdit *edit, QObject *parent) : QObject(p
 }
 
 void SaveManagerBrick::triggerSave() {
-    if (m_textEdit) {
-        QString fileName = m_gui->getSaveFileName();
-        if (!fileName.isEmpty()) {
-            m_function->save(fileName);
-        }
+    if (!m_textEdit) {
+        qDebug() << "SaveManagerBrick: No text edit set, cannot save";
+        return;
+    }
+    QString fileName = m_gui->getSaveFileName();
+    if (!fileName.isEmpty()) {
+        m_function->save(fileName);
+        qDebug() << "SaveManagerBrick: Save triggered for file:" << fileName;
+    } else {
+        qDebug() << "SaveManagerBrick: Save cancelled or no filename provided";
     }
 }
 
 void SaveManagerBrick::setTextEdit(QTextEdit *edit) {
     m_textEdit = edit;
-    // No dummy save—let triggerSave handle it when called
+    m_gui->setTextEdit(edit);  // Ensure GUI brick updates too
     qDebug() << "SaveManagerBrick: TextEdit updated to:" << m_textEdit;
 }
