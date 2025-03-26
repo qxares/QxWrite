@@ -22,7 +22,8 @@ SOURCES += \
     savefunctionbrick.cpp \
     saveguibrick.cpp \
     savehandlerbrick.cpp \
-    iconbrick.cpp
+    iconbrick.cpp \
+    documenthandlerbrick.cpp  # Added
 
 HEADERS += \
     mainwindowbrick.h \
@@ -42,7 +43,8 @@ HEADERS += \
     savefunctionbrick.h \
     saveguibrick.h \
     savehandlerbrick.h \
-    iconbrick.h
+    iconbrick.h \
+    documenthandlerbrick.h    # Added
 
 RESOURCES += \
     icons.qrc
