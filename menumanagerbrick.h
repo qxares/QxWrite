@@ -20,6 +20,7 @@ public:
 
 Q_SIGNALS:
     void newFileTriggered(int type);
+    void saveAsTriggered();  // Added signal for Save As
 
 private:
     QMenuBar *menuBar;

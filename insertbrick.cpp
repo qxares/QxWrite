@@ -10,7 +10,7 @@ InsertBrick::InsertBrick(QTextEdit *edit, QObject *parent) : QObject(parent), ta
 
 void InsertBrick::insertImage() {
     if (targetEdit) {
-        QString fileName = dialogBrick->openFileDialog("Insert Image", "Images (*.png *.jpg *.bmp)");
+        QString fileName = dialogBrick->getOpenFileName(nullptr, "Insert Image", "/home/ares", "Images (*.png *.jpg *.bmp)");
         if (!fileName.isEmpty()) {
             QImage image(fileName);
             if (!image.isNull()) {

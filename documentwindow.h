@@ -15,7 +15,7 @@ public:
     ~DocumentWindow();
     QTextEdit* getTextEdit() const;
     void clear();
-    void newFile(NewFileBrick::DocType type);  // New method
+    void newFile(NewFileBrick::DocType type);  // Enhanced for QxDocument
 
 private:
     QTextEdit *textEdit;

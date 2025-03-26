@@ -19,11 +19,11 @@ void MenuManagerBrick::setupMenus(QAction *newAction, QAction *openAction, QActi
                                   QAction *colorAction, QAction *imageAction, QAction *alignLeftAction,
                                   QAction *alignCenterAction, QAction *alignRightAction) {
     QMenu *newMenu = fileMenu->addMenu("New");
-    QAction *newNote = newMenu->addAction("QxNote");
-    QAction *newDoc = newMenu->addAction("QxDocument");
-    QAction *newSheet = newMenu->addAction("QxSheet");
+    QAction *newNote = newMenu->addAction(QIcon(":/icons/icons/file-plus.svg"), "QxNote");
+    QAction *newDoc = newMenu->addAction(QIcon(":/icons/icons/file-plus.svg"), "QxDocument");
+    QAction *newSheet = newMenu->addAction(QIcon(":/icons/icons/file-plus.svg"), "QxSheet");
 
-    QAction *saveAsAction = fileMenu->addAction("Save As");  // Add Save As
+    QAction *saveAsAction = fileMenu->addAction(QIcon(":/icons/icons/save-as.svg"), "Save As");
     if (openAction) fileMenu->addAction(openAction);
     if (saveAction) fileMenu->addAction(saveAction);
     if (boldAction) formatMenu->addAction(boldAction);
@@ -49,5 +49,3 @@ QMenuBar* MenuManagerBrick::getMenuBar() const {
 }
 
 MenuManagerBrick::~MenuManagerBrick() {}
-
-Q_SIGNAL void MenuManagerBrick::saveAsTriggered();  // Add this signal declaration

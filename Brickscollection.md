@@ -42,12 +42,13 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
 - **Purpose**: Builds and manages toolbar.
 - **Features**: Adds actions with icons for text formatting and file ops.
 - **Status**: Implemented, 8 actions set up. (Note: May evolve into GUI Manager subtype.)
+- **Recent Changes**: Removed "New" icon from toolbar while retaining the action for menu use (March 2025).
 
 ### MenuManagerBrick
 - **Purpose**: Constructs menu bar.
 - **Features**: File, Edit, Format menus with actions.
 - **Status**: Fully implemented. Supports "File > New," "File > Open," "File > Save," "File > Save As," "Format > Bold/Italic/Font/Color," and "Insert > Image."
-- **Recent Changes**: Fixed connect bug with `OpenFileBrick::openFile()` using modern `connect()` syntax. Added "File > Save As" action.
+- **Recent Changes**: Fixed connect bug with `OpenFileBrick::openFile()` using modern `connect()` syntax. Added "File > Save As" action. Attempted to add icons to "New" submenu and "Save As" but reverted due to missing icon file and user preference (March 2025).
 
 ### InsertBrick
 - **Purpose**: Inserts images into text.
@@ -84,11 +85,13 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
   - **SaveHandlerBrick**: Decides when to prompt for a file path.
   - **SaveGuiBrick**: Shows the file dialog via `DialogBrick`.
   - **SaveManagerBrick**: Coordinates the save process, logs actions.
+- **Recent Changes**: Added `setTextEdit` method to dynamically update the text edit target (March 2025).
 
 ### SaveFunctionBrick
 - **Purpose**: Core save logic.
 - **Features**: Writes text to file. Supports rich text via `toHtml()`.
 - **Status**: Implemented. Added error handling with `QMessageBox` for failed file saves.
+- **Recent Changes**: Added null check for `m_textEdit` to prevent crashes during save (March 2025).
 
 ### SaveHandlerBrick
 - **Purpose**: Initiates save process.
@@ -99,6 +102,7 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
 - **Purpose**: Save UI interaction.
 - **Features**: Triggers `DialogBrick` for save path.
 - **Status**: Implemented.
+- **Recent Changes**: Added `setTextEdit` method to dynamically update the text edit target (March 2025).
 
 ### FontBrick
 - **Purpose**: Changes font.
@@ -123,3 +127,4 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
 
 ## Next Steps
 - Consider adding "Recent Files" to the `DialogBrick` for quicker access.
+- Plan for table support with a new `TableBrick` for QxGrid integration (March 2025).
