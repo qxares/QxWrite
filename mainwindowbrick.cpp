@@ -36,23 +36,18 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     insertBrick = new InsertBrick(documentWindow->getTextEdit(), this);
     alignBrick = new AlignBrick(documentWindow->getTextEdit(), this);
 
-    // Nest "New" submenu under "File"
-    QMenu *fileMenu = menuManagerBrick->getMenuBar()->addMenu("File");
-    QMenu *newMenu = fileMenu->addMenu("New");
-    QAction *newNote = newMenu->addAction("QxNote");
-    QAction *newDoc = newMenu->addAction("QxDocument");
-    QAction *newSheet = newMenu->addAction("QxSheet");
-
     menuManagerBrick->setupMenus(
-        nullptr, toolBarBrick->getAction("open"), toolBarBrick->getAction("save"),
+        toolBarBrick->getAction("new"), toolBarBrick->getAction("open"), toolBarBrick->getAction("save"),
         toolBarBrick->getAction("bold"), toolBarBrick->getAction("italic"), toolBarBrick->getAction("font"),
         toolBarBrick->getAction("color"), toolBarBrick->getAction("image"), toolBarBrick->getAction("alignLeft"),
         toolBarBrick->getAction("alignCenter"), toolBarBrick->getAction("alignRight")
     );
 
-    connect(newNote, &QAction::triggered, this, [this]() { documentWindow->newFile(NewFileBrick::Note); });
-    connect(newDoc, &QAction::triggered, this, [this]() { documentWindow->newFile(NewFileBrick::Document); });
-    connect(newSheet, &QAction::triggered, this, [this]() { documentWindow->newFile(NewFileBrick::Sheet); });
+    connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this](int type) {
+        if (type == 0) documentWindow->newFile(NewFileBrick::Note);
+        else if (type == 1) documentWindow->newFile(NewFileBrick::Document);
+        else if (type == 2) documentWindow->newFile(NewFileBrick::Sheet);
+    });
     connect(toolBarBrick->getAction("new"), &QAction::triggered, this, [this]() { documentWindow->newFile(NewFileBrick::Note); });  // Toolbar defaults to Note
     connect(toolBarBrick->getAction("open"), &QAction::triggered, this, [this]() {
         qDebug() << "MainWindowBrick: Triggering Open in current DocumentWindow (Toolbar)";

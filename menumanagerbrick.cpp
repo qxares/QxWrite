@@ -18,18 +18,26 @@ void MenuManagerBrick::setupMenus(QAction *newAction, QAction *openAction, QActi
                                   QAction *boldAction, QAction *italicAction, QAction *fontAction,
                                   QAction *colorAction, QAction *imageAction, QAction *alignLeftAction,
                                   QAction *alignCenterAction, QAction *alignRightAction) {
-    fileMenu->addAction(newAction);
-    fileMenu->addAction(openAction);
-    fileMenu->addAction(saveAction);
-    formatMenu->addAction(boldAction);
-    formatMenu->addAction(italicAction);
-    formatMenu->addAction(fontAction);
-    formatMenu->addAction(colorAction);
-    editMenu->addAction(imageAction);
+    QMenu *newMenu = fileMenu->addMenu("New");
+    QAction *newNote = newMenu->addAction("QxNote");
+    QAction *newDoc = newMenu->addAction("QxDocument");
+    QAction *newSheet = newMenu->addAction("QxSheet");
+
+    if (openAction) fileMenu->addAction(openAction);
+    if (saveAction) fileMenu->addAction(saveAction);
+    if (boldAction) formatMenu->addAction(boldAction);
+    if (italicAction) formatMenu->addAction(italicAction);
+    if (fontAction) formatMenu->addAction(fontAction);
+    if (colorAction) formatMenu->addAction(colorAction);
+    if (imageAction) editMenu->addAction(imageAction);
     formatMenu->addSeparator();
-    formatMenu->addAction(alignLeftAction);
-    formatMenu->addAction(alignCenterAction);
-    formatMenu->addAction(alignRightAction);
+    if (alignLeftAction) formatMenu->addAction(alignLeftAction);
+    if (alignCenterAction) formatMenu->addAction(alignCenterAction);
+    if (alignRightAction) formatMenu->addAction(alignRightAction);
+
+    QObject::connect(newNote, &QAction::triggered, this, [this]() { emit newFileTriggered(0); });
+    QObject::connect(newDoc, &QAction::triggered, this, [this]() { emit newFileTriggered(1); });
+    QObject::connect(newSheet, &QAction::triggered, this, [this]() { emit newFileTriggered(2); });
 
     qDebug() << "Menus set up.";
 }
@@ -37,3 +45,5 @@ void MenuManagerBrick::setupMenus(QAction *newAction, QAction *openAction, QActi
 QMenuBar* MenuManagerBrick::getMenuBar() const {
     return menuBar;
 }
+
+MenuManagerBrick::~MenuManagerBrick() {}
