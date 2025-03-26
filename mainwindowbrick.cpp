@@ -36,12 +36,12 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     insertBrick = new InsertBrick(documentWindow->getTextEdit(), this);
     alignBrick = new AlignBrick(documentWindow->getTextEdit(), this);
 
-    // Replace single "new" action with a submenu
-    QMenu *newMenu = new QMenu("New", this);
+    // Nest "New" submenu under "File"
+    QMenu *fileMenu = menuManagerBrick->getMenuBar()->addMenu("File");
+    QMenu *newMenu = fileMenu->addMenu("New");
     QAction *newNote = newMenu->addAction("QxNote");
     QAction *newDoc = newMenu->addAction("QxDocument");
     QAction *newSheet = newMenu->addAction("QxSheet");
-    menuManagerBrick->getMenuBar()->addMenu(newMenu);
 
     menuManagerBrick->setupMenus(
         nullptr, toolBarBrick->getAction("open"), toolBarBrick->getAction("save"),
