@@ -25,6 +25,9 @@ public:
     explicit MainWindowBrick(QWidget *parent = nullptr);
     ~MainWindowBrick();
 
+private slots:
+    void handleOpenFile();  // New slot for opening files
+
 private:
     ToolBarBrick *toolBarBrick;
     MenuManagerBrick *menuManagerBrick;

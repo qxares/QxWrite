@@ -30,9 +30,9 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
 
 ### MainWindowBrick
 - **Purpose**: Core application window.
-- **Features**: Sets up 800x600 UI, toolbar, menu bar, and text edit area.
+- **Features**: Sets up 800x600 UI, toolbar, menu bar, and MDI area for multiple documents.
 - **Status**: Fully implemented.
-- **Recent Changes**: Updated `setupMenus` call to match new signature after removing `newAction` parameter (March 2025).
+- **Recent Changes**: Updated `setupMenus` call to match new signature after removing `newAction` parameter (March 2025). Modified to delegate file opening to `DocumentHandlerBrick` for proper window management (March 2025).
 
 ### IconBrick
 - **Purpose**: Manages toolbar/menu icons.
@@ -125,6 +125,12 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
   - Size: 700x500.
 - **Status**: Fully implemented. Supports open/save operations with navigation to parent directories and subdirectories.
 - **Recent Changes**: Added `lastDir` to persist directory, updated `getOpenFileName()` debug log to show `Open cancelled`. Added parent directory (`..`) and subdirectory navigation in file list, fixed visibility of directories by adjusting name filter behavior, resolved variable shadowing error in `getSaveFileName` and `getOpenFileName`, fixed `..` visibility in file view (left pane), added root directory check to prevent navigation above `/`.
+
+### DocumentHandlerBrick
+- **Purpose**: Manages document windows within the MDI area.
+- **Features**: Creates new documents, tiles them for visibility.
+- **Status**: Fully implemented. Supports QxDocuments, QxNotes, and QxSheets.
+- **Recent Changes**: Added support for cascading windows by document type (QxDocuments, QxNotes, QxSheets) with separate stacks, implemented `openDocument` to create new windows for opened files (March 2025).
 
 ## Next Steps
 - Consider adding "Recent Files" to the `DialogBrick` for quicker access.

@@ -683,7 +683,8 @@ iconbrick.o: iconbrick.cpp iconbrick.h
 
 documenthandlerbrick.o: documenthandlerbrick.cpp documenthandlerbrick.h \
 		newfilebrick.h \
-		documentwindow.h
+		documentwindow.h \
+		openfilebrick.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o documenthandlerbrick.o documenthandlerbrick.cpp
 
 qrc_icons.o: qrc_icons.cpp 

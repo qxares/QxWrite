@@ -65,26 +65,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     connect(toolBarBrick->getAction("new"), &QAction::triggered, this, [this]() { 
         documentHandler->newDocument(NewFileBrick::Note); 
     });
-    connect(toolBarBrick->getAction("open"), &QAction::triggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                qDebug() << "MainWindowBrick: Triggering Open in active DocumentWindow";
-                openFileBrick->setTextEdit(docWindow->getTextEdit());
-                openFileBrick->openFile();
-            } else {
-                qDebug() << "MainWindowBrick: No active document window for Open";
-            }
-        } else {
-            qDebug() << "MainWindowBrick: No active subwindow for Open, creating new";
-            documentHandler->newDocument(NewFileBrick::Document);
-            if (auto *subWindow = mdiArea->activeSubWindow()) {
-                if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                    openFileBrick->setTextEdit(docWindow->getTextEdit());
-                    openFileBrick->openFile();
-                }
-            }
-        }
-    });
+    connect(toolBarBrick->getAction("open"), &QAction::triggered, this, &MainWindowBrick::handleOpenFile);
     connect(toolBarBrick->getAction("save"), &QAction::triggered, this, [this]() {
         if (auto *subWindow = mdiArea->activeSubWindow()) {
             if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
@@ -165,6 +146,10 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     resize(800, 600);
 
     qDebug() << "MainWindowBrick ready.";
+}
+
+void MainWindowBrick::handleOpenFile() {
+    documentHandler->openDocument(openFileBrick);
 }
 
 MainWindowBrick::~MainWindowBrick() {}
