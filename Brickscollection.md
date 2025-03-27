@@ -127,10 +127,16 @@ QxWrite is a modular text editor built with Qt, using the brick system for featu
 - **Recent Changes**: Added `lastDir` to persist directory, updated `getOpenFileName()` debug log to show `Open cancelled`. Added parent directory (`..`) and subdirectory navigation in file list, fixed visibility of directories by adjusting name filter behavior, resolved variable shadowing error in `getSaveFileName` and `getOpenFileName`, fixed `..` visibility in file view (left pane), added root directory check to prevent navigation above `/`.
 
 ### DocumentHandlerBrick
-- **Purpose**: Manages document windows within the MDI area.
-- **Features**: Creates new documents, tiles them for visibility.
-- **Status**: Fully implemented. Supports QxDocuments, QxNotes, and QxSheets.
-- **Recent Changes**: Added support for cascading windows by document type (QxDocuments, QxNotes, QxSheets) with separate stacks, implemented `openDocument` to create new windows for opened files (March 2025).
+- **Purpose**: Manages multiple document windows within a QMdiArea, supporting QxNotes (type 0), QxDocuments (type 1), and QxGrids (type 2).
+- **Features**:
+  - Creates new document windows with `newDocument(DocType type)`.
+  - Opens existing files via `openDocument(OpenFileBrick*)`.
+  - Cascades windows of the same type with `cascadeWindows(DocType type)`.
+  - Moves cascades interactively via right-click "Move Cascade" with `moveCascade(QMdiSubWindow*)`.
+  - Context menu with Undo, Redo, Cut, Copy, Paste, and Move Cascade options.
+- **Status**: Stable as of March 26, 2025—tested with up to 7 Documents, 6 Notes, 4 Grids; no segfaults after null checks added. Fixed `¬eWindows` typo to `noteWindows` in `cascadeWindows` and `moveCascade`.
+- **Files**: `documenthandlerbrick.h`, `documenthandlerbrick.cpp`
+- **Recent Changes**: Added support for cascading windows by document type (QxDocuments, QxNotes, QxSheets) with separate stacks, implemented `openDocument` to create new windows for opened files, added null checks to `cascadeWindows` to prevent segfaults, enhanced debugging with window counts and anchor logging (March 2025).
 
 ## Next Steps
 - Consider adding "Recent Files" to the `DialogBrick` for quicker access.

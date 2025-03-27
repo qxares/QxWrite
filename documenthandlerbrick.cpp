@@ -8,6 +8,7 @@
 #include <QAction>
 #include <QApplication>
 #include <QMouseEvent>
+#include <QClipboard>  // For clipboard access
 
 DocumentHandlerBrick::DocumentHandlerBrick(QWidget *parent) : QObject(parent) {
     mdiArea = qobject_cast<QMdiArea*>(parent->findChild<QMdiArea*>());
@@ -30,8 +31,10 @@ void DocumentHandlerBrick::newDocument(NewFileBrick::DocType type) {
                              type == NewFileBrick::Document ? "QxDocument" : "QxGrid");
     subWindow->resize(400, 300);  // Default size for visibility
 
-    // Connect the context menu signal
-    connect(docWindow, &DocumentWindow::customContextMenuRequested, this, &DocumentHandlerBrick::showContextMenu);
+    // Set up context menu on the subwindow
+    subWindow->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(subWindow, &QMdiSubWindow::customContextMenuRequested, this, 
+            [this, subWindow](const QPoint &pos) { showContextMenu(subWindow, pos); });
 
     // Add to the appropriate list
     if (type == NewFileBrick::Document) {
@@ -47,7 +50,7 @@ void DocumentHandlerBrick::newDocument(NewFileBrick::DocType type) {
     qDebug() << "DocumentHandlerBrick: New document added, type:" << static_cast<int>(type);
 }
 
-void DocumentHandlerBrick::openDocument(OpenFile prettierBrick *openFileBrick) {
+void DocumentHandlerBrick::openDocument(OpenFileBrick *openFileBrick) {
     if (!mdiArea) {
         qDebug() << "DocumentHandlerBrick: No MDI area to handle open document!";
         return;
@@ -58,8 +61,10 @@ void DocumentHandlerBrick::openDocument(OpenFile prettierBrick *openFileBrick) {
     subWindow->setWindowTitle("QxDocument");
     subWindow->resize(400, 300);  // Default size for visibility
 
-    // Connect the context menu signal
-    connect(docWindow, &DocumentWindow::customContextMenuRequested, this, &DocumentHandlerBrick::showContextMenu);
+    // Set up context menu on the subwindow
+    subWindow->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(subWindow, &QMdiSubWindow::customContextMenuRequested, this, 
+            [this, subWindow](const QPoint &pos) { showContextMenu(subWindow, pos); });
 
     documentWindows.append(subWindow);  // Add to QxDocuments stack
     subWindow->show();
@@ -75,12 +80,13 @@ void DocumentHandlerBrick::cascadeWindows(NewFileBrick::DocType type) {
     if (type == NewFileBrick::Document) {
         windowList = &documentWindows;
     } else if (type == NewFileBrick::Note) {
-        windowList = &noteWindows;  // Fixed typo: ¬eWindows to noteWindows
+        windowList = &noteWindows;  // Fixed typo from ¬eWindows
     } else if (type == NewFileBrick::Sheet) {
         windowList = &sheetWindows;
     }
 
     if (!windowList || windowList->isEmpty()) {
+        qDebug() << "DocumentHandlerBrick: No windows to cascade for type:" << static_cast<int>(type);
         return;
     }
 
@@ -88,7 +94,16 @@ void DocumentHandlerBrick::cascadeWindows(NewFileBrick::DocType type) {
     QMdiSubWindow *anchorWindow = mdiArea->activeSubWindow();
     if (!anchorWindow || !windowList->contains(anchorWindow)) {
         anchorWindow = windowList->first();  // Fallback to first window
+        qDebug() << "DocumentHandlerBrick: Using first window as anchor:" << anchorWindow;
+    } else {
+        qDebug() << "DocumentHandlerBrick: Using active window as anchor:" << anchorWindow;
     }
+
+    if (!anchorWindow) {
+        qDebug() << "DocumentHandlerBrick: No valid anchor window for cascading!";
+        return;
+    }
+
     int x = anchorWindow->pos().x();
     int y = anchorWindow->pos().y();
 
@@ -99,6 +114,7 @@ void DocumentHandlerBrick::cascadeWindows(NewFileBrick::DocType type) {
             window->move(x, y);
         }
     }
+    qDebug() << "DocumentHandlerBrick: Cascaded" << windowList->size() << "windows for type:" << static_cast<int>(type);
 }
 
 void DocumentHandlerBrick::showContextMenu(QMdiSubWindow *subWindow, const QPoint &pos) {
@@ -108,9 +124,12 @@ void DocumentHandlerBrick::showContextMenu(QMdiSubWindow *subWindow, const QPoin
         return;
     }
     QTextEdit *textEdit = docWindow->getTextEdit();
+    if (!textEdit) {
+        qDebug() << "DocumentHandlerBrick: No textEdit in DocumentWindow!";
+        return;
+    }
 
     QMenu contextMenu;
-    // Add standard text edit actions from QTextEdit
     contextMenu.addAction("Undo", textEdit, &QTextEdit::undo)->setEnabled(textEdit->document()->isUndoAvailable());
     contextMenu.addAction("Redo", textEdit, &QTextEdit::redo)->setEnabled(textEdit->document()->isRedoAvailable());
     contextMenu.addSeparator();
@@ -118,36 +137,35 @@ void DocumentHandlerBrick::showContextMenu(QMdiSubWindow *subWindow, const QPoin
     contextMenu.addAction("Copy", textEdit, &QTextEdit::copy)->setEnabled(textEdit->textCursor().hasSelection());
     contextMenu.addAction("Paste", textEdit, &QTextEdit::paste)->setEnabled(QApplication::clipboard()->text().length() > 0);
     contextMenu.addSeparator();
-    // Add custom "Move Cascade" action
-    QAction *moveCascadeAction = contextMenu.addAction("Move Cascade", [this, subWindow]() { moveCascade(subWindow); });
+    contextMenu.addAction("Move Cascade", [this, subWindow]() { moveCascade(subWindow); });
 
     contextMenu.exec(subWindow->mapToGlobal(pos));
+    qDebug() << "DocumentHandlerBrick: Context menu shown for subWindow:" << subWindow;
 }
 
 void DocumentHandlerBrick::moveCascade(QMdiSubWindow *subWindow) {
     QList<QMdiSubWindow*> *windowList = nullptr;
-    NewFileBrick::DocType type;
     if (documentWindows.contains(subWindow)) {
         windowList = &documentWindows;
-        type = NewFileBrick::Document;
     } else if (noteWindows.contains(subWindow)) {
-        windowList = &noteWindows;  // Fixed typo: ¬eWindows to noteWindows
+        windowList = &noteWindows;  // Fixed typo from ¬eWindows
     } else if (sheetWindows.contains(subWindow)) {
         windowList = &sheetWindows;
-        type = NewFileBrick::Sheet;
     }
 
     if (!windowList || windowList->isEmpty()) {
+        qDebug() << "DocumentHandlerBrick: No windows to move in cascade for subWindow:" << subWindow;
         return;
     }
 
+    qDebug() << "DocumentHandlerBrick: Moving cascade of" << windowList->size() << "windows, anchor:" << subWindow;
+
     QPoint initialPos = QCursor::pos();
     QPoint originalAnchorPos = subWindow->pos();
-    QApplication::setOverrideCursor(Qt::SizeAllCursor);  // Visual feedback
+    QApplication::setOverrideCursor(Qt::SizeAllCursor);
 
-    // Wait for mouse press to start dragging
     while (!(QApplication::mouseButtons() & Qt::LeftButton)) {
-        QApplication::processEvents();  // Keep UI responsive
+        QApplication::processEvents();  // Wait for click
     }
 
     while (QApplication::mouseButtons() & Qt::LeftButton) {
@@ -156,10 +174,7 @@ void DocumentHandlerBrick::moveCascade(QMdiSubWindow *subWindow) {
         int dx = currentPos.x() - initialPos.x();
         int dy = currentPos.y() - initialPos.y();
 
-        // Move the anchor window
         subWindow->move(originalAnchorPos.x() + dx, originalAnchorPos.y() + dy);
-
-        // Move the rest of the cascade relative to the anchor
         int offset = 30;
         int x = subWindow->pos().x();
         int y = subWindow->pos().y();
@@ -173,4 +188,5 @@ void DocumentHandlerBrick::moveCascade(QMdiSubWindow *subWindow) {
     }
 
     QApplication::restoreOverrideCursor();
+    qDebug() << "DocumentHandlerBrick: Cascade moved, new anchor pos:" << subWindow->pos();
 }

@@ -6,7 +6,6 @@
 #include <QScrollBar>
 #include <QDebug>
 #include <QMdiSubWindow>
-#include <QMenu>
 
 DocumentWindow::DocumentWindow(QWidget *parent) : QWidget(parent) {
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -18,14 +17,6 @@ DocumentWindow::DocumentWindow(QWidget *parent) : QWidget(parent) {
 
     newFileBrick = new NewFileBrick(textEdit, this);
     openFileBrick = new OpenFileBrick(textEdit, this);
-
-    // Enable custom context menu on the subwindow (set by parent later)
-    if (QMdiSubWindow *subWindow = qobject_cast<QMdiSubWindow*>(this->parent())) {
-        subWindow->setContextMenuPolicy(Qt::CustomContextMenu);
-        connect(subWindow, &QMdiSubWindow::customContextMenuRequested, this, [this, subWindow](const QPoint &pos) {
-            emit customContextMenuRequested(subWindow, pos);
-        });
-    }
 
     qDebug() << "DocumentWindow initialized with textEdit:" << textEdit;
 }
