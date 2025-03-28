@@ -42,7 +42,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
                                  colorAction, imageAction, alignLeftAction, alignCenterAction,
                                  alignRightAction, nullptr, nullptr, tableAction);
 
-    connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this](int type) {
+    connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this, openAction, saveAction, boldAction, italicAction, fontAction, colorAction, imageAction, alignLeftAction, alignCenterAction, alignRightAction, tableAction](int type) {
         QTextEdit *textEdit = documentHandler->newDocument(static_cast<NewFileBrick::DocType>(type));
         if (!textEdit) return;
 
@@ -62,14 +62,14 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
 
         connect(openAction, &QAction::triggered, openFileBrick, &OpenFileBrick::openFile);
         connect(saveAction, &QAction::triggered, saveManagerBrick, &SaveManagerBrick::triggerSave);
-        connect(boldAction, &QAction::triggered, boldBrick, &BoldBrick::toggleBold);
-        connect(italicAction, &QAction::triggered, italicBrick, &ItalicBrick::toggleItalic);
-        connect(fontAction, &QAction::triggered, fontBrick, &FontBrick::selectFont);
-        connect(colorAction, &QAction::triggered, colorBrick, &ColorBrick::selectColor);
+        connect(boldAction, &QAction::triggered, boldBrick, &BoldBrick::applyBold);
+        connect(italicAction, &QAction::triggered, italicBrick, &ItalicBrick::applyItalic);
+        connect(fontAction, &QAction::triggered, fontBrick, &FontBrick::changeFont);
+        connect(colorAction, &QAction::triggered, colorBrick, &ColorBrick::changeColor);
         connect(imageAction, &QAction::triggered, insertBrick, &InsertBrick::insertImage);
-        connect(alignLeftAction, &QAction::triggered, alignBrick, &AlignBrick::alignLeft);
-        connect(alignCenterAction, &QAction::triggered, alignBrick, &AlignBrick::alignCenter);
-        connect(alignRightAction, &QAction::triggered, alignBrick, &AlignBrick::alignRight);
+        connect(alignLeftAction, &QAction::triggered, alignBrick, [alignBrick]() { alignBrick->align(Qt::AlignLeft); });
+        connect(alignCenterAction, &QAction::triggered, alignBrick, [alignBrick]() { alignBrick->align(Qt::AlignCenter); });
+        connect(alignRightAction, &QAction::triggered, alignBrick, [alignBrick]() { alignBrick->align(Qt::AlignRight); });
         connect(tableAction, &QAction::triggered, tableBrick, &TableBrick::insertTable);
 
         connect(menuManagerBrick, &MenuManagerBrick::saveAsTriggered, saveManagerBrick, &SaveManagerBrick::triggerSave);

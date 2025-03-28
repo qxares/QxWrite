@@ -9,7 +9,7 @@ class ItalicBrick : public QObject {
 public:
     explicit ItalicBrick(QTextEdit *edit, QObject *parent = nullptr);
     void applyItalic();
-    void setTextEdit(QTextEdit *edit);  // Added
+    void setTextEdit(QTextEdit *edit);
 
 private:
     QTextEdit *m_textEdit;

@@ -9,7 +9,7 @@ class FontBrick : public QObject {
 public:
     explicit FontBrick(QTextEdit *edit, QObject *parent = nullptr);
     void changeFont();
-    void setTextEdit(QTextEdit *edit);  // Added
+    void setTextEdit(QTextEdit *edit);
 
 private:
     QTextEdit *m_textEdit;

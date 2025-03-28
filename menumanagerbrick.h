@@ -36,10 +36,11 @@ signals:
     void deleteRowTriggered();
     void deleteColumnTriggered();
     void mergeCellsTriggered();
-    void deleteTableTriggered();        // New: Signal for deleting table
-    void alignTableLeftTriggered();     // New: Signal for aligning table left
-    void alignTableCenterTriggered();   // New: Signal for aligning table center
-    void alignTableRightTriggered();    // New: Signal for aligning table right
+    void deleteTableTriggered();
+    void alignTableLeftTriggered();
+    void alignTableCenterTriggered();
+    void alignTableRightTriggered();
+    void moveTriggered(); // Added for ResizeBrick::moveObject
 
 private:
     QMenuBar *menuBar;
