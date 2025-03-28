@@ -14,7 +14,7 @@ ToolBarBrick::ToolBarBrick(QWidget *parent) : QObject(parent) {
     alignLeftAction = addAction("alignLeft", "Align Left", ":/icons/icons/align-left.svg");
     alignCenterAction = addAction("alignCenter", "Align Center", ":/icons/icons/align-center.svg");
     alignRightAction = addAction("alignRight", "Align Right", ":/icons/icons/align-right.svg");
-    tableAction = addAction("table", "Insert Table", ""); // No icon yet
+    tableAction = addAction("table", "Insert Table", ":/icons/icons/table.svg"); // Icon added
     qDebug() << "ToolBarBrick initialized with toolbar:" << toolBar;
 }
 

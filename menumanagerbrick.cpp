@@ -75,7 +75,8 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
     QObject::connect(menuBullets, &QAction::triggered, this, &MenuManagerBrick::bulletsTriggered);
 
     if (tableAction) {
-        QAction *menuTable = new QAction("Table", this);
+        QAction *menuTable = new QAction("Insert Table", this); // Text updated for clarity
+        menuTable->setIcon(QIcon(":/icons/icons/table.svg")); // Icon added
         menuTable->setToolTip("Insert a table");
         formatMenu->addAction(menuTable);
         QObject::connect(menuTable, &QAction::triggered, tableAction, &QAction::trigger);
