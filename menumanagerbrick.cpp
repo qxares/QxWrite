@@ -8,9 +8,11 @@ MenuManagerBrick::MenuManagerBrick(QWidget *parent) : QObject(parent) {
     fileMenu = new QMenu("File", menuBar);
     editMenu = new QMenu("Edit", menuBar);
     formatMenu = new QMenu("Format", menuBar);
+    tableMenu = new QMenu("Table", menuBar); // New Table menu
     menuBar->addMenu(fileMenu);
     menuBar->addMenu(editMenu);
     menuBar->addMenu(formatMenu);
+    menuBar->addMenu(tableMenu); // Add to menu bar
     qDebug() << "MenuManagerBrick initialized, menuBar:" << menuBar;
 }
 
@@ -68,7 +70,7 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
         QAction *menuTable = new QAction("Insert Table", this);
         menuTable->setIcon(QIcon(":/icons/icons/table.svg"));
         menuTable->setToolTip("Insert a table");
-        formatMenu->addAction(menuTable);
+        tableMenu->addAction(menuTable); // Moved to tableMenu
         QObject::connect(menuTable, &QAction::triggered, tableAction, &QAction::trigger);
         QObject::connect(menuTable, &QAction::triggered, this, &MenuManagerBrick::tableTriggered);
         qDebug() << "Table menu item added and connected, tableAction:" << tableAction;

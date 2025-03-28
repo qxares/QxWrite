@@ -49,7 +49,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         toolBarBrick->getAction("bold"), toolBarBrick->getAction("italic"), toolBarBrick->getAction("font"),
         toolBarBrick->getAction("color"), toolBarBrick->getAction("image"), toolBarBrick->getAction("alignLeft"),
         toolBarBrick->getAction("alignCenter"), toolBarBrick->getAction("alignRight"),
-        nullptr, nullptr, toolBarBrick->getAction("table")
+        nullptr, nullptr, tableBrick->getInsertTableAction() // Use tableBrick's action directly
     );
 
     connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this](int type) {
@@ -95,9 +95,6 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         } else {
             qDebug() << "No active subwindow for table insertion";
         }
-    });
-    connect(toolBarBrick->getAction("new"), &QAction::triggered, this, [this]() { 
-        documentHandler->newDocument(NewFileBrick::Note); 
     });
     connect(toolBarBrick->getAction("open"), &QAction::triggered, this, &MainWindowBrick::handleOpenFile);
     connect(toolBarBrick->getAction("save"), &QAction::triggered, this, [this]() {
@@ -176,19 +173,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
             }
         }
     });
-    connect(toolBarBrick->getAction("table"), &QAction::triggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                tableBrick->setTextEdit(docWindow->getTextEdit());
-                tableBrick->insertTable();
-                qDebug() << "Table insertion triggered from toolbar";
-            } else {
-                qDebug() << "No active document window for table insertion (toolbar)";
-            }
-        } else {
-            qDebug() << "No active subwindow for table insertion (toolbar)";
-        }
-    });
+    // Removed: connect for tableAction from toolbar
 
     resize(800, 600);
 
