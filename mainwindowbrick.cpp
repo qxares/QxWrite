@@ -30,17 +30,20 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     addToolBar(toolBarBrick->getToolBar());
     setMenuBar(menuManagerBrick->getMenuBar());
 
-    QAction *openAction = toolBarBrick->addAction("open", "Open", ":/icons/icons/open.svg");
-    QAction *saveAction = toolBarBrick->addAction("save", "Save", ":/icons/icons/save.svg");
-    QAction *boldAction = toolBarBrick->addAction("bold", "Bold", ":/icons/icons/bold.svg");
-    QAction *italicAction = toolBarBrick->addAction("italic", "Italic", ":/icons/icons/italic.svg");
-    QAction *fontAction = toolBarBrick->addAction("font", "Font", ":/icons/icons/font.svg");
-    QAction *colorAction = toolBarBrick->addAction("color", "Color", ":/icons/icons/color.svg");
-    QAction *imageAction = toolBarBrick->addAction("image", "Insert Image", ":/icons/icons/image.svg");
-    QAction *alignLeftAction = toolBarBrick->addAction("alignLeft", "Align Left", ":/icons/icons/align-left.svg");
-    QAction *alignCenterAction = toolBarBrick->addAction("alignCenter", "Align Center", ":/icons/icons/align-center.svg");
-    QAction *alignRightAction = toolBarBrick->addAction("alignRight", "Align Right", ":/icons/icons/align-right.svg");
-    QAction *tableAction = toolBarBrick->addAction("table", "Insert Table", ":/icons/icons/table.svg");
+    // Set a reasonable default size
+    resize(800, 600);
+
+    QAction *openAction = toolBarBrick->getAction("open");
+    QAction *saveAction = toolBarBrick->getAction("save");
+    QAction *boldAction = toolBarBrick->getAction("bold");
+    QAction *italicAction = toolBarBrick->getAction("italic");
+    QAction *fontAction = toolBarBrick->getAction("font");
+    QAction *colorAction = toolBarBrick->getAction("color");
+    QAction *imageAction = toolBarBrick->getAction("image");
+    QAction *alignLeftAction = toolBarBrick->getAction("alignLeft");
+    QAction *alignCenterAction = toolBarBrick->getAction("alignCenter");
+    QAction *alignRightAction = toolBarBrick->getAction("alignRight");
+    QAction *tableAction = toolBarBrick->getAction("table");
 
     menuManagerBrick->setupMenus(openAction, saveAction, boldAction, italicAction, fontAction,
                                  colorAction, imageAction, alignLeftAction, alignCenterAction,

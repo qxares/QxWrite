@@ -66,7 +66,10 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
         formatMenu->addAction(menuColor);
         QObject::connect(menuColor, &QAction::triggered, colorAction, &QAction::trigger);
     }
-    QAction *insertTable = tableMenu->addAction("Insert Table");
+    if (tableAction) {
+        QAction *insertTable = tableMenu->addAction("Insert Table");
+        QObject::connect(insertTable, &QAction::triggered, tableAction, &QAction::trigger);
+    }
     QMenu *insertMenu = new QMenu("Insert", tableMenu);
     QAction *insertRowMenu = insertMenu->addAction("Add Row");
     QAction *insertColumnMenu = insertMenu->addAction("Add Column");
@@ -89,19 +92,17 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
 
     QAction *deleteRow = deleteMenu->addAction("Selected Row");
     QAction *deleteColumn = deleteMenu->addAction("Selected Column");
-    QAction *deleteTable = deleteMenu->addAction("Table"); // New: Delete Table option
+    QAction *deleteTable = deleteMenu->addAction("Table");
 
     tableMenu->addMenu(insertMenu);
     tableMenu->addMenu(deleteMenu);
 
-    // New: Table alignment options
     QMenu *alignMenu = new QMenu("Align Table", tableMenu);
     QAction *alignTableLeft = alignMenu->addAction("Left");
     QAction *alignTableCenter = alignMenu->addAction("Center");
     QAction *alignTableRight = alignMenu->addAction("Right");
     tableMenu->addMenu(alignMenu);
 
-    QObject::connect(insertTable, &QAction::triggered, this, &MenuManagerBrick::insertTableTriggered);
     QObject::connect(insertRowBefore, &QAction::triggered, this, &MenuManagerBrick::insertRowBeforeTriggered);
     QObject::connect(insertRowAfter, &QAction::triggered, this, &MenuManagerBrick::insertRowAfterTriggered);
     QObject::connect(insertRowAbove, &QAction::triggered, this, &MenuManagerBrick::insertRowAboveTriggered);
@@ -112,11 +113,11 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
     QObject::connect(insertColumnBelow, &QAction::triggered, this, &MenuManagerBrick::insertColumnBelowTriggered);
     QObject::connect(deleteRow, &QAction::triggered, this, &MenuManagerBrick::deleteRowTriggered);
     QObject::connect(deleteColumn, &QAction::triggered, this, &MenuManagerBrick::deleteColumnTriggered);
-    QObject::connect(deleteTable, &QAction::triggered, this, &MenuManagerBrick::deleteTableTriggered); // New signal
+    QObject::connect(deleteTable, &QAction::triggered, this, &MenuManagerBrick::deleteTableTriggered);
     QObject::connect(mergeCells, &QAction::triggered, this, &MenuManagerBrick::mergeCellsTriggered);
-    QObject::connect(alignTableLeft, &QAction::triggered, this, &MenuManagerBrick::alignTableLeftTriggered);   // New signal
-    QObject::connect(alignTableCenter, &QAction::triggered, this, &MenuManagerBrick::alignTableCenterTriggered); // New signal
-    QObject::connect(alignTableRight, &QAction::triggered, this, &MenuManagerBrick::alignTableRightTriggered);  // New signal
+    QObject::connect(alignTableLeft, &QAction::triggered, this, &MenuManagerBrick::alignTableLeftTriggered);
+    QObject::connect(alignTableCenter, &QAction::triggered, this, &MenuManagerBrick::alignTableCenterTriggered);
+    QObject::connect(alignTableRight, &QAction::triggered, this, &MenuManagerBrick::alignTableRightTriggered);
 
     QAction *menuNumbering = new QAction("Numbering", this);
     menuNumbering->setToolTip("Toggle numbered list");
