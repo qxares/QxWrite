@@ -65,7 +65,7 @@ void TableBrick::insertTable() {
         format.setCellPadding(5);
         format.setCellSpacing(2);
         format.setBorder(1);
-        format.setAlignment(Qt::AlignLeft); // Default alignment
+        format.setAlignment(Qt::AlignLeft);
         QVector<QTextLength> constraints;
         for (int col = 0; col < cols; ++col) {
             constraints.append(QTextLength(QTextLength::FixedLength, 120));
@@ -93,55 +93,19 @@ void TableBrick::insertTable() {
     }
 }
 
-void TableBrick::alignTable(Qt::Alignment alignment) {
-    if (!m_textEdit) return;
-
-    QTextCursor cursor = m_textEdit->textCursor();
-    QTextTable *table = cursor.currentTable();
-
-    // If no table at cursor, search for the nearest one
-    if (!table) {
-        QTextDocument *doc = m_textEdit->document();
-        cursor.movePosition(QTextCursor::Start);
-        while (!cursor.isNull() && !cursor.atEnd()) {
-            table = cursor.currentTable();
-            if (table) break;
-            cursor.movePosition(QTextCursor::NextBlock);
-        }
-    }
-
-    if (table) {
-        cursor.beginEditBlock();
-        QTextTableFormat format = table->format();
-        format.setAlignment(alignment);
-        table->setFormat(format);
-
-        QTextBlockFormat blockFormat;
-        blockFormat.setAlignment(alignment);
-        cursor.setBlockFormat(blockFormat);
-
-        cursor.endEditBlock();
-        m_textEdit->update();
-        qDebug() << "TableBrick: Aligned table to" << (alignment == Qt::AlignLeft ? "left" : 
-                                                      alignment == Qt::AlignCenter ? "center" : "right");
-    } else {
-        qDebug() << "TableBrick: No table found in document for alignment";
-    }
-}
-
-void TableBrick::alignTableLeft() { alignTable(Qt::AlignLeft); }
-void TableBrick::alignTableCenter() { alignTable(Qt::AlignCenter); }
-void TableBrick::alignTableRight() { alignTable(Qt::AlignRight); }
-
-void TableBrick::insertRowBefore() { /* ... */ }
-void TableBrick::insertRowAfter() { /* ... */ }
-void TableBrick::insertRowAbove() { insertRowBefore(); }
-void TableBrick::insertRowBelow() { insertRowAfter(); }
-void TableBrick::insertColumnBefore() { /* ... */ }
-void TableBrick::insertColumnAfter() { /* ... */ }
-void TableBrick::insertColumnAbove() { insertColumnBefore(); }
-void TableBrick::insertColumnBelow() { insertColumnAfter(); }
-void TableBrick::deleteRow() { /* ... */ }
-void TableBrick::deleteColumn() { /* ... */ }
-void TableBrick::mergeCells() { /* ... */ }
-void TableBrick::deleteTable() { /* ... */ }
+// Stubs removed—handled by TableHandlerBrick
+void TableBrick::alignTableLeft() {}
+void TableBrick::alignTableCenter() {}
+void TableBrick::alignTableRight() {}
+void TableBrick::insertRowBefore() {}
+void TableBrick::insertRowAfter() {}
+void TableBrick::insertRowAbove() {}
+void TableBrick::insertRowBelow() {}
+void TableBrick::insertColumnBefore() {}
+void TableBrick::insertColumnAfter() {}
+void TableBrick::insertColumnAbove() {}
+void TableBrick::insertColumnBelow() {}
+void TableBrick::deleteRow() {}
+void TableBrick::deleteColumn() {}
+void TableBrick::mergeCells() {}
+void TableBrick::deleteTable() {}

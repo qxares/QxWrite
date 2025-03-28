@@ -12,6 +12,7 @@
 #include "alignbrick.h"
 #include "listbrick.h"
 #include "tablebrick.h"
+#include "tablehandlerbrick.h"
 #include "documenthandlerbrick.h"
 #include "resizebrick.h"
 #include <QMdiArea>
@@ -41,7 +42,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     QAction *alignLeftAction = toolBarBrick->getAction("alignLeft");
     QAction *alignCenterAction = toolBarBrick->getAction("alignCenter");
     QAction *alignRightAction = toolBarBrick->getAction("alignRight");
-    QAction *tableAction = new QAction("Insert Table", this); // Table action for menu only
+    QAction *tableAction = new QAction("Insert Table", this);
 
     menuManagerBrick->setupMenus(openAction, saveAction, boldAction, italicAction, fontAction,
                                  colorAction, imageAction, alignLeftAction, alignCenterAction,
@@ -62,6 +63,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         auto *alignBrick = new AlignBrick(textEdit, this);
         auto *listBrick = new ListBrick(textEdit, this);
         auto *tableBrick = new TableBrick(textEdit, this);
+        auto *tableHandlerBrick = new TableHandlerBrick(textEdit, this);
         auto *resizeBrick = new ResizeBrick(textEdit, this);
         resizeBrick->enableResize();
 
@@ -78,9 +80,10 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         connect(tableAction, &QAction::triggered, tableBrick, &TableBrick::insertTable);
 
         connect(menuManagerBrick, &MenuManagerBrick::saveAsTriggered, saveManagerBrick, &SaveManagerBrick::triggerSave);
-        connect(menuManagerBrick, &MenuManagerBrick::alignTableLeftTriggered, tableBrick, &TableBrick::alignTableLeft);
-        connect(menuManagerBrick, &MenuManagerBrick::alignTableCenterTriggered, tableBrick, &TableBrick::alignTableCenter);
-        connect(menuManagerBrick, &MenuManagerBrick::alignTableRightTriggered, tableBrick, &TableBrick::alignTableRight);
+        connect(menuManagerBrick, &MenuManagerBrick::alignTableLeftTriggered, tableHandlerBrick, &TableHandlerBrick::alignTableLeft);
+        connect(menuManagerBrick, &MenuManagerBrick::alignTableCenterTriggered, tableHandlerBrick, &TableHandlerBrick::alignTableCenter);
+        connect(menuManagerBrick, &MenuManagerBrick::alignTableRightTriggered, tableHandlerBrick, &TableHandlerBrick::alignTableRight);
+        connect(menuManagerBrick, &MenuManagerBrick::deleteTableTriggered, tableHandlerBrick, &TableHandlerBrick::deleteTable);
         connect(menuManagerBrick, &MenuManagerBrick::moveTriggered, resizeBrick, &ResizeBrick::moveObject);
 
         QMenu *tableMenu = menuManagerBrick->getMenuBar()->findChild<QMenu*>("tableMenu");

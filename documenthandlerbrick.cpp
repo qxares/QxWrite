@@ -8,7 +8,7 @@
 #include <QAction>
 #include <QApplication>
 #include <QMouseEvent>
-#include <QClipboard>  // For clipboard access
+#include <QClipboard>
 
 DocumentHandlerBrick::DocumentHandlerBrick(QWidget *parent) : QObject(parent) {
     mdiArea = qobject_cast<QMdiArea*>(parent->findChild<QMdiArea*>());
@@ -24,19 +24,28 @@ QTextEdit* DocumentHandlerBrick::newDocument(NewFileBrick::DocType type) {
         qDebug() << "DocumentHandlerBrick: No MDI area to handle new document!";
         return nullptr;
     }
-    DocumentWindow *docWindow = new DocumentWindow(nullptr);  // No parent yet
+    DocumentWindow *docWindow = new DocumentWindow(nullptr);
     docWindow->newFile(type);
     QMdiSubWindow *subWindow = mdiArea->addSubWindow(docWindow);
     subWindow->setWindowTitle(type == NewFileBrick::Note ? "QxNote" : 
                              type == NewFileBrick::Document ? "QxDocument" : "QxGrid");
-    subWindow->resize(400, 300);  // Default size for visibility
+    subWindow->resize(400, 300);
 
-    // Set up context menu on the subwindow
     subWindow->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(subWindow, &QMdiSubWindow::customContextMenuRequested, this, 
             [this, subWindow](const QPoint &pos) { showContextMenu(subWindow, pos); });
 
-    // Add to the appropriate list
+    connect(subWindow, &QMdiSubWindow::destroyed, this, [this, subWindow, type]() {
+        if (type == NewFileBrick::Document) {
+            documentWindows.removeAll(subWindow);
+        } else if (type == NewFileBrick::Note) {
+            noteWindows.removeAll(subWindow);
+        } else if (type == NewFileBrick::Sheet) {
+            sheetWindows.removeAll(subWindow);
+        }
+        qDebug() << "DocumentHandlerBrick: Subwindow removed from list, type:" << static_cast<int>(type);
+    });
+
     if (type == NewFileBrick::Document) {
         documentWindows.append(subWindow);
     } else if (type == NewFileBrick::Note) {
@@ -46,9 +55,9 @@ QTextEdit* DocumentHandlerBrick::newDocument(NewFileBrick::DocType type) {
     }
 
     subWindow->show();
-    cascadeWindows(type);  // Cascade windows of this type
+    cascadeWindows(type);
     qDebug() << "DocumentHandlerBrick: New document added, type:" << static_cast<int>(type);
-    return docWindow->getTextEdit(); // Return the QTextEdit*
+    return docWindow->getTextEdit();
 }
 
 void DocumentHandlerBrick::openDocument(OpenFileBrick *openFileBrick) {
@@ -56,20 +65,24 @@ void DocumentHandlerBrick::openDocument(OpenFileBrick *openFileBrick) {
         qDebug() << "DocumentHandlerBrick: No MDI area to handle open document!";
         return;
     }
-    DocumentWindow *docWindow = new DocumentWindow(nullptr);  // No parent yet
-    docWindow->newFile(NewFileBrick::Document);  // Default to QxDocument for opened files
+    DocumentWindow *docWindow = new DocumentWindow(nullptr);
+    docWindow->newFile(NewFileBrick::Document);
     QMdiSubWindow *subWindow = mdiArea->addSubWindow(docWindow);
     subWindow->setWindowTitle("QxDocument");
-    subWindow->resize(400, 300);  // Default size for visibility
+    subWindow->resize(400, 300);
 
-    // Set up context menu on the subwindow
     subWindow->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(subWindow, &QMdiSubWindow::customContextMenuRequested, this, 
             [this, subWindow](const QPoint &pos) { showContextMenu(subWindow, pos); });
 
-    documentWindows.append(subWindow);  // Add to QxDocuments stack
+    connect(subWindow, &QMdiSubWindow::destroyed, this, [this, subWindow]() {
+        documentWindows.removeAll(subWindow);
+        qDebug() << "DocumentHandlerBrick: Subwindow removed from list, type: Document";
+    });
+
+    documentWindows.append(subWindow);
     subWindow->show();
-    cascadeWindows(NewFileBrick::Document);  // Cascade QxDocuments
+    cascadeWindows(NewFileBrick::Document);
 
     openFileBrick->setTextEdit(docWindow->getTextEdit());
     openFileBrick->openFile();
@@ -81,7 +94,7 @@ void DocumentHandlerBrick::cascadeWindows(NewFileBrick::DocType type) {
     if (type == NewFileBrick::Document) {
         windowList = &documentWindows;
     } else if (type == NewFileBrick::Note) {
-        windowList = &noteWindows;  // Fixed typo from ¬eWindows
+        windowList = &noteWindows; // Fixed typo
     } else if (type == NewFileBrick::Sheet) {
         windowList = &sheetWindows;
     }
@@ -91,10 +104,10 @@ void DocumentHandlerBrick::cascadeWindows(NewFileBrick::DocType type) {
         return;
     }
 
-    const int offset = 30;  // Offset for cascading
+    const int offset = 30;
     QMdiSubWindow *anchorWindow = mdiArea->activeSubWindow();
     if (!anchorWindow || !windowList->contains(anchorWindow)) {
-        anchorWindow = windowList->first();  // Fallback to first window
+        anchorWindow = windowList->first();
         qDebug() << "DocumentHandlerBrick: Using first window as anchor:" << anchorWindow;
     } else {
         qDebug() << "DocumentHandlerBrick: Using active window as anchor:" << anchorWindow;
@@ -109,7 +122,7 @@ void DocumentHandlerBrick::cascadeWindows(NewFileBrick::DocType type) {
     int y = anchorWindow->pos().y();
 
     for (QMdiSubWindow *window : *windowList) {
-        if (window != anchorWindow) {  // Skip the anchor itself
+        if (window != anchorWindow) {
             x += offset;
             y += offset;
             window->move(x, y);
@@ -149,7 +162,7 @@ void DocumentHandlerBrick::moveCascade(QMdiSubWindow *subWindow) {
     if (documentWindows.contains(subWindow)) {
         windowList = &documentWindows;
     } else if (noteWindows.contains(subWindow)) {
-        windowList = &noteWindows;  // Fixed typo from ¬eWindows
+        windowList = &noteWindows; // Fixed typo
     } else if (sheetWindows.contains(subWindow)) {
         windowList = &sheetWindows;
     }
@@ -166,7 +179,7 @@ void DocumentHandlerBrick::moveCascade(QMdiSubWindow *subWindow) {
     QApplication::setOverrideCursor(Qt::SizeAllCursor);
 
     while (!(QApplication::mouseButtons() & Qt::LeftButton)) {
-        QApplication::processEvents();  // Wait for click
+        QApplication::processEvents();
     }
 
     while (QApplication::mouseButtons() & Qt::LeftButton) {
