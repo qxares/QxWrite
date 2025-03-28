@@ -18,7 +18,7 @@ void ResizeBrick::enableResize() {
     qDebug() << "ResizeBrick: Enabled for textEdit:" << m_textEdit;
 }
 
-bool eventFilter(QObject *obj, QEvent *event) {
+bool ResizeBrick::eventFilter(QObject *obj, QEvent *event) {
     if (obj == m_textEdit->viewport()) {
         switch (event->type()) {
             case QEvent::MouseButtonPress:
@@ -42,9 +42,9 @@ void ResizeBrick::mousePressEvent(QMouseEvent *event) {
         QTextCursor cursor = m_textEdit->cursorForPosition(event->pos());
         m_currentTable = cursor.currentTable();
         if (m_currentTable) {
-            QTextTableFormat format = m_currentTable->format();
             QRectF tableRect = m_textEdit->document()->documentLayout()->frameBoundingRect(m_currentTable);
-            if (tableRect.bottomRight() - event->pos() < QPointF(10, 10)) { // Near bottom-right corner
+            QPointF clickPos = event->pos();
+            if ((tableRect.bottomRight() - clickPos).manhattanLength() < 10) { // Near bottom-right
                 m_resizing = true;
                 m_startPos = event->pos();
                 QApplication::setOverrideCursor(Qt::SizeFDiagCursor);
@@ -61,7 +61,8 @@ void ResizeBrick::mouseMoveEvent(QMouseEvent *event) {
         QVector<QTextLength> constraints = format.columnWidthConstraints();
         int cols = m_currentTable->columns();
         for (int i = 0; i < cols; ++i) {
-            constraints[i] = QTextLength(QTextLength::FixedLength, constraints[i].rawValue() + delta.x() / cols);
+            qreal newWidth = qMax(50.0, constraints[i].rawValue() + delta.x() / cols); // Min width 50px
+            constraints[i] = QTextLength(QTextLength::FixedLength, newWidth);
         }
         format.setColumnWidthConstraints(constraints);
         m_currentTable->setFormat(format);
@@ -100,7 +101,7 @@ void ResizeBrick::moveObject() {
         QPoint currentPos = QCursor::pos();
         int dx = currentPos.x() - initialPos.x();
         QTextBlockFormat blockFormat = block.blockFormat();
-        blockFormat.setLeftMargin(dx > 0 ? dx : 0);
+        blockFormat.setLeftMargin(qMax(0, dx)); // No negative margin
         cursor.setBlockFormat(blockFormat);
         m_textEdit->update();
     }
