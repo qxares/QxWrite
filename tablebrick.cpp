@@ -65,14 +65,26 @@ void TableBrick::insertTable() {
         format.setCellPadding(5);
         format.setCellSpacing(2);
         format.setBorder(1);
-        // Set standard cell sizes: 120px wide, 30px tall
+        // Set column widths to 120px
+        QVector<QTextLength> constraints;
         for (int col = 0; col < cols; ++col) {
-            format.setColumnWidthConstraints(QVector<QTextLength>() << QTextLength(QTextLength::FixedLength, 120));
+            constraints.append(QTextLength(QTextLength::FixedLength, 120));
         }
-        format.setMinimumHeight(30); // Applies to all rows
+        format.setColumnWidthConstraints(constraints);
         table->setFormat(format);
-        cursor.endEditBlock();
 
+        // Set row heights to 30px by adjusting each cell's format
+        QTextCharFormat cellFormat;
+        cellFormat.setProperty(QTextFormat::BlockBottomMargin, 30); // Forces minimum height
+        for (int row = 0; row < rows; ++row) {
+            for (int col = 0; col < cols; ++col) {
+                QTextTableCell cell = table->cellAt(row, col);
+                QTextCursor cellCursor = cell.firstCursorPosition();
+                cellCursor.mergeBlockCharFormat(cellFormat);
+            }
+        }
+
+        cursor.endEditBlock();
         m_textEdit->setTextCursor(cursor);
         qDebug() << "TableBrick: Inserted" << rows << "x" << cols << "table with 120px wide, 30px tall cells";
     }
