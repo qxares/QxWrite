@@ -21,6 +21,10 @@ public:
     void deleteRow();
     void deleteColumn();
     void mergeCells();
+    void deleteTable(); // New: Delete entire table
+    void alignTableLeft();   // New: Align table left
+    void alignTableCenter(); // New: Align table center
+    void alignTableRight();  // New: Align table right
 
 private:
     QTextEdit *m_textEdit;

@@ -89,9 +89,17 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
 
     QAction *deleteRow = deleteMenu->addAction("Selected Row");
     QAction *deleteColumn = deleteMenu->addAction("Selected Column");
+    QAction *deleteTable = deleteMenu->addAction("Table"); // New: Delete Table option
 
     tableMenu->addMenu(insertMenu);
     tableMenu->addMenu(deleteMenu);
+
+    // New: Table alignment options
+    QMenu *alignMenu = new QMenu("Align Table", tableMenu);
+    QAction *alignTableLeft = alignMenu->addAction("Left");
+    QAction *alignTableCenter = alignMenu->addAction("Center");
+    QAction *alignTableRight = alignMenu->addAction("Right");
+    tableMenu->addMenu(alignMenu);
 
     QObject::connect(insertTable, &QAction::triggered, this, &MenuManagerBrick::insertTableTriggered);
     QObject::connect(insertRowBefore, &QAction::triggered, this, &MenuManagerBrick::insertRowBeforeTriggered);
@@ -104,7 +112,11 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
     QObject::connect(insertColumnBelow, &QAction::triggered, this, &MenuManagerBrick::insertColumnBelowTriggered);
     QObject::connect(deleteRow, &QAction::triggered, this, &MenuManagerBrick::deleteRowTriggered);
     QObject::connect(deleteColumn, &QAction::triggered, this, &MenuManagerBrick::deleteColumnTriggered);
+    QObject::connect(deleteTable, &QAction::triggered, this, &MenuManagerBrick::deleteTableTriggered); // New signal
     QObject::connect(mergeCells, &QAction::triggered, this, &MenuManagerBrick::mergeCellsTriggered);
+    QObject::connect(alignTableLeft, &QAction::triggered, this, &MenuManagerBrick::alignTableLeftTriggered);   // New signal
+    QObject::connect(alignTableCenter, &QAction::triggered, this, &MenuManagerBrick::alignTableCenterTriggered); // New signal
+    QObject::connect(alignTableRight, &QAction::triggered, this, &MenuManagerBrick::alignTableRightTriggered);  // New signal
 
     QAction *menuNumbering = new QAction("Numbering", this);
     menuNumbering->setToolTip("Toggle numbered list");
@@ -142,16 +154,4 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
         QObject::connect(menuAlignRight, &QAction::triggered, alignRightAction, &QAction::trigger);
     }
 
-    QObject::connect(newNote, &QAction::triggered, this, [this]() { emit newFileTriggered(0); });
-    QObject::connect(newDoc, &QAction::triggered, this, [this]() { emit newFileTriggered(1); });
-    QObject::connect(newSheet, &QAction::triggered, this, [this]() { emit newFileTriggered(2); });
-    QObject::connect(saveAsAction, &QAction::triggered, this, [this]() { emit saveAsTriggered(); });
-
-    qDebug() << "Menus set up. Format menu actions:" << formatMenu->actions().count();
-}
-
-QMenuBar* MenuManagerBrick::getMenuBar() const {
-    return menuBar;
-}
-
-MenuManagerBrick::~MenuManagerBrick() {}
+    QObject::connect(newNote, &QAction::triggered, this, 

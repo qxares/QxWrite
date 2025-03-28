@@ -235,3 +235,60 @@ void TableBrick::mergeCells() {
         qDebug() << "TableBrick: No table or selection for merging";
     }
 }
+
+void TableBrick::deleteTable() {
+    if (!m_textEdit) return;
+    QTextCursor cursor = m_textEdit->textCursor();
+    QTextTable *table = cursor.currentTable();
+    if (table) {
+        int rows = table->rows();
+        cursor.beginEditBlock();
+        table->removeRows(0, rows); // Remove all rows to delete the table
+        cursor.endEditBlock();
+        qDebug() << "TableBrick: Deleted entire table with" << rows << "rows";
+    } else {
+        qDebug() << "TableBrick: No table at cursor to delete";
+    }
+}
+
+void TableBrick::alignTableLeft() {
+    if (!m_textEdit) return;
+    QTextCursor cursor = m_textEdit->textCursor();
+    QTextTable *table = cursor.currentTable();
+    if (table) {
+        QTextTableFormat format = table->format();
+        format.setAlignment(Qt::AlignLeft);
+        table->setFormat(format);
+        qDebug() << "TableBrick: Aligned table to left";
+    } else {
+        qDebug() << "TableBrick: No table at cursor for alignment";
+    }
+}
+
+void TableBrick::alignTableCenter() {
+    if (!m_textEdit) return;
+    QTextCursor cursor = m_textEdit->textCursor();
+    QTextTable *table = cursor.currentTable();
+    if (table) {
+        QTextTableFormat format = table->format();
+        format.setAlignment(Qt::AlignCenter);
+        table->setFormat(format);
+        qDebug() << "TableBrick: Aligned table to center";
+    } else {
+        qDebug() << "TableBrick: No table at cursor for alignment";
+    }
+}
+
+void TableBrick::alignTableRight() {
+    if (!m_textEdit) return;
+    QTextCursor cursor = m_textEdit->textCursor();
+    QTextTable *table = cursor.currentTable();
+    if (table) {
+        QTextTableFormat format = table->format();
+        format.setAlignment(Qt::AlignRight);
+        table->setFormat(format);
+        qDebug() << "TableBrick: Aligned table to right";
+    } else {
+        qDebug() << "TableBrick: No table at cursor for alignment";
+    }
+}
