@@ -13,7 +13,6 @@ ToolBarBrick::ToolBarBrick(QWidget *parent) : QObject(parent) {
     alignLeftAction = addAction("alignLeft", "Align Left", ":/icons/icons/align-left.svg");
     alignCenterAction = addAction("alignCenter", "Align Center", ":/icons/icons/align-center.svg");
     alignRightAction = addAction("alignRight", "Align Right", ":/icons/icons/align-right.svg");
-    // Removed: tableAction = addAction("table", "Insert Table", ":/icons/icons/table.svg");
     qDebug() << "ToolBarBrick initialized with toolbar:" << toolBar;
 }
 
@@ -32,7 +31,6 @@ QAction* ToolBarBrick::getAction(const QString &name) const {
     if (name == "alignLeft") return alignLeftAction;
     if (name == "alignCenter") return alignCenterAction;
     if (name == "alignRight") return alignRightAction;
-    // Removed: if (name == "table") return tableAction;
     return nullptr;
 }
 

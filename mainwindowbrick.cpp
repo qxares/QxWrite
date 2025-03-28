@@ -49,7 +49,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         toolBarBrick->getAction("bold"), toolBarBrick->getAction("italic"), toolBarBrick->getAction("font"),
         toolBarBrick->getAction("color"), toolBarBrick->getAction("image"), toolBarBrick->getAction("alignLeft"),
         toolBarBrick->getAction("alignCenter"), toolBarBrick->getAction("alignRight"),
-        nullptr, nullptr, tableBrick->getInsertTableAction() // Use tableBrick's action directly
+        nullptr, nullptr, toolBarBrick->getAction("table") // Will be null, handled by menu
     );
 
     connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this](int type) {
@@ -173,7 +173,6 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
             }
         }
     });
-    // Removed: connect for tableAction from toolbar
 
     resize(800, 600);
 
