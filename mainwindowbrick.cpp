@@ -49,10 +49,9 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         toolBarBrick->getAction("bold"), toolBarBrick->getAction("italic"), toolBarBrick->getAction("font"),
         toolBarBrick->getAction("color"), toolBarBrick->getAction("image"), toolBarBrick->getAction("alignLeft"),
         toolBarBrick->getAction("alignCenter"), toolBarBrick->getAction("alignRight"),
-        nullptr, nullptr, toolBarBrick->getAction("table") // Use getAction for consistency
+        nullptr, nullptr, toolBarBrick->getAction("table")
     );
 
-    // Connections unchanged from your version...
     connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this](int type) {
         documentHandler->newDocument(static_cast<NewFileBrick::DocType>(type));
     });
@@ -89,7 +88,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
             if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
                 tableBrick->setTextEdit(docWindow->getTextEdit());
                 tableBrick->insertTable();
-                qDebug() << "Table insertion triggered for active document";
+                qDebug() << "Table insertion triggered from menu";
             } else {
                 qDebug() << "No active document window for table insertion";
             }
@@ -175,6 +174,19 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
                 alignBrick->setTextEdit(docWindow->getTextEdit());
                 alignBrick->align(Qt::AlignRight);
             }
+        }
+    });
+    connect(toolBarBrick->getAction("table"), &QAction::triggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                tableBrick->setTextEdit(docWindow->getTextEdit());
+                tableBrick->insertTable();
+                qDebug() << "Table insertion triggered from toolbar";
+            } else {
+                qDebug() << "No active document window for table insertion (toolbar)";
+            }
+        } else {
+            qDebug() << "No active subwindow for table insertion (toolbar)";
         }
     });
 

@@ -3,17 +3,17 @@
 
 ToolBarBrick::ToolBarBrick(QWidget *parent) : QObject(parent) {
     toolBar = new QToolBar(parent);
-    newAction = addAction("new", "New", ":/icons/icons/file-plus.svg");
-    openAction = addAction("open", "Open", ":/icons/icons/folder-open.svg");
-    saveAction = addAction("save", "Save", ":/icons/icons/save.svg");
-    boldAction = addAction("bold", "Bold", ":/icons/icons/bold.svg");
-    italicAction = addAction("italic", "Italic", ":/icons/icons/italic.svg");
-    fontAction = addAction("font", "Font", ":/icons/icons/font.svg");
-    colorAction = addAction("color", "Color", ":/icons/icons/palette.svg");
-    imageAction = addAction("image", "Insert Image", ":/icons/icons/image.svg");
-    alignLeftAction = addAction("alignLeft", "Align Left", ":/icons/icons/align-left.svg");
-    alignCenterAction = addAction("alignCenter", "Align Center", ":/icons/icons/align-center.svg");
-    alignRightAction = addAction("alignRight", "Align Right", ":/icons/icons/align-right.svg");
+    newAction = addAction("new", "New", ":/icons/plus.svg");
+    openAction = addAction("open", "Open", ":/icons/open.svg");
+    saveAction = addAction("save", "Save", ":/icons/save.svg");
+    boldAction = addAction("bold", "Bold", ":/icons/bold.svg");
+    italicAction = addAction("italic", "Italic", ":/icons/italic.svg");
+    fontAction = addAction("font", "Font", ":/icons/font.svg");
+    colorAction = addAction("color", "Color", ":/icons/color.svg");
+    imageAction = addAction("image", "Insert Image", ":/icons/image.svg");
+    alignLeftAction = addAction("alignLeft", "Align Left", ":/icons/align-left.svg");
+    alignCenterAction = addAction("alignCenter", "Align Center", ":/icons/align-center.svg");
+    alignRightAction = addAction("alignRight", "Align Right", ":/icons/align-right.svg");
     tableAction = addAction("table", "Insert Table", ""); // No icon yet
     qDebug() << "ToolBarBrick initialized with toolbar:" << toolBar;
 }
@@ -42,7 +42,7 @@ QAction* ToolBarBrick::addAction(const QString &name, const QString &text, const
     QAction *action = new QAction(text, this);
     if (!iconPath.isEmpty()) {
         action->setIcon(QIcon(iconPath));
-        qDebug() << "ToolBarBrick:" << text << "icon loaded";
+        qDebug() << "ToolBarBrick:" << text << "icon loaded from" << iconPath;
     } else {
         qDebug() << "ToolBarBrick:" << text << "no icon specified";
     }

@@ -74,10 +74,14 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
     formatMenu->addAction(menuBullets);
     QObject::connect(menuBullets, &QAction::triggered, this, &MenuManagerBrick::bulletsTriggered);
 
-    QAction *menuTable = new QAction("Table", this);
-    menuTable->setToolTip("Insert a table");
-    formatMenu->addAction(menuTable);
-    QObject::connect(menuTable, &QAction::triggered, this, &MenuManagerBrick::tableTriggered);
+    if (tableAction) {
+        QAction *menuTable = new QAction("Table", this);
+        menuTable->setToolTip("Insert a table");
+        formatMenu->addAction(menuTable);
+        QObject::connect(menuTable, &QAction::triggered, tableAction, &QAction::trigger);
+        QObject::connect(menuTable, &QAction::triggered, this, &MenuManagerBrick::tableTriggered);
+        qDebug() << "Table menu item added and connected";
+    }
 
     if (imageAction) {
         QAction *menuImage = new QAction("Image", this);
