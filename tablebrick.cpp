@@ -78,9 +78,14 @@ void TableBrick::insertRowBefore() {
     QTextCursor cursor = m_textEdit->textCursor();
     QTextTable *table = cursor.currentTable();
     if (table) {
-        int row = cursor.block().textTableCell().row();
-        table->insertRows(row, 1);
-        qDebug() << "TableBrick: Inserted row before row" << row;
+        QTextTableCell cell = table->cellAt(cursor);
+        if (cell.isValid()) {
+            int row = cell.row();
+            table->insertRows(row, 1);
+            qDebug() << "TableBrick: Inserted row before row" << row;
+        } else {
+            qDebug() << "TableBrick: Cursor not in a valid table cell";
+        }
     } else {
         qDebug() << "TableBrick: No table at cursor for row insertion";
     }
@@ -91,9 +96,14 @@ void TableBrick::insertRowAfter() {
     QTextCursor cursor = m_textEdit->textCursor();
     QTextTable *table = cursor.currentTable();
     if (table) {
-        int row = cursor.block().textTableCell().row() + 1;
-        table->insertRows(row, 1);
-        qDebug() << "TableBrick: Inserted row after row" << row - 1;
+        QTextTableCell cell = table->cellAt(cursor);
+        if (cell.isValid()) {
+            int row = cell.row() + 1;
+            table->insertRows(row, 1);
+            qDebug() << "TableBrick: Inserted row after row" << row - 1;
+        } else {
+            qDebug() << "TableBrick: Cursor not in a valid table cell";
+        }
     } else {
         qDebug() << "TableBrick: No table at cursor for row insertion";
     }
@@ -112,9 +122,14 @@ void TableBrick::insertColumnBefore() {
     QTextCursor cursor = m_textEdit->textCursor();
     QTextTable *table = cursor.currentTable();
     if (table) {
-        int col = cursor.block().textTableCell().column();
-        table->insertColumns(col, 1);
-        qDebug() << "TableBrick: Inserted column before column" << col;
+        QTextTableCell cell = table->cellAt(cursor);
+        if (cell.isValid()) {
+            int col = cell.column();
+            table->insertColumns(col, 1);
+            qDebug() << "TableBrick: Inserted column before column" << col;
+        } else {
+            qDebug() << "TableBrick: Cursor not in a valid table cell";
+        }
     } else {
         qDebug() << "TableBrick: No table at cursor for column insertion";
     }
@@ -125,9 +140,14 @@ void TableBrick::insertColumnAfter() {
     QTextCursor cursor = m_textEdit->textCursor();
     QTextTable *table = cursor.currentTable();
     if (table) {
-        int col = cursor.block().textTableCell().column() + 1;
-        table->insertColumns(col, 1);
-        qDebug() << "TableBrick: Inserted column after column" << col - 1;
+        QTextTableCell cell = table->cellAt(cursor);
+        if (cell.isValid()) {
+            int col = cell.column() + 1;
+            table->insertColumns(col, 1);
+            qDebug() << "TableBrick: Inserted column after column" << col - 1;
+        } else {
+            qDebug() << "TableBrick: Cursor not in a valid table cell";
+        }
     } else {
         qDebug() << "TableBrick: No table at cursor for column insertion";
     }
@@ -146,9 +166,14 @@ void TableBrick::deleteRow() {
     QTextCursor cursor = m_textEdit->textCursor();
     QTextTable *table = cursor.currentTable();
     if (table) {
-        int row = cursor.block().textTableCell().row();
-        table->removeRows(row, 1);
-        qDebug() << "TableBrick: Deleted row" << row;
+        QTextTableCell cell = table->cellAt(cursor);
+        if (cell.isValid()) {
+            int row = cell.row();
+            table->removeRows(row, 1);
+            qDebug() << "TableBrick: Deleted row" << row;
+        } else {
+            qDebug() << "TableBrick: Cursor not in a valid table cell";
+        }
     } else {
         qDebug() << "TableBrick: No table at cursor for row deletion";
     }
@@ -159,9 +184,14 @@ void TableBrick::deleteColumn() {
     QTextCursor cursor = m_textEdit->textCursor();
     QTextTable *table = cursor.currentTable();
     if (table) {
-        int col = cursor.block().textTableCell().column();
-        table->removeColumns(col, 1);
-        qDebug() << "TableBrick: Deleted column" << col;
+        QTextTableCell cell = table->cellAt(cursor);
+        if (cell.isValid()) {
+            int col = cell.column();
+            table->removeColumns(col, 1);
+            qDebug() << "TableBrick: Deleted column" << col;
+        } else {
+            qDebug() << "TableBrick: Cursor not in a valid table cell";
+        }
     } else {
         qDebug() << "TableBrick: No table at cursor for column deletion";
     }
@@ -181,6 +211,8 @@ void TableBrick::mergeCells() {
         if (rows > 1 || cols > 1) {
             table->mergeCells(firstRow, firstCol, rows, cols);
             qDebug() << "TableBrick: Merged" << rows << "x" << cols << "cells at" << firstRow << "," << firstCol;
+        } else {
+            qDebug() << "TableBrick: Selection too small to merge";
         }
     } else {
         qDebug() << "TableBrick: No table or selection for merging";
