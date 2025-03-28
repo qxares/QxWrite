@@ -183,6 +183,38 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
             }
         }
     });
+    connect(menuManagerBrick, &MenuManagerBrick::deleteTableTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                tableBrick->setTextEdit(docWindow->getTextEdit());
+                tableBrick->deleteTable();
+            }
+        }
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::alignTableLeftTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                tableBrick->setTextEdit(docWindow->getTextEdit());
+                tableBrick->alignTableLeft();
+            }
+        }
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::alignTableCenterTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                tableBrick->setTextEdit(docWindow->getTextEdit());
+                tableBrick->alignTableCenter();
+            }
+        }
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::alignTableRightTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                tableBrick->setTextEdit(docWindow->getTextEdit());
+                tableBrick->alignTableRight();
+            }
+        }
+    });
     connect(toolBarBrick->getAction("open"), &QAction::triggered, this, &MainWindowBrick::handleOpenFile);
     connect(toolBarBrick->getAction("save"), &QAction::triggered, this, [this]() {
         if (auto *subWindow = mdiArea->activeSubWindow()) {
