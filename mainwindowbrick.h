@@ -15,7 +15,8 @@ class FontBrick;
 class ColorBrick;
 class InsertBrick;
 class AlignBrick;
-class ListBrick;  // New brick
+class ListBrick;
+class TableBrick; // New brick
 class DocumentHandlerBrick;
 
 class MainWindowBrick : public QMainWindow {
@@ -40,7 +41,8 @@ private:
     ColorBrick *colorBrick;
     InsertBrick *insertBrick;
     AlignBrick *alignBrick;
-    ListBrick *listBrick;  // New brick
+    ListBrick *listBrick;
+    TableBrick *tableBrick; // New brick
     DocumentHandlerBrick *documentHandler;
 };
 

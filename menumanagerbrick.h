@@ -15,14 +15,16 @@ public:
                     QAction *boldAction, QAction *italicAction, QAction *fontAction,
                     QAction *colorAction, QAction *imageAction, QAction *alignLeftAction,
                     QAction *alignCenterAction, QAction *alignRightAction,
-                    QAction *numberingAction, QAction *bulletsAction); // Added actions
+                    QAction *numberingAction, QAction *bulletsAction,
+                    QAction *tableAction = nullptr); // Added table action
     QMenuBar* getMenuBar() const;
 
 signals:
     void newFileTriggered(int type);
     void saveAsTriggered();
-    void numberingTriggered();  // New signal
-    void bulletsTriggered();    // New signal
+    void numberingTriggered();
+    void bulletsTriggered();
+    void tableTriggered(); // New signal for table insertion
 
 private:
     QMenuBar *menuBar;

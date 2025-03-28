@@ -11,6 +11,7 @@
 #include "insertbrick.h"
 #include "alignbrick.h"
 #include "listbrick.h"
+#include "tablebrick.h" // New include
 #include "documentwindow.h"
 #include "documenthandlerbrick.h"
 #include <QDebug>
@@ -41,13 +42,14 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     insertBrick = new InsertBrick(nullptr, this);
     alignBrick = new AlignBrick(nullptr, this);
     listBrick = new ListBrick(nullptr, this);
+    tableBrick = new TableBrick(nullptr, this); // New brick
 
     menuManagerBrick->setupMenus(
         toolBarBrick->getAction("open"), toolBarBrick->getAction("save"),
         toolBarBrick->getAction("bold"), toolBarBrick->getAction("italic"), toolBarBrick->getAction("font"),
         toolBarBrick->getAction("color"), toolBarBrick->getAction("image"), toolBarBrick->getAction("alignLeft"),
         toolBarBrick->getAction("alignCenter"), toolBarBrick->getAction("alignRight"),
-        nullptr, nullptr  // Numbering and Bullets are menu-only, no toolbar actions
+        nullptr, nullptr, nullptr // Numbering, Bullets, Table are menu-only
     );
 
     connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this](int type) {
@@ -78,6 +80,14 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
             if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
                 listBrick->setTextEdit(docWindow->getTextEdit());
                 listBrick->toggleBullets();
+            }
+        }
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::tableTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                tableBrick->setTextEdit(docWindow->getTextEdit());
+                tableBrick->insertTable();
             }
         }
     });

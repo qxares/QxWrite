@@ -18,7 +18,8 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
                                   QAction *boldAction, QAction *italicAction, QAction *fontAction,
                                   QAction *colorAction, QAction *imageAction, QAction *alignLeftAction,
                                   QAction *alignCenterAction, QAction *alignRightAction,
-                                  QAction *numberingAction, QAction *bulletsAction) {
+                                  QAction *numberingAction, QAction *bulletsAction,
+                                  QAction *tableAction) {
     QAction *newActionMenu = fileMenu->addAction("New");
     QMenu *newMenu = new QMenu();
     QAction *newNote = newMenu->addAction("QxNote");
@@ -63,7 +64,6 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
         formatMenu->addAction(menuColor);
         QObject::connect(menuColor, &QAction::triggered, colorAction, &QAction::trigger);
     }
-    // Always add Numbering and Bullets to Format menu (menu-only, no toolbar dependency)
     QAction *menuNumbering = new QAction("Numbering", this);
     menuNumbering->setToolTip("Toggle numbered list");
     formatMenu->addAction(menuNumbering);
@@ -73,6 +73,11 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
     menuBullets->setToolTip("Toggle bulleted list");
     formatMenu->addAction(menuBullets);
     QObject::connect(menuBullets, &QAction::triggered, this, &MenuManagerBrick::bulletsTriggered);
+
+    QAction *menuTable = new QAction("Table", this);
+    menuTable->setToolTip("Insert a table");
+    formatMenu->addAction(menuTable);
+    QObject::connect(menuTable, &QAction::triggered, this, &MenuManagerBrick::tableTriggered);
 
     if (imageAction) {
         QAction *menuImage = new QAction("Image", this);

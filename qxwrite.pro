@@ -24,6 +24,7 @@ SOURCES += \
     savehandlerbrick.cpp \
     iconbrick.cpp \
     documenthandlerbrick.cpp  # Added
+    tablebrick.cpp
 
 HEADERS += \
     mainwindowbrick.h \
@@ -45,6 +46,7 @@ HEADERS += \
     savehandlerbrick.h \
     iconbrick.h \
     documenthandlerbrick.h    # Added
+    tablebrick.h
 
 RESOURCES += \
     icons.qrc
