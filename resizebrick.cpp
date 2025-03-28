@@ -4,6 +4,7 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include <QApplication>
+#include <QAbstractTextDocumentLayout> // Added for documentLayout()
 
 ResizeBrick::ResizeBrick(QTextEdit *textEdit, QObject *parent) : QObject(parent), 
     m_textEdit(textEdit), m_resizing(false), m_currentTable(nullptr) {}

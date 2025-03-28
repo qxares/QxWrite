@@ -11,6 +11,7 @@ public:
     void setTextEdit(QTextEdit *textEdit);
     void enableResize(); // Hook into QTextEdit events
     void moveObject();   // Right-click move like cascade
+    bool eventFilter(QObject *obj, QEvent *event) override; // Add eventFilter declaration
 
 private:
     void mousePressEvent(QMouseEvent *event);
