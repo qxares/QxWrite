@@ -10,7 +10,7 @@
 #include "colorbrick.h"
 #include "insertbrick.h"
 #include "alignbrick.h"
-#include "listbrick.h"  // New include
+#include "listbrick.h"
 #include "documentwindow.h"
 #include "documenthandlerbrick.h"
 #include <QDebug>
@@ -40,14 +40,14 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     colorBrick = new ColorBrick(nullptr, this);
     insertBrick = new InsertBrick(nullptr, this);
     alignBrick = new AlignBrick(nullptr, this);
-    listBrick = new ListBrick(nullptr, this);  // New brick
+    listBrick = new ListBrick(nullptr, this);
 
     menuManagerBrick->setupMenus(
         toolBarBrick->getAction("open"), toolBarBrick->getAction("save"),
         toolBarBrick->getAction("bold"), toolBarBrick->getAction("italic"), toolBarBrick->getAction("font"),
         toolBarBrick->getAction("color"), toolBarBrick->getAction("image"), toolBarBrick->getAction("alignLeft"),
         toolBarBrick->getAction("alignCenter"), toolBarBrick->getAction("alignRight"),
-        toolBarBrick->getAction("numbering"), toolBarBrick->getAction("bullets")  // New actions
+        nullptr, nullptr  // Numbering and Bullets are menu-only, no toolbar actions
     );
 
     connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this](int type) {

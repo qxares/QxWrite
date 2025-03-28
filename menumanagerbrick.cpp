@@ -63,18 +63,17 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
         formatMenu->addAction(menuColor);
         QObject::connect(menuColor, &QAction::triggered, colorAction, &QAction::trigger);
     }
-    if (numberingAction) {
-        QAction *menuNumbering = new QAction("Numbering", this);
-        menuNumbering->setToolTip("Toggle numbered list");
-        formatMenu->addAction(menuNumbering);
-        QObject::connect(menuNumbering, &QAction::triggered, this, &MenuManagerBrick::numberingTriggered);
-    }
-    if (bulletsAction) {
-        QAction *menuBullets = new QAction("Bullets", this);
-        menuBullets->setToolTip("Toggle bulleted list");
-        formatMenu->addAction(menuBullets);
-        QObject::connect(menuBullets, &QAction::triggered, this, &MenuManagerBrick::bulletsTriggered);
-    }
+    // Always add Numbering and Bullets to Format menu (menu-only, no toolbar dependency)
+    QAction *menuNumbering = new QAction("Numbering", this);
+    menuNumbering->setToolTip("Toggle numbered list");
+    formatMenu->addAction(menuNumbering);
+    QObject::connect(menuNumbering, &QAction::triggered, this, &MenuManagerBrick::numberingTriggered);
+
+    QAction *menuBullets = new QAction("Bullets", this);
+    menuBullets->setToolTip("Toggle bulleted list");
+    formatMenu->addAction(menuBullets);
+    QObject::connect(menuBullets, &QAction::triggered, this, &MenuManagerBrick::bulletsTriggered);
+
     if (imageAction) {
         QAction *menuImage = new QAction("Image", this);
         menuImage->setToolTip(imageAction->toolTip());
