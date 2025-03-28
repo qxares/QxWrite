@@ -3,7 +3,7 @@
 
 ToolBarBrick::ToolBarBrick(QWidget *parent) : QObject(parent) {
     toolBar = new QToolBar(parent);
-    newAction = addAction("new", "New", ":/icons/icons/plus.svg");
+    // Removed: newAction = addAction("new", "New", ":/icons/icons/plus.svg");
     openAction = addAction("open", "Open", ":/icons/icons/open.svg");
     saveAction = addAction("save", "Save", ":/icons/icons/save.svg");
     boldAction = addAction("bold", "Bold", ":/icons/icons/bold.svg");
@@ -14,7 +14,7 @@ ToolBarBrick::ToolBarBrick(QWidget *parent) : QObject(parent) {
     alignLeftAction = addAction("alignLeft", "Align Left", ":/icons/icons/align-left.svg");
     alignCenterAction = addAction("alignCenter", "Align Center", ":/icons/icons/align-center.svg");
     alignRightAction = addAction("alignRight", "Align Right", ":/icons/icons/align-right.svg");
-    tableAction = addAction("table", "Insert Table", ":/icons/icons/table.svg"); // Icon added
+    tableAction = addAction("table", "Insert Table", ":/icons/icons/table.svg");
     qDebug() << "ToolBarBrick initialized with toolbar:" << toolBar;
 }
 
@@ -23,7 +23,7 @@ QToolBar* ToolBarBrick::getToolBar() const {
 }
 
 QAction* ToolBarBrick::getAction(const QString &name) const {
-    if (name == "new") return newAction;
+    // Removed: if (name == "new") return newAction;
     if (name == "open") return openAction;
     if (name == "save") return saveAction;
     if (name == "bold") return boldAction;

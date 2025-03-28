@@ -64,6 +64,15 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
         formatMenu->addAction(menuColor);
         QObject::connect(menuColor, &QAction::triggered, colorAction, &QAction::trigger);
     }
+    if (tableAction) {
+        QAction *menuTable = new QAction("Insert Table", this);
+        menuTable->setIcon(QIcon(":/icons/icons/table.svg"));
+        menuTable->setToolTip("Insert a table");
+        formatMenu->addAction(menuTable);
+        QObject::connect(menuTable, &QAction::triggered, tableAction, &QAction::trigger);
+        QObject::connect(menuTable, &QAction::triggered, this, &MenuManagerBrick::tableTriggered);
+        qDebug() << "Table menu item added and connected, tableAction:" << tableAction;
+    }
     QAction *menuNumbering = new QAction("Numbering", this);
     menuNumbering->setToolTip("Toggle numbered list");
     formatMenu->addAction(menuNumbering);
@@ -73,16 +82,6 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
     menuBullets->setToolTip("Toggle bulleted list");
     formatMenu->addAction(menuBullets);
     QObject::connect(menuBullets, &QAction::triggered, this, &MenuManagerBrick::bulletsTriggered);
-
-    if (tableAction) {
-        QAction *menuTable = new QAction("Insert Table", this); // Text updated for clarity
-        menuTable->setIcon(QIcon(":/icons/icons/table.svg")); // Icon added
-        menuTable->setToolTip("Insert a table");
-        formatMenu->addAction(menuTable);
-        QObject::connect(menuTable, &QAction::triggered, tableAction, &QAction::trigger);
-        QObject::connect(menuTable, &QAction::triggered, this, &MenuManagerBrick::tableTriggered);
-        qDebug() << "Table menu item added and connected";
-    }
 
     if (imageAction) {
         QAction *menuImage = new QAction("Image", this);
@@ -115,7 +114,7 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
     QObject::connect(newSheet, &QAction::triggered, this, [this]() { emit newFileTriggered(2); });
     QObject::connect(saveAsAction, &QAction::triggered, this, [this]() { emit saveAsTriggered(); });
 
-    qDebug() << "Menus set up.";
+    qDebug() << "Menus set up. Format menu actions:" << formatMenu->actions().count();
 }
 
 QMenuBar* MenuManagerBrick::getMenuBar() const {
