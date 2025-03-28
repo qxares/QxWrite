@@ -53,6 +53,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     );
 
     connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this](int type) {
+        qDebug() << "MainWindowBrick: New file triggered with type" << type;
         documentHandler->newDocument(static_cast<NewFileBrick::DocType>(type));
     });
     connect(menuManagerBrick, &MenuManagerBrick::saveAsTriggered, this, [this]() {
@@ -194,6 +195,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     connect(menuManagerBrick, &MenuManagerBrick::alignTableLeftTriggered, this, [this]() {
         if (auto *subWindow = mdiArea->activeSubWindow()) {
             if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                qDebug() << "MainWindowBrick: alignTableLeftTriggered fired";
                 tableBrick->setTextEdit(docWindow->getTextEdit());
                 tableBrick->alignTableLeft();
             }
@@ -202,6 +204,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     connect(menuManagerBrick, &MenuManagerBrick::alignTableCenterTriggered, this, [this]() {
         if (auto *subWindow = mdiArea->activeSubWindow()) {
             if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                qDebug() << "MainWindowBrick: alignTableCenterTriggered fired";
                 tableBrick->setTextEdit(docWindow->getTextEdit());
                 tableBrick->alignTableCenter();
             }
@@ -210,6 +213,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     connect(menuManagerBrick, &MenuManagerBrick::alignTableRightTriggered, this, [this]() {
         if (auto *subWindow = mdiArea->activeSubWindow()) {
             if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                qDebug() << "MainWindowBrick: alignTableRightTriggered fired";
                 tableBrick->setTextEdit(docWindow->getTextEdit());
                 tableBrick->alignTableRight();
             }
@@ -271,6 +275,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     connect(toolBarBrick->getAction("alignLeft"), &QAction::triggered, this, [this]() {
         if (auto *subWindow = mdiArea->activeSubWindow()) {
             if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                qDebug() << "MainWindowBrick: Toolbar alignLeft triggered";
                 alignBrick->setTextEdit(docWindow->getTextEdit());
                 alignBrick->align(Qt::AlignLeft);
             }
@@ -279,6 +284,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     connect(toolBarBrick->getAction("alignCenter"), &QAction::triggered, this, [this]() {
         if (auto *subWindow = mdiArea->activeSubWindow()) {
             if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                qDebug() << "MainWindowBrick: Toolbar alignCenter triggered";
                 alignBrick->setTextEdit(docWindow->getTextEdit());
                 alignBrick->align(Qt::AlignCenter);
             }
@@ -287,6 +293,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     connect(toolBarBrick->getAction("alignRight"), &QAction::triggered, this, [this]() {
         if (auto *subWindow = mdiArea->activeSubWindow()) {
             if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                qDebug() << "MainWindowBrick: Toolbar alignRight triggered";
                 alignBrick->setTextEdit(docWindow->getTextEdit());
                 alignBrick->align(Qt::AlignRight);
             }
