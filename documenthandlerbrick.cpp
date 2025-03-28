@@ -19,10 +19,10 @@ DocumentHandlerBrick::DocumentHandlerBrick(QWidget *parent) : QObject(parent) {
     }
 }
 
-void DocumentHandlerBrick::newDocument(NewFileBrick::DocType type) {
+QTextEdit* DocumentHandlerBrick::newDocument(NewFileBrick::DocType type) {
     if (!mdiArea) {
         qDebug() << "DocumentHandlerBrick: No MDI area to handle new document!";
-        return;
+        return nullptr;
     }
     DocumentWindow *docWindow = new DocumentWindow(nullptr);  // No parent yet
     docWindow->newFile(type);
@@ -48,6 +48,7 @@ void DocumentHandlerBrick::newDocument(NewFileBrick::DocType type) {
     subWindow->show();
     cascadeWindows(type);  // Cascade windows of this type
     qDebug() << "DocumentHandlerBrick: New document added, type:" << static_cast<int>(type);
+    return docWindow->getTextEdit(); // Return the QTextEdit*
 }
 
 void DocumentHandlerBrick::openDocument(OpenFileBrick *openFileBrick) {

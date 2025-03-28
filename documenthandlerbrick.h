@@ -9,12 +9,13 @@
 
 class QMdiArea;
 class OpenFileBrick;
+class QTextEdit;
 
 class DocumentHandlerBrick : public QObject {
     Q_OBJECT
 public:
     explicit DocumentHandlerBrick(QWidget *parent = nullptr);
-    void newDocument(NewFileBrick::DocType type);
+    QTextEdit* newDocument(NewFileBrick::DocType type); // Changed to return QTextEdit*
     void openDocument(OpenFileBrick *openFileBrick); // New method for opening files
 
 private slots:
