@@ -1,3 +1,4 @@
+/home/ares/Downloads/editor/QxWriteProject/mainwindowbrick.cpp
 #include "mainwindowbrick.h"
 #include "toolbarbrick.h"
 #include "menumanagerbrick.h"
@@ -11,7 +12,7 @@
 #include "insertbrick.h"
 #include "alignbrick.h"
 #include "listbrick.h"
-#include "tablebrick.h" // New include
+#include "tablebrick.h"
 #include "documentwindow.h"
 #include "documenthandlerbrick.h"
 #include <QDebug>
@@ -42,14 +43,17 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     insertBrick = new InsertBrick(nullptr, this);
     alignBrick = new AlignBrick(nullptr, this);
     listBrick = new ListBrick(nullptr, this);
-    tableBrick = new TableBrick(nullptr, this); // New brick
+    tableBrick = new TableBrick(nullptr, this);
+
+    // Add table action to toolbar (even if menu-only for now)
+    QAction *tableAction = toolBarBrick->addAction("table", "Insert Table", "");
 
     menuManagerBrick->setupMenus(
         toolBarBrick->getAction("open"), toolBarBrick->getAction("save"),
         toolBarBrick->getAction("bold"), toolBarBrick->getAction("italic"), toolBarBrick->getAction("font"),
         toolBarBrick->getAction("color"), toolBarBrick->getAction("image"), toolBarBrick->getAction("alignLeft"),
         toolBarBrick->getAction("alignCenter"), toolBarBrick->getAction("alignRight"),
-        nullptr, nullptr, nullptr // Numbering, Bullets, Table are menu-only
+        nullptr, nullptr, tableAction // Pass tableAction instead of nullptr
     );
 
     connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this](int type) {
