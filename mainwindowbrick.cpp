@@ -32,18 +32,6 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     menuManagerBrick = new MenuManagerBrick(this);
     setMenuBar(menuManagerBrick->getMenuBar());
 
-    newFileBrick = new NewFileBrick(nullptr, this);
-    openFileBrick = new OpenFileBrick(nullptr, this);
-    saveManagerBrick = new SaveManagerBrick(nullptr, this);
-    boldBrick = new BoldBrick(nullptr, this);
-    italicBrick = new ItalicBrick(nullptr, this);
-    fontBrick = new FontBrick(nullptr, this);
-    colorBrick = new ColorBrick(nullptr, this);
-    insertBrick = new InsertBrick(nullptr, this);
-    alignBrick = new AlignBrick(nullptr, this);
-    listBrick = new ListBrick(nullptr, this);
-    tableBrick = new TableBrick(nullptr, this);
-
     menuManagerBrick->setupMenus(
         toolBarBrick->getAction("open"), toolBarBrick->getAction("save"),
         toolBarBrick->getAction("bold"), toolBarBrick->getAction("italic"), toolBarBrick->getAction("font"),
@@ -54,259 +42,127 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
 
     connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this](int type) {
         qDebug() << "MainWindowBrick: New file triggered with type" << type;
-        documentHandler->newDocument(static_cast<NewFileBrick::DocType>(type));
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::saveAsTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                saveManagerBrick->setTextEdit(docWindow->getTextEdit());
-                saveManagerBrick->triggerSave();
-            } else {
-                qDebug() << "MainWindowBrick: No active document window for Save As";
-            }
-        } else {
-            qDebug() << "MainWindowBrick: No active subwindow for Save As";
+        QTextEdit *textEdit = documentHandler->newDocument(static_cast<NewFileBrick::DocType>(type));
+        if (!textEdit) {
+            qDebug() << "MainWindowBrick: Failed to create new document!";
+            return;
         }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::numberingTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                listBrick->setTextEdit(docWindow->getTextEdit());
-                listBrick->toggleNumbering();
-            }
-        }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::bulletsTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                listBrick->setTextEdit(docWindow->getTextEdit());
-                listBrick->toggleBullets();
-            }
-        }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::insertTableTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                tableBrick->setTextEdit(docWindow->getTextEdit());
-                tableBrick->insertTable();
-            } else {
-                qDebug() << "No active document window for table insertion";
-            }
-        } else {
-            qDebug() << "No active subwindow for table insertion";
-        }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::insertRowBeforeTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                tableBrick->setTextEdit(docWindow->getTextEdit());
-                tableBrick->insertRowBefore();
-            }
-        }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::insertRowAfterTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                tableBrick->setTextEdit(docWindow->getTextEdit());
-                tableBrick->insertRowAfter();
-            }
-        }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::insertRowAboveTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                tableBrick->setTextEdit(docWindow->getTextEdit());
-                tableBrick->insertRowAbove();
-            }
-        }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::insertRowBelowTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                tableBrick->setTextEdit(docWindow->getTextEdit());
-                tableBrick->insertRowBelow();
-            }
-        }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::insertColumnBeforeTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                tableBrick->setTextEdit(docWindow->getTextEdit());
-                tableBrick->insertColumnBefore();
-            }
-        }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::insertColumnAfterTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                tableBrick->setTextEdit(docWindow->getTextEdit());
-                tableBrick->insertColumnAfter();
-            }
-        }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::insertColumnAboveTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                tableBrick->setTextEdit(docWindow->getTextEdit());
-                tableBrick->insertColumnAbove();
-            }
-        }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::insertColumnBelowTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                tableBrick->setTextEdit(docWindow->getTextEdit());
-                tableBrick->insertColumnBelow();
-            }
-        }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::deleteRowTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                tableBrick->setTextEdit(docWindow->getTextEdit());
-                tableBrick->deleteRow();
-            }
-        }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::deleteColumnTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                tableBrick->setTextEdit(docWindow->getTextEdit());
-                tableBrick->deleteColumn();
-            }
-        }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::mergeCellsTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                tableBrick->setTextEdit(docWindow->getTextEdit());
-                tableBrick->mergeCells();
-            }
-        }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::deleteTableTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                tableBrick->setTextEdit(docWindow->getTextEdit());
-                tableBrick->deleteTable();
-            }
-        }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::alignTableLeftTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                qDebug() << "MainWindowBrick: alignTableLeftTriggered fired";
-                tableBrick->setTextEdit(docWindow->getTextEdit());
-                tableBrick->alignTableLeft();
-            }
-        }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::alignTableCenterTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                qDebug() << "MainWindowBrick: alignTableCenterTriggered fired";
-                tableBrick->setTextEdit(docWindow->getTextEdit());
-                tableBrick->alignTableCenter();
-            }
-        }
-    });
-    connect(menuManagerBrick, &MenuManagerBrick::alignTableRightTriggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                qDebug() << "MainWindowBrick: alignTableRightTriggered fired";
-                tableBrick->setTextEdit(docWindow->getTextEdit());
-                tableBrick->alignTableRight();
-            }
-        }
-    });
-    connect(toolBarBrick->getAction("open"), &QAction::triggered, this, &MainWindowBrick::handleOpenFile);
-    connect(toolBarBrick->getAction("save"), &QAction::triggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                saveManagerBrick->setTextEdit(docWindow->getTextEdit());
-                saveManagerBrick->triggerSave();
-            } else {
-                qDebug() << "MainWindowBrick: No active document window for Save";
-            }
-        } else {
-            qDebug() << "MainWindowBrick: No active subwindow for Save";
-        }
-    });
-    connect(toolBarBrick->getAction("bold"), &QAction::triggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                boldBrick->setTextEdit(docWindow->getTextEdit());
-                boldBrick->applyBold();
-            }
-        }
-    });
-    connect(toolBarBrick->getAction("italic"), &QAction::triggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                italicBrick->setTextEdit(docWindow->getTextEdit());
-                italicBrick->applyItalic();
-            }
-        }
-    });
-    connect(toolBarBrick->getAction("font"), &QAction::triggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                fontBrick->setTextEdit(docWindow->getTextEdit());
-                fontBrick->changeFont();
-            }
-        }
-    });
-    connect(toolBarBrick->getAction("color"), &QAction::triggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                colorBrick->setTextEdit(docWindow->getTextEdit());
-                colorBrick->changeColor();
-            }
-        }
-    });
-    connect(toolBarBrick->getAction("image"), &QAction::triggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                insertBrick->setTextEdit(docWindow->getTextEdit());
-                insertBrick->insertImage();
-            }
-        }
-    });
-    connect(toolBarBrick->getAction("alignLeft"), &QAction::triggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                qDebug() << "MainWindowBrick: Toolbar alignLeft triggered";
-                alignBrick->setTextEdit(docWindow->getTextEdit());
-                alignBrick->align(Qt::AlignLeft);
-            }
-        }
-    });
-    connect(toolBarBrick->getAction("alignCenter"), &QAction::triggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                qDebug() << "MainWindowBrick: Toolbar alignCenter triggered";
-                alignBrick->setTextEdit(docWindow->getTextEdit());
-                alignBrick->align(Qt::AlignCenter);
-            }
-        }
-    });
-    connect(toolBarBrick->getAction("alignRight"), &QAction::triggered, this, [this]() {
-        if (auto *subWindow = mdiArea->activeSubWindow()) {
-            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
-                qDebug() << "MainWindowBrick: Toolbar alignRight triggered";
-                alignBrick->setTextEdit(docWindow->getTextEdit());
-                alignBrick->align(Qt::AlignRight);
-            }
-        }
+
+        // Fresh bricks per document
+        auto *newFileBrick = new NewFileBrick(textEdit, this);
+        auto *openFileBrick = new OpenFileBrick(textEdit, this);
+        auto *saveManagerBrick = new SaveManagerBrick(textEdit, this);
+        auto *boldBrick = new BoldBrick(textEdit, this);
+        auto *italicBrick = new ItalicBrick(textEdit, this);
+        auto *fontBrick = new FontBrick(textEdit, this);
+        auto *colorBrick = new ColorBrick(textEdit, this);
+        auto *insertBrick = new InsertBrick(textEdit, this);
+        auto *alignBrick = new AlignBrick(textEdit, this);
+        auto *listBrick = new ListBrick(textEdit, this);
+        auto *tableBrick = new TableBrick(textEdit, this);
+
+        // Menu connections
+        connect(menuManagerBrick, &MenuManagerBrick::saveAsTriggered, this, [saveManagerBrick]() {
+            saveManagerBrick->triggerSave();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::numberingTriggered, this, [listBrick]() {
+            listBrick->toggleNumbering();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::bulletsTriggered, this, [listBrick]() {
+            listBrick->toggleBullets();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::insertTableTriggered, this, [tableBrick]() {
+            tableBrick->insertTable();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::insertRowBeforeTriggered, this, [tableBrick]() {
+            tableBrick->insertRowBefore();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::insertRowAfterTriggered, this, [tableBrick]() {
+            tableBrick->insertRowAfter();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::insertRowAboveTriggered, this, [tableBrick]() {
+            tableBrick->insertRowAbove();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::insertRowBelowTriggered, this, [tableBrick]() {
+            tableBrick->insertRowBelow();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::insertColumnBeforeTriggered, this, [tableBrick]() {
+            tableBrick->insertColumnBefore();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::insertColumnAfterTriggered, this, [tableBrick]() {
+            tableBrick->insertColumnAfter();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::insertColumnAboveTriggered, this, [tableBrick]() {
+            tableBrick->insertColumnAbove();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::insertColumnBelowTriggered, this, [tableBrick]() {
+            tableBrick->insertColumnBelow();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::deleteRowTriggered, this, [tableBrick]() {
+            tableBrick->deleteRow();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::deleteColumnTriggered, this, [tableBrick]() {
+            tableBrick->deleteColumn();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::mergeCellsTriggered, this, [tableBrick]() {
+            tableBrick->mergeCells();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::deleteTableTriggered, this, [tableBrick]() {
+            tableBrick->deleteTable();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::alignTableLeftTriggered, this, [tableBrick]() {
+            qDebug() << "MainWindowBrick: alignTableLeftTriggered fired";
+            tableBrick->alignTableLeft();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::alignTableCenterTriggered, this, [tableBrick]() {
+            qDebug() << "MainWindowBrick: alignTableCenterTriggered fired";
+            tableBrick->alignTableCenter();
+        });
+        connect(menuManagerBrick, &MenuManagerBrick::alignTableRightTriggered, this, [tableBrick]() {
+            qDebug() << "MainWindowBrick: alignTableRightTriggered fired";
+            tableBrick->alignTableRight();
+        });
+
+        // Toolbar connections
+        connect(toolBarBrick->getAction("open"), &QAction::triggered, this, &MainWindowBrick::handleOpenFile);
+        connect(toolBarBrick->getAction("save"), &QAction::triggered, this, [saveManagerBrick]() {
+            saveManagerBrick->triggerSave();
+        });
+        connect(toolBarBrick->getAction("bold"), &QAction::triggered, this, [boldBrick]() {
+            boldBrick->applyBold();
+        });
+        connect(toolBarBrick->getAction("italic"), &QAction::triggered, this, [italicBrick]() {
+            italicBrick->applyItalic();
+        });
+        connect(toolBarBrick->getAction("font"), &QAction::triggered, this, [fontBrick]() {
+            fontBrick->changeFont();
+        });
+        connect(toolBarBrick->getAction("color"), &QAction::triggered, this, [colorBrick]() {
+            colorBrick->changeColor();
+        });
+        connect(toolBarBrick->getAction("image"), &QAction::triggered, this, [insertBrick]() {
+            insertBrick->insertImage();
+        });
+        connect(toolBarBrick->getAction("alignLeft"), &QAction::triggered, this, [alignBrick]() {
+            qDebug() << "MainWindowBrick: Toolbar alignLeft triggered";
+            alignBrick->align(Qt::AlignLeft);
+        });
+        connect(toolBarBrick->getAction("alignCenter"), &QAction::triggered, this, [alignBrick]() {
+            qDebug() << "MainWindowBrick: Toolbar alignCenter triggered";
+            alignBrick->align(Qt::AlignCenter);
+        });
+        connect(toolBarBrick->getAction("alignRight"), &QAction::triggered, this, [alignBrick]() {
+            qDebug() << "MainWindowBrick: Toolbar alignRight triggered";
+            alignBrick->align(Qt::AlignRight);
+        });
     });
 
     resize(800, 600);
-
     qDebug() << "MainWindowBrick ready.";
 }
 
 void MainWindowBrick::handleOpenFile() {
-    documentHandler->openDocument(openFileBrick);
+    documentHandler->openDocument(new OpenFileBrick(nullptr, this)); // Fresh instance, updated later if needed
 }
 
 MainWindowBrick::~MainWindowBrick() {}

@@ -65,7 +65,6 @@ void TableBrick::insertTable() {
         format.setCellPadding(5);
         format.setCellSpacing(2);
         format.setBorder(1);
-        // Set column widths to 120px
         QVector<QTextLength> constraints;
         for (int col = 0; col < cols; ++col) {
             constraints.append(QTextLength(QTextLength::FixedLength, 120));
@@ -73,9 +72,8 @@ void TableBrick::insertTable() {
         format.setColumnWidthConstraints(constraints);
         table->setFormat(format);
 
-        // Set row heights to 30px by adjusting each cell's format
         QTextCharFormat cellFormat;
-        cellFormat.setProperty(QTextFormat::BlockBottomMargin, 30); // Forces minimum height
+        cellFormat.setProperty(QTextFormat::BlockBottomMargin, 30);
         for (int row = 0; row < rows; ++row) {
             for (int col = 0; col < cols; ++col) {
                 QTextTableCell cell = table->cellAt(row, col);
@@ -127,11 +125,11 @@ void TableBrick::insertRowAfter() {
 }
 
 void TableBrick::insertRowAbove() {
-    insertRowBefore(); // Alias for consistency with menu naming
+    insertRowBefore();
 }
 
 void TableBrick::insertRowBelow() {
-    insertRowAfter(); // Alias for consistency with menu naming
+    insertRowAfter();
 }
 
 void TableBrick::insertColumnBefore() {
@@ -171,11 +169,11 @@ void TableBrick::insertColumnAfter() {
 }
 
 void TableBrick::insertColumnAbove() {
-    insertColumnBefore(); // Alias for consistency
+    insertColumnBefore();
 }
 
 void TableBrick::insertColumnBelow() {
-    insertColumnAfter(); // Alias for consistency
+    insertColumnAfter();
 }
 
 void TableBrick::deleteRow() {
@@ -243,7 +241,7 @@ void TableBrick::deleteTable() {
     if (table) {
         int rows = table->rows();
         cursor.beginEditBlock();
-        table->removeRows(0, rows); // Remove all rows to delete the table
+        table->removeRows(0, rows);
         cursor.endEditBlock();
         qDebug() << "TableBrick: Deleted entire table with" << rows << "rows";
     } else {
@@ -259,6 +257,7 @@ void TableBrick::alignTableLeft() {
         QTextTableFormat format = table->format();
         format.setAlignment(Qt::AlignLeft);
         table->setFormat(format);
+        m_textEdit->update(); // Force UI refresh
         qDebug() << "TableBrick: Aligned table to left";
     } else {
         qDebug() << "TableBrick: No table at cursor for alignment";
@@ -273,6 +272,7 @@ void TableBrick::alignTableCenter() {
         QTextTableFormat format = table->format();
         format.setAlignment(Qt::AlignCenter);
         table->setFormat(format);
+        m_textEdit->update(); // Force UI refresh
         qDebug() << "TableBrick: Aligned table to center";
     } else {
         qDebug() << "TableBrick: No table at cursor for alignment";
@@ -287,6 +287,7 @@ void TableBrick::alignTableRight() {
         QTextTableFormat format = table->format();
         format.setAlignment(Qt::AlignRight);
         table->setFormat(format);
+        m_textEdit->update(); // Force UI refresh
         qDebug() << "TableBrick: Aligned table to right";
     } else {
         qDebug() << "TableBrick: No table at cursor for alignment";
