@@ -1,78 +1,20 @@
 #include "toolbarbrick.h"
-#include <QToolBar>
-#include <QAction>
 #include <QDebug>
 
 ToolBarBrick::ToolBarBrick(QWidget *parent) : QObject(parent) {
-    toolBar = new QToolBar("Main Toolbar", parent);
-    toolBar->setMovable(false);
-
-    newAction = new QAction(QIcon(":/icons/icons/file-plus.svg"), "New", this);
-    newAction->setToolTip("New Document");
-    if (!newAction->icon().isNull()) qDebug() << "ToolBarBrick: New icon loaded";
-    else newAction->setIcon(QIcon::fromTheme("document-new"));
-    // Removed toolBar->addAction(newAction) to keep the action but not show it
-
-    openAction = new QAction(QIcon(":/icons/icons/open.svg"), "Open", this);
-    openAction->setToolTip("Open Document");
-    if (!openAction->icon().isNull()) qDebug() << "ToolBarBrick: Open icon loaded";
-    else openAction->setIcon(QIcon::fromTheme("document-open"));
-    toolBar->addAction(openAction);
-
-    saveAction = new QAction(QIcon(":/icons/icons/save.svg"), "Save", this);
-    saveAction->setToolTip("Save Document");
-    if (!saveAction->icon().isNull()) qDebug() << "ToolBarBrick: Save icon loaded";
-    else saveAction->setIcon(QIcon::fromTheme("document-save"));
-    toolBar->addAction(saveAction);
-
-    boldAction = new QAction(QIcon(":/icons/icons/bold.svg"), "Bold", this);
-    boldAction->setToolTip("Bold Text");
-    if (!boldAction->icon().isNull()) qDebug() << "ToolBarBrick: Bold icon loaded";
-    else boldAction->setIcon(QIcon::fromTheme("format-text-bold"));
-    toolBar->addAction(boldAction);
-
-    italicAction = new QAction(QIcon(":/icons/icons/italic.svg"), "Italic", this);
-    italicAction->setToolTip("Italic Text");
-    if (!italicAction->icon().isNull()) qDebug() << "ToolBarBrick: Italic icon loaded";
-    else italicAction->setIcon(QIcon::fromTheme("format-text-italic"));
-    toolBar->addAction(italicAction);
-
-    fontAction = new QAction(QIcon(":/icons/icons/font.svg"), "Font", this);
-    fontAction->setToolTip("Change Font");
-    if (!fontAction->icon().isNull()) qDebug() << "ToolBarBrick: Font icon loaded";
-    else fontAction->setIcon(QIcon::fromTheme("font"));
-    toolBar->addAction(fontAction);
-
-    colorAction = new QAction(QIcon(":/icons/icons/color.svg"), "Color", this);
-    colorAction->setToolTip("Text Color");
-    if (!colorAction->icon().isNull()) qDebug() << "ToolBarBrick: Color icon loaded";
-    else colorAction->setIcon(QIcon::fromTheme("color-select"));
-    toolBar->addAction(colorAction);
-
-    imageAction = new QAction(QIcon(":/icons/icons/image.svg"), "Image", this);
-    imageAction->setToolTip("Insert Image");
-    if (!imageAction->icon().isNull()) qDebug() << "ToolBarBrick: Image icon loaded";
-    else imageAction->setIcon(QIcon::fromTheme("insert-image"));
-    toolBar->addAction(imageAction);
-
-    alignLeftAction = new QAction(QIcon(":/icons/icons/align-left.svg"), "Align Left", this);
-    alignLeftAction->setToolTip("Align Left");
-    if (!alignLeftAction->icon().isNull()) qDebug() << "ToolBarBrick: Align Left icon loaded";
-    else alignLeftAction->setIcon(QIcon::fromTheme("format-justify-left"));
-    toolBar->addAction(alignLeftAction);
-
-    alignCenterAction = new QAction(QIcon(":/icons/icons/align-center.svg"), "Align Center", this);
-    alignCenterAction->setToolTip("Align Center");
-    if (!alignCenterAction->icon().isNull()) qDebug() << "ToolBarBrick: Align Center icon loaded";
-    else alignCenterAction->setIcon(QIcon::fromTheme("format-justify-center"));
-    toolBar->addAction(alignCenterAction);
-
-    alignRightAction = new QAction(QIcon(":/icons/icons/align-right.svg"), "Align Right", this);
-    alignRightAction->setToolTip("Align Right");
-    if (!alignRightAction->icon().isNull()) qDebug() << "ToolBarBrick: Align Right icon loaded";
-    else alignRightAction->setIcon(QIcon::fromTheme("format-justify-right"));
-    toolBar->addAction(alignRightAction);
-
+    toolBar = new QToolBar(parent);
+    newAction = addAction("new", "New", ":/icons/icons/file-plus.svg");
+    openAction = addAction("open", "Open", ":/icons/icons/folder-open.svg");
+    saveAction = addAction("save", "Save", ":/icons/icons/save.svg");
+    boldAction = addAction("bold", "Bold", ":/icons/icons/bold.svg");
+    italicAction = addAction("italic", "Italic", ":/icons/icons/italic.svg");
+    fontAction = addAction("font", "Font", ":/icons/icons/font.svg");
+    colorAction = addAction("color", "Color", ":/icons/icons/palette.svg");
+    imageAction = addAction("image", "Insert Image", ":/icons/icons/image.svg");
+    alignLeftAction = addAction("alignLeft", "Align Left", ":/icons/icons/align-left.svg");
+    alignCenterAction = addAction("alignCenter", "Align Center", ":/icons/icons/align-center.svg");
+    alignRightAction = addAction("alignRight", "Align Right", ":/icons/icons/align-right.svg");
+    tableAction = addAction("table", "Insert Table", ""); // No icon yet
     qDebug() << "ToolBarBrick initialized with toolbar:" << toolBar;
 }
 
@@ -92,6 +34,18 @@ QAction* ToolBarBrick::getAction(const QString &name) const {
     if (name == "alignLeft") return alignLeftAction;
     if (name == "alignCenter") return alignCenterAction;
     if (name == "alignRight") return alignRightAction;
-    qDebug() << "ToolBarBrick: Action" << name << "not found";
+    if (name == "table") return tableAction;
     return nullptr;
+}
+
+QAction* ToolBarBrick::addAction(const QString &name, const QString &text, const QString &iconPath) {
+    QAction *action = new QAction(text, this);
+    if (!iconPath.isEmpty()) {
+        action->setIcon(QIcon(iconPath));
+        qDebug() << "ToolBarBrick:" << text << "icon loaded";
+    } else {
+        qDebug() << "ToolBarBrick:" << text << "no icon specified";
+    }
+    toolBar->addAction(action);
+    return action;
 }

@@ -1,4 +1,3 @@
-/home/ares/Downloads/editor/QxWriteProject/mainwindowbrick.cpp
 #include "mainwindowbrick.h"
 #include "toolbarbrick.h"
 #include "menumanagerbrick.h"
@@ -45,17 +44,15 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     listBrick = new ListBrick(nullptr, this);
     tableBrick = new TableBrick(nullptr, this);
 
-    // Add table action to toolbar (even if menu-only for now)
-    QAction *tableAction = toolBarBrick->addAction("table", "Insert Table", "");
-
     menuManagerBrick->setupMenus(
         toolBarBrick->getAction("open"), toolBarBrick->getAction("save"),
         toolBarBrick->getAction("bold"), toolBarBrick->getAction("italic"), toolBarBrick->getAction("font"),
         toolBarBrick->getAction("color"), toolBarBrick->getAction("image"), toolBarBrick->getAction("alignLeft"),
         toolBarBrick->getAction("alignCenter"), toolBarBrick->getAction("alignRight"),
-        nullptr, nullptr, tableAction // Pass tableAction instead of nullptr
+        nullptr, nullptr, toolBarBrick->getAction("table") // Use getAction for consistency
     );
 
+    // Connections unchanged from your version...
     connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this](int type) {
         documentHandler->newDocument(static_cast<NewFileBrick::DocType>(type));
     });
@@ -92,7 +89,12 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
             if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
                 tableBrick->setTextEdit(docWindow->getTextEdit());
                 tableBrick->insertTable();
+                qDebug() << "Table insertion triggered for active document";
+            } else {
+                qDebug() << "No active document window for table insertion";
             }
+        } else {
+            qDebug() << "No active subwindow for table insertion";
         }
     });
     connect(toolBarBrick->getAction("new"), &QAction::triggered, this, [this]() { 

@@ -11,6 +11,7 @@ public:
     explicit ToolBarBrick(QWidget *parent = nullptr);
     QToolBar* getToolBar() const;
     QAction* getAction(const QString &name) const;
+    QAction* addAction(const QString &name, const QString &text, const QString &iconPath);
 
 private:
     QToolBar *toolBar;
@@ -25,6 +26,7 @@ private:
     QAction *alignLeftAction;
     QAction *alignCenterAction;
     QAction *alignRightAction;
+    QAction *tableAction; // Added table action
 };
 
 #endif // TOOLBARBRICK_H
