@@ -18,7 +18,7 @@ void TableBrick::insertTable() {
     QTextCursor cursor = m_textEdit->textCursor();
     cursor.beginEditBlock();
     QTextTable *table = cursor.insertTable(3, 3); // Default 3x3 table
-    table->setFormat(QTextTableFormat()); // Basic format, can customize later
+    table->setFormat(QTextTableFormat());
     cursor.endEditBlock();
 
     m_textEdit->setTextCursor(cursor);

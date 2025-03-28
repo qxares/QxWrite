@@ -16,7 +16,7 @@ public:
                     QAction *colorAction, QAction *imageAction, QAction *alignLeftAction,
                     QAction *alignCenterAction, QAction *alignRightAction,
                     QAction *numberingAction, QAction *bulletsAction,
-                    QAction *tableAction = nullptr); // Added table action
+                    QAction *tableAction = nullptr);
     QMenuBar* getMenuBar() const;
 
 signals:
@@ -24,13 +24,14 @@ signals:
     void saveAsTriggered();
     void numberingTriggered();
     void bulletsTriggered();
-    void tableTriggered(); // New signal for table insertion
+    void tableTriggered();
 
 private:
     QMenuBar *menuBar;
     QMenu *fileMenu;
     QMenu *editMenu;
     QMenu *formatMenu;
+    QMenu *tableMenu; // Added declaration
 };
 
 #endif // MENUMANAGERBRICK_H

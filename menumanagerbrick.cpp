@@ -68,12 +68,11 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
     }
     if (tableAction) {
         QAction *menuTable = new QAction("Insert Table", this);
-        // No icon, just text
         menuTable->setToolTip("Insert a table");
         tableMenu->addAction(menuTable);
         QObject::connect(menuTable, &QAction::triggered, tableAction, &QAction::trigger);
         QObject::connect(menuTable, &QAction::triggered, this, &MenuManagerBrick::tableTriggered);
-        qDebug() << "Table menu item added and connected, tableAction:" << tableAction;
+        qDebug() << "Table menu item added to Table menu";
     }
     QAction *menuNumbering = new QAction("Numbering", this);
     menuNumbering->setToolTip("Toggle numbered list");
