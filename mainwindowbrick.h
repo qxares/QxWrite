@@ -6,18 +6,8 @@
 
 class ToolBarBrick;
 class MenuManagerBrick;
-class NewFileBrick;
-class OpenFileBrick;
-class SaveManagerBrick;
-class BoldBrick;
-class ItalicBrick;
-class FontBrick;
-class ColorBrick;
-class InsertBrick;
-class AlignBrick;
-class ListBrick;
-class TableBrick; // New brick
 class DocumentHandlerBrick;
+class TableHandlerBrick; // Added for activeTableHandler
 
 class MainWindowBrick : public QMainWindow {
     Q_OBJECT
@@ -32,18 +22,8 @@ private:
     QMdiArea *mdiArea;
     ToolBarBrick *toolBarBrick;
     MenuManagerBrick *menuManagerBrick;
-    NewFileBrick *newFileBrick;
-    OpenFileBrick *openFileBrick;
-    SaveManagerBrick *saveManagerBrick;
-    BoldBrick *boldBrick;
-    ItalicBrick *italicBrick;
-    FontBrick *fontBrick;
-    ColorBrick *colorBrick;
-    InsertBrick *insertBrick;
-    AlignBrick *alignBrick;
-    ListBrick *listBrick;
-    TableBrick *tableBrick; // New brick
     DocumentHandlerBrick *documentHandler;
+    TableHandlerBrick *activeTableHandler; // Added to track active document's TableHandlerBrick
 };
 
 #endif // MAINWINDOWBRICK_H

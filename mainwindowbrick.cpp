@@ -26,6 +26,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     documentHandler = new DocumentHandlerBrick(this);
     toolBarBrick = new ToolBarBrick(this);
     menuManagerBrick = new MenuManagerBrick(this);
+    activeTableHandler = nullptr; // Initialize
 
     addToolBar(toolBarBrick->getToolBar());
     setMenuBar(menuManagerBrick->getMenuBar());
@@ -65,8 +66,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         auto *resizeBrick = new ResizeBrick(textEdit, this);
         resizeBrick->enableResize();
 
-        // Store tableHandlerBrick for active document
-        activeTableHandler = tableHandlerBrick;
+        activeTableHandler = tableHandlerBrick; // Set for new document
 
         connect(openAction, &QAction::triggered, openFileBrick, &OpenFileBrick::openFile);
         connect(saveAction, &QAction::triggered, saveManagerBrick, &SaveManagerBrick::triggerSave);
@@ -92,7 +92,6 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
             tableMenu->addAction("Move", [resizeBrick]() { resizeBrick->moveObject(); });
         }
 
-        // Update activeTableHandler when subwindow changes
         connect(mdiArea, &QMdiArea::subWindowActivated, this, [this, textEdit, tableHandlerBrick]() {
             if (mdiArea->activeSubWindow() && mdiArea->activeSubWindow()->widget()) {
                 QTextEdit *activeEdit = qobject_cast<DocumentWindow*>(mdiArea->activeSubWindow()->widget())->getTextEdit();
