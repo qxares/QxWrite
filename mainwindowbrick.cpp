@@ -26,6 +26,10 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     toolBarBrick = new ToolBarBrick(this);
     menuManagerBrick = new MenuManagerBrick(this);
 
+    // Add toolbar and menu bar to the main window
+    addToolBar(toolBarBrick->getToolBar());
+    setMenuBar(menuManagerBrick->getMenuBar());
+
     QAction *openAction = toolBarBrick->addAction("open", "Open", ":/icons/icons/open.svg");
     QAction *saveAction = toolBarBrick->addAction("save", "Save", ":/icons/icons/save.svg");
     QAction *boldAction = toolBarBrick->addAction("bold", "Bold", ":/icons/icons/bold.svg");
