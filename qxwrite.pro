@@ -1,4 +1,3 @@
-/home/ares/Downloads/editor/QxWriteProject/qxwrite.pro
 QT       += core gui widgets printsupport
 
 TARGET = QxWrite
@@ -26,7 +25,8 @@ SOURCES += \
     iconbrick.cpp \
     documenthandlerbrick.cpp \
     listbrick.cpp \
-    tablebrick.cpp
+    tablebrick.cpp \
+    resizebrick.cpp
 
 HEADERS += \
     mainwindowbrick.h \
@@ -49,7 +49,8 @@ HEADERS += \
     iconbrick.h \
     documenthandlerbrick.h \
     listbrick.h \
-    tablebrick.h
+    tablebrick.h \
+    resizebrick.h
 
 RESOURCES += \
     icons.qrc
