@@ -9,17 +9,24 @@ void TableHandlerBrick::setTextEdit(QTextEdit *textEdit) {
     m_textEdit = textEdit;
 }
 
-QTextTable* TableHandlerBrick::findTableAtCursor() {
+QTextTable* TableHandlerBrick::findTableInDocument() {
     if (!m_textEdit) return nullptr;
 
     QTextCursor cursor = m_textEdit->textCursor();
     QTextTable *table = cursor.currentTable();
 
     if (!table) {
-        cursor.movePosition(QTextCursor::Start);
-        while (!cursor.isNull() && !cursor.atEnd()) {
+        // Search entire document for any table
+        QTextDocument *doc = m_textEdit->document();
+        cursor.setPosition(0); // Start at beginning
+        while (!cursor.atEnd()) {
             table = cursor.currentTable();
-            if (table) break;
+            if (table) {
+                // Move cursor to table start for operations
+                cursor = table->firstCursorPosition();
+                m_textEdit->setTextCursor(cursor);
+                break;
+            }
             cursor.movePosition(QTextCursor::NextBlock);
         }
     }
@@ -27,7 +34,7 @@ QTextTable* TableHandlerBrick::findTableAtCursor() {
 }
 
 void TableHandlerBrick::alignTable(Qt::Alignment alignment) {
-    QTextTable *table = findTableAtCursor();
+    QTextTable *table = findTableInDocument();
     if (!table) {
         qDebug() << "TableHandlerBrick: No table found for alignment";
         return;
@@ -44,7 +51,7 @@ void TableHandlerBrick::alignTable(Qt::Alignment alignment) {
     cursor.setBlockFormat(blockFormat);
 
     cursor.endEditBlock();
-    m_textEdit->viewport()->update(); // Force repaint
+    m_textEdit->viewport()->update();
     qDebug() << "TableHandlerBrick: Aligned table to" << (alignment == Qt::AlignLeft ? "left" : 
                                                          alignment == Qt::AlignCenter ? "center" : "right");
 }
@@ -54,7 +61,7 @@ void TableHandlerBrick::alignTableCenter() { alignTable(Qt::AlignCenter); }
 void TableHandlerBrick::alignTableRight() { alignTable(Qt::AlignRight); }
 
 void TableHandlerBrick::deleteTable() {
-    QTextTable *table = findTableAtCursor();
+    QTextTable *table = findTableInDocument();
     if (!table) {
         qDebug() << "TableHandlerBrick: No table found to delete";
         return;
@@ -62,9 +69,11 @@ void TableHandlerBrick::deleteTable() {
 
     QTextCursor cursor = table->firstCursorPosition();
     cursor.beginEditBlock();
-    cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor, table->rows() * table->columns());
+    int rows = table->rows();
+    int cols = table->columns();
+    cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor, rows * cols);
     cursor.removeSelectedText();
     cursor.endEditBlock();
     m_textEdit->setTextCursor(cursor);
-    qDebug() << "TableHandlerBrick: Table deleted";
+    qDebug() << "TableHandlerBrick: Table deleted (" << rows << "x" << cols << ")";
 }

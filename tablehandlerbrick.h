@@ -18,7 +18,7 @@ public slots:
     void deleteTable();
 
 private:
-    QTextTable* findTableAtCursor();
+    QTextTable* findTableInDocument(); // Renamed and improved
     void alignTable(Qt::Alignment alignment);
     QTextEdit *m_textEdit;
 };

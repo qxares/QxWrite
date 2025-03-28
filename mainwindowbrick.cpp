@@ -52,7 +52,6 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         QTextEdit *textEdit = documentHandler->newDocument(static_cast<NewFileBrick::DocType>(type));
         if (!textEdit) return;
 
-        // Removed unused newFileBrick and listBrick
         auto *openFileBrick = new OpenFileBrick(textEdit, this);
         auto *saveManagerBrick = new SaveManagerBrick(textEdit, this);
         auto *boldBrick = new BoldBrick(textEdit, this);
@@ -65,6 +64,9 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         auto *tableHandlerBrick = new TableHandlerBrick(textEdit, this);
         auto *resizeBrick = new ResizeBrick(textEdit, this);
         resizeBrick->enableResize();
+
+        // Store tableHandlerBrick for active document
+        activeTableHandler = tableHandlerBrick;
 
         connect(openAction, &QAction::triggered, openFileBrick, &OpenFileBrick::openFile);
         connect(saveAction, &QAction::triggered, saveManagerBrick, &SaveManagerBrick::triggerSave);
@@ -89,6 +91,16 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         if (tableMenu) {
             tableMenu->addAction("Move", [resizeBrick]() { resizeBrick->moveObject(); });
         }
+
+        // Update activeTableHandler when subwindow changes
+        connect(mdiArea, &QMdiArea::subWindowActivated, this, [this, textEdit, tableHandlerBrick]() {
+            if (mdiArea->activeSubWindow() && mdiArea->activeSubWindow()->widget()) {
+                QTextEdit *activeEdit = qobject_cast<DocumentWindow*>(mdiArea->activeSubWindow()->widget())->getTextEdit();
+                if (activeEdit == textEdit) {
+                    activeTableHandler = tableHandlerBrick;
+                }
+            }
+        });
     });
 
     connect(openAction, &QAction::triggered, this, &MainWindowBrick::handleOpenFile);
