@@ -26,11 +26,9 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     toolBarBrick = new ToolBarBrick(this);
     menuManagerBrick = new MenuManagerBrick(this);
 
-    // Add toolbar and menu bar to the main window
     addToolBar(toolBarBrick->getToolBar());
     setMenuBar(menuManagerBrick->getMenuBar());
 
-    // Set a reasonable default size
     resize(800, 600);
 
     QAction *openAction = toolBarBrick->getAction("open");
@@ -43,7 +41,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     QAction *alignLeftAction = toolBarBrick->getAction("alignLeft");
     QAction *alignCenterAction = toolBarBrick->getAction("alignCenter");
     QAction *alignRightAction = toolBarBrick->getAction("alignRight");
-    QAction *tableAction = toolBarBrick->getAction("table");
+    QAction *tableAction = new QAction("Insert Table", this); // Table action for menu only
 
     menuManagerBrick->setupMenus(openAction, saveAction, boldAction, italicAction, fontAction,
                                  colorAction, imageAction, alignLeftAction, alignCenterAction,

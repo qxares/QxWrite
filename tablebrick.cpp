@@ -84,7 +84,7 @@ void TableBrick::insertTable() {
         }
 
         QTextBlockFormat blockFormat;
-        blockFormat.setAlignment(Qt::AlignLeft); // Sync block with table
+        blockFormat.setAlignment(Qt::AlignLeft);
         cursor.setBlockFormat(blockFormat);
 
         cursor.endEditBlock();
@@ -95,25 +95,37 @@ void TableBrick::insertTable() {
 
 void TableBrick::alignTable(Qt::Alignment alignment) {
     if (!m_textEdit) return;
+
     QTextCursor cursor = m_textEdit->textCursor();
     QTextTable *table = cursor.currentTable();
+
+    // If no table at cursor, search for the nearest one
+    if (!table) {
+        QTextDocument *doc = m_textEdit->document();
+        cursor.movePosition(QTextCursor::Start);
+        while (!cursor.isNull() && !cursor.atEnd()) {
+            table = cursor.currentTable();
+            if (table) break;
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+    }
+
     if (table) {
         cursor.beginEditBlock();
         QTextTableFormat format = table->format();
         format.setAlignment(alignment);
         table->setFormat(format);
 
-        // Sync block format for document flow
         QTextBlockFormat blockFormat;
         blockFormat.setAlignment(alignment);
         cursor.setBlockFormat(blockFormat);
 
         cursor.endEditBlock();
-        m_textEdit->update(); // Force UI refresh
+        m_textEdit->update();
         qDebug() << "TableBrick: Aligned table to" << (alignment == Qt::AlignLeft ? "left" : 
                                                       alignment == Qt::AlignCenter ? "center" : "right");
     } else {
-        qDebug() << "TableBrick: No table at cursor for alignment";
+        qDebug() << "TableBrick: No table found in document for alignment";
     }
 }
 
@@ -121,7 +133,6 @@ void TableBrick::alignTableLeft() { alignTable(Qt::AlignLeft); }
 void TableBrick::alignTableCenter() { alignTable(Qt::AlignCenter); }
 void TableBrick::alignTableRight() { alignTable(Qt::AlignRight); }
 
-// Rest unchanged: insertRowBefore, insertRowAfter, etc. remain as-is
 void TableBrick::insertRowBefore() { /* ... */ }
 void TableBrick::insertRowAfter() { /* ... */ }
 void TableBrick::insertRowAbove() { insertRowBefore(); }
