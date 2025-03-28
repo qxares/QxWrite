@@ -154,4 +154,16 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
         QObject::connect(menuAlignRight, &QAction::triggered, alignRightAction, &QAction::trigger);
     }
 
-    QObject::connect(newNote, &QAction::triggered, this, 
+    QObject::connect(newNote, &QAction::triggered, this, [this]() { emit newFileTriggered(0); });
+    QObject::connect(newDoc, &QAction::triggered, this, [this]() { emit newFileTriggered(1); });
+    QObject::connect(newSheet, &QAction::triggered, this, [this]() { emit newFileTriggered(2); });
+    QObject::connect(saveAsAction, &QAction::triggered, this, [this]() { emit saveAsTriggered(); });
+
+    qDebug() << "Menus set up. Format menu actions:" << formatMenu->actions().count();
+}
+
+QMenuBar* MenuManagerBrick::getMenuBar() const {
+    return menuBar;
+}
+
+MenuManagerBrick::~MenuManagerBrick() {}
