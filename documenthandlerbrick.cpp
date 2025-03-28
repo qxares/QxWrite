@@ -94,7 +94,7 @@ void DocumentHandlerBrick::cascadeWindows(NewFileBrick::DocType type) {
     if (type == NewFileBrick::Document) {
         windowList = &documentWindows;
     } else if (type == NewFileBrick::Note) {
-        windowList = &noteWindows; // Fixed typo
+        windowList = &noteWindows; // Fixed typo from ¬eWindows
     } else if (type == NewFileBrick::Sheet) {
         windowList = &sheetWindows;
     }
@@ -162,7 +162,7 @@ void DocumentHandlerBrick::moveCascade(QMdiSubWindow *subWindow) {
     if (documentWindows.contains(subWindow)) {
         windowList = &documentWindows;
     } else if (noteWindows.contains(subWindow)) {
-        windowList = &noteWindows; // Fixed typo
+        windowList = &noteWindows; // Fixed typo from ¬eWindows
     } else if (sheetWindows.contains(subWindow)) {
         windowList = &sheetWindows;
     }

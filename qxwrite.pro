@@ -26,6 +26,7 @@ SOURCES += \
     documenthandlerbrick.cpp \
     listbrick.cpp \
     tablebrick.cpp \
+    tablehandlerbrick.cpp \
     resizebrick.cpp
 
 HEADERS += \
@@ -50,6 +51,7 @@ HEADERS += \
     documenthandlerbrick.h \
     listbrick.h \
     tablebrick.h \
+    tablehandlerbrick.h \
     resizebrick.h
 
 RESOURCES += \

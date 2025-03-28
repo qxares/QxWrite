@@ -52,7 +52,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         QTextEdit *textEdit = documentHandler->newDocument(static_cast<NewFileBrick::DocType>(type));
         if (!textEdit) return;
 
-        auto *newFileBrick = new NewFileBrick(textEdit, this);
+        // Removed unused newFileBrick and listBrick
         auto *openFileBrick = new OpenFileBrick(textEdit, this);
         auto *saveManagerBrick = new SaveManagerBrick(textEdit, this);
         auto *boldBrick = new BoldBrick(textEdit, this);
@@ -61,7 +61,6 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         auto *colorBrick = new ColorBrick(textEdit, this);
         auto *insertBrick = new InsertBrick(textEdit, this);
         auto *alignBrick = new AlignBrick(textEdit, this);
-        auto *listBrick = new ListBrick(textEdit, this);
         auto *tableBrick = new TableBrick(textEdit, this);
         auto *tableHandlerBrick = new TableHandlerBrick(textEdit, this);
         auto *resizeBrick = new ResizeBrick(textEdit, this);
