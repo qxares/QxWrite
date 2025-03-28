@@ -48,3 +48,5 @@ HEADERS += \
 
 RESOURCES += \
     icons.qrc
+SOURCES += listbrick.cpp
+HEADERS += listbrick.h

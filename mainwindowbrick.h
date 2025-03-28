@@ -1,7 +1,6 @@
 #ifndef MAINWINDOWBRICK_H
 #define MAINWINDOWBRICK_H
 
-#include <QObject>
 #include <QMainWindow>
 #include <QMdiArea>
 
@@ -16,7 +15,7 @@ class FontBrick;
 class ColorBrick;
 class InsertBrick;
 class AlignBrick;
-class DocumentWindow;
+class ListBrick;  // New brick
 class DocumentHandlerBrick;
 
 class MainWindowBrick : public QMainWindow {
@@ -26,9 +25,10 @@ public:
     ~MainWindowBrick();
 
 private slots:
-    void handleOpenFile();  // New slot for opening files
+    void handleOpenFile();
 
 private:
+    QMdiArea *mdiArea;
     ToolBarBrick *toolBarBrick;
     MenuManagerBrick *menuManagerBrick;
     NewFileBrick *newFileBrick;
@@ -40,7 +40,7 @@ private:
     ColorBrick *colorBrick;
     InsertBrick *insertBrick;
     AlignBrick *alignBrick;
-    QMdiArea *mdiArea;              // Replacing single DocumentWindow
+    ListBrick *listBrick;  // New brick
     DocumentHandlerBrick *documentHandler;
 };
 

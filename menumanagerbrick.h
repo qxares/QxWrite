@@ -3,9 +3,8 @@
 
 #include <QObject>
 #include <QMenuBar>
-#include <QAction>
 
-class QMenu;
+class QAction;
 
 class MenuManagerBrick : public QObject {
     Q_OBJECT
@@ -15,12 +14,15 @@ public:
     void setupMenus(QAction *openAction, QAction *saveAction,
                     QAction *boldAction, QAction *italicAction, QAction *fontAction,
                     QAction *colorAction, QAction *imageAction, QAction *alignLeftAction,
-                    QAction *alignCenterAction, QAction *alignRightAction);
+                    QAction *alignCenterAction, QAction *alignRightAction,
+                    QAction *numberingAction, QAction *bulletsAction); // Added actions
     QMenuBar* getMenuBar() const;
 
-Q_SIGNALS:
+signals:
     void newFileTriggered(int type);
-    void saveAsTriggered();  // Added signal for Save As
+    void saveAsTriggered();
+    void numberingTriggered();  // New signal
+    void bulletsTriggered();    // New signal
 
 private:
     QMenuBar *menuBar;

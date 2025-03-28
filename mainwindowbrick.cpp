@@ -10,6 +10,7 @@
 #include "colorbrick.h"
 #include "insertbrick.h"
 #include "alignbrick.h"
+#include "listbrick.h"  // New include
 #include "documentwindow.h"
 #include "documenthandlerbrick.h"
 #include <QDebug>
@@ -39,12 +40,14 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     colorBrick = new ColorBrick(nullptr, this);
     insertBrick = new InsertBrick(nullptr, this);
     alignBrick = new AlignBrick(nullptr, this);
+    listBrick = new ListBrick(nullptr, this);  // New brick
 
     menuManagerBrick->setupMenus(
         toolBarBrick->getAction("open"), toolBarBrick->getAction("save"),
         toolBarBrick->getAction("bold"), toolBarBrick->getAction("italic"), toolBarBrick->getAction("font"),
         toolBarBrick->getAction("color"), toolBarBrick->getAction("image"), toolBarBrick->getAction("alignLeft"),
-        toolBarBrick->getAction("alignCenter"), toolBarBrick->getAction("alignRight")
+        toolBarBrick->getAction("alignCenter"), toolBarBrick->getAction("alignRight"),
+        toolBarBrick->getAction("numbering"), toolBarBrick->getAction("bullets")  // New actions
     );
 
     connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this](int type) {
@@ -60,6 +63,22 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
             }
         } else {
             qDebug() << "MainWindowBrick: No active subwindow for Save As";
+        }
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::numberingTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                listBrick->setTextEdit(docWindow->getTextEdit());
+                listBrick->toggleNumbering();
+            }
+        }
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::bulletsTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                listBrick->setTextEdit(docWindow->getTextEdit());
+                listBrick->toggleBullets();
+            }
         }
     });
     connect(toolBarBrick->getAction("new"), &QAction::triggered, this, [this]() { 
