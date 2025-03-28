@@ -24,14 +24,25 @@ signals:
     void saveAsTriggered();
     void numberingTriggered();
     void bulletsTriggered();
-    void tableTriggered();
+    void insertTableTriggered();
+    void insertRowBeforeTriggered();
+    void insertRowAfterTriggered();
+    void insertRowAboveTriggered();
+    void insertRowBelowTriggered();
+    void insertColumnBeforeTriggered();
+    void insertColumnAfterTriggered();
+    void insertColumnAboveTriggered();
+    void insertColumnBelowTriggered();
+    void deleteRowTriggered();
+    void deleteColumnTriggered();
+    void mergeCellsTriggered();
 
 private:
     QMenuBar *menuBar;
     QMenu *fileMenu;
     QMenu *editMenu;
     QMenu *formatMenu;
-    QMenu *tableMenu; // Added declaration
+    QMenu *tableMenu;
 };
 
 #endif // MENUMANAGERBRICK_H

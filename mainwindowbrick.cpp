@@ -49,7 +49,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         toolBarBrick->getAction("bold"), toolBarBrick->getAction("italic"), toolBarBrick->getAction("font"),
         toolBarBrick->getAction("color"), toolBarBrick->getAction("image"), toolBarBrick->getAction("alignLeft"),
         toolBarBrick->getAction("alignCenter"), toolBarBrick->getAction("alignRight"),
-        nullptr, nullptr, nullptr // Table handled by menu signal
+        nullptr, nullptr, nullptr
     );
 
     connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this](int type) {
@@ -83,17 +83,104 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
             }
         }
     });
-    connect(menuManagerBrick, &MenuManagerBrick::tableTriggered, this, [this]() {
+    connect(menuManagerBrick, &MenuManagerBrick::insertTableTriggered, this, [this]() {
         if (auto *subWindow = mdiArea->activeSubWindow()) {
             if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
                 tableBrick->setTextEdit(docWindow->getTextEdit());
                 tableBrick->insertTable();
-                qDebug() << "Table insertion triggered from menu";
             } else {
                 qDebug() << "No active document window for table insertion";
             }
         } else {
             qDebug() << "No active subwindow for table insertion";
+        }
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::insertRowBeforeTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                tableBrick->setTextEdit(docWindow->getTextEdit());
+                tableBrick->insertRowBefore();
+            }
+        }
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::insertRowAfterTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                tableBrick->setTextEdit(docWindow->getTextEdit());
+                tableBrick->insertRowAfter();
+            }
+        }
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::insertRowAboveTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                tableBrick->setTextEdit(docWindow->getTextEdit());
+                tableBrick->insertRowAbove();
+            }
+        }
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::insertRowBelowTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                tableBrick->setTextEdit(docWindow->getTextEdit());
+                tableBrick->insertRowBelow();
+            }
+        }
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::insertColumnBeforeTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                tableBrick->setTextEdit(docWindow->getTextEdit());
+                tableBrick->insertColumnBefore();
+            }
+        }
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::insertColumnAfterTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                tableBrick->setTextEdit(docWindow->getTextEdit());
+                tableBrick->insertColumnAfter();
+            }
+        }
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::insertColumnAboveTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                tableBrick->setTextEdit(docWindow->getTextEdit());
+                tableBrick->insertColumnAbove();
+            }
+        }
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::insertColumnBelowTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                tableBrick->setTextEdit(docWindow->getTextEdit());
+                tableBrick->insertColumnBelow();
+            }
+        }
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::deleteRowTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                tableBrick->setTextEdit(docWindow->getTextEdit());
+                tableBrick->deleteRow();
+            }
+        }
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::deleteColumnTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                tableBrick->setTextEdit(docWindow->getTextEdit());
+                tableBrick->deleteColumn();
+            }
+        }
+    });
+    connect(menuManagerBrick, &MenuManagerBrick::mergeCellsTriggered, this, [this]() {
+        if (auto *subWindow = mdiArea->activeSubWindow()) {
+            if (auto *docWindow = qobject_cast<DocumentWindow*>(subWindow->widget())) {
+                tableBrick->setTextEdit(docWindow->getTextEdit());
+                tableBrick->mergeCells();
+            }
         }
     });
     connect(toolBarBrick->getAction("open"), &QAction::triggered, this, &MainWindowBrick::handleOpenFile);
