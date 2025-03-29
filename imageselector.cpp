@@ -14,7 +14,7 @@ QUrl ImageSelector::selectImage(const QPoint &pos) {
     if (!sceneManager) return QUrl();
     QGraphicsItem *item = sceneManager->itemAt(pos);
     if (auto *pixmapItem = dynamic_cast<QGraphicsPixmapItem*>(item)) {
-        selectedImageUrl = sceneManager->getImageUrls().key(pixmapItem);
+        selectedImageUrl = sceneManager->getImageUrls().value(pixmapItem); // Swapped key() for value()
         qDebug() << "Selected image:" << selectedImageUrl;
         return selectedImageUrl;
     }
