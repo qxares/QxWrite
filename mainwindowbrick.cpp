@@ -63,6 +63,13 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     // Connections
     connect(saveHandler, &SaveHandlerBrick::completed, saveManager, &SaveManagerBrick::validate);
 
+    // Force layout update and final debug
+    update();
+    show();
+    qDebug() << "After show - QTextEdit visible:" << edit->isVisible() << "Geometry:" << edit->geometry();
+    qDebug() << "After show - CentralWidget visible:" << centralWidget->isVisible() << "Geometry:" << centralWidget->geometry();
+    qDebug() << "MainWindow visible:" << isVisible() << "Geometry:" << geometry();
+
     qDebug() << "MainWindowBrick ready.";
 }
 
