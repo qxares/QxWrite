@@ -32,10 +32,10 @@ void ImageOverlay::startResizing(const QUrl &imageUrl, const QPoint &startPos) {
     qDebug() << "Starting resizing for" << imageUrl << "Start size:" << startSize << "at" << rect;
 }
 
-void ImageOverlay::updateResizing(const QPoint ¤tPos) {
+void ImageOverlay::updateResizing(const QPoint &currentPos) { // Fixed typo: removed ¤
     if (activeImageUrl.isEmpty() || !rubberBand) return;
-    QPoint currentPos = mapToScene(currentPos).toPoint();
-    int deltaX = currentPos.x() - startPos.x();
+    QPoint mappedPos = mapToScene(currentPos).toPoint(); // Renamed to avoid shadowing
+    int deltaX = mappedPos.x() - startPos.x();
     int newWidth = qMax(50, startSize.width() + deltaX);
     qreal aspectRatio = static_cast<qreal>(startSize.height()) / startSize.width();
     int newHeight = qMax(50, static_cast<int>(newWidth * aspectRatio));

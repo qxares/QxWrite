@@ -13,7 +13,7 @@ public:
     ImageOverlay(QWidget *parent = nullptr);
     void addImage(const QUrl &imageUrl, const QPixmap &pixmap, const QPoint &pos);
     void startResizing(const QUrl &imageUrl, const QPoint &startPos);
-    void updateResizing(const QPoint &currentPos);
+    void updateResizing(const QPoint &currentPos); // Fixed typo: removed ¤
     void finishResizing();
 
 protected:
