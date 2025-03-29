@@ -3,7 +3,6 @@
 #include <QDebug>
 #include "boldbrick.h" // Covers BoldBrick logic (function, handler, and GUI for now)
 #include "italicbrick.h" // Covers ItalicBrick logic (function, handler, and GUI for now)
-#include "italicguibrick.h"
 #include "italicmanagerbrick.h"
 #include "savefunctionbrick.h"
 #include "savehandlerbrick.h"
@@ -26,7 +25,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     // Italic Action
     ItalicBrick *italicFunction = new ItalicBrick(edit, this); // Fixed: was ItalicFunctionBrick
     ItalicBrick *italicHandler = new ItalicBrick(edit, this); // Temp fix: was ItalicHandlerBrick
-    ItalicGuiBrick *italicGui = new ItalicGuiBrick(this);
+    ItalicBrick *italicGui = new ItalicBrick(edit, this); // Temp fix: was ItalicGuiBrick
     ItalicManagerBrick *italicManager = new ItalicManagerBrick(italicHandler, italicGui, this);
 
     // Save Action
@@ -38,7 +37,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     // GUI Manager
     GuiManagerBrick *guiManager = new GuiManagerBrick(menuBar(), addToolBar("Tools"), this);
     guiManager->addGuiBrick(boldGui); // Might need adjustment if BoldBrick isn’t GUI-compatible
-    guiManager->addGuiBrick(italicGui);
+    guiManager->addGuiBrick(italicGui); // Might need adjustment if ItalicBrick isn’t GUI-compatible
     guiManager->addGuiBrick(saveGui);
 
     // Placeholder Example
@@ -49,7 +48,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
 
     // Connections
     connect(boldGui, &BoldBrick::applyBold, boldHandler, &BoldBrick::applyBold); // Temp fix: no manager yet
-    connect(italicGui, &ItalicGuiBrick::triggered, italicHandler, &ItalicBrick::applyItalic); // Fixed signal
+    connect(italicGui, &ItalicBrick::applyItalic, italicHandler, &ItalicBrick::applyItalic); // Temp fix: adjusted signal
     connect(italicHandler, &ItalicBrick::applyItalic, italicManager, &ItalicManagerBrick::validate); // Temp fix
     connect(saveGui, &SaveGuiBrick::triggered, saveHandler, &SaveHandlerBrick::handle);
     connect(saveHandler, &SaveHandlerBrick::completed, saveManager, &SaveManagerBrick::validate);
