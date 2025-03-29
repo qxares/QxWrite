@@ -1,121 +1,64 @@
 #include "mainwindowbrick.h"
-#include "toolbarbrick.h"
-#include "menumanagerbrick.h"
-#include "newfilebrick.h"
-#include "openfilebrick.h"
-#include "savemanagerbrick.h"
-#include "boldbrick.h"
-#include "italicbrick.h"
-#include "fontbrick.h"
-#include "colorbrick.h"
-#include "insertbrick.h"
-#include "alignbrick.h"
-#include "listbrick.h"
-#include "tablebrick.h"
-#include "tablehandlerbrick.h"
-#include "documenthandlerbrick.h"
-#include "resizebrick.h"
-#include "placeholderbrick.h"
-#include <QMdiArea>
-#include <QMenu>
+#include <QTextEdit>
 #include <QDebug>
+#include "boldbrick.h" // Fixed typo: was boldfunctionbrick.h
+#include "boldhandlerbrick.h"
+#include "boldguibrick.h"
+#include "boldmanagerbrick.h"
+#include "italicfunctionbrick.h"
+#include "italichandlerbrick.h"
+#include "italicguibrick.h"
+#include "italicmanagerbrick.h"
+#include "savefunctionbrick.h"
+#include "savehandlerbrick.h"
+#include "saveguibrick.h"
+#include "savemanagerbrick.h"
+#include "guimanagerbrick.h"
+#include "placeholderbrick.h"
 
 MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
-    mdiArea = new QMdiArea(this);
-    setCentralWidget(mdiArea);
-
-    documentHandler = new DocumentHandlerBrick(this);
-    toolBarBrick = new ToolBarBrick(this);
-    menuManagerBrick = new MenuManagerBrick(this);
-    activeTableHandler = nullptr;
-
-    addToolBar(toolBarBrick->getToolBar());
-    setMenuBar(menuManagerBrick->getMenuBar());
-
+    qDebug() << "MainWindowBrick starting...";
+    edit = new QTextEdit(this);
+    setCentralWidget(edit);
     resize(800, 600);
 
-    QAction *openAction = toolBarBrick->getAction("open");
-    QAction *saveAction = toolBarBrick->getAction("save");
-    QAction *boldAction = toolBarBrick->getAction("bold");
-    QAction *italicAction = toolBarBrick->getAction("italic");
-    QAction *fontAction = toolBarBrick->getAction("font");
-    QAction *colorAction = toolBarBrick->getAction("color");
-    QAction *imageAction = toolBarBrick->getAction("image");
-    QAction *alignLeftAction = toolBarBrick->getAction("alignLeft");
-    QAction *alignCenterAction = toolBarBrick->getAction("alignCenter");
-    QAction *alignRightAction = toolBarBrick->getAction("alignRight");
-    QAction *tableAction = new QAction("Insert Table", this);
+    // Bold Action
+    BoldFunctionBrick *boldFunction = new BoldFunctionBrick(edit, this);
+    BoldHandlerBrick *boldHandler = new BoldHandlerBrick(boldFunction, this);
+    BoldGuiBrick *boldGui = new BoldGuiBrick(this);
+    BoldManagerBrick *boldManager = new BoldManagerBrick(boldHandler, boldGui, this);
 
-    menuManagerBrick->setupMenus(openAction, saveAction, boldAction, italicAction, fontAction,
-                                 colorAction, imageAction, alignLeftAction, alignCenterAction,
-                                 alignRightAction, nullptr, nullptr, tableAction);
+    // Italic Action
+    ItalicFunctionBrick *italicFunction = new ItalicFunctionBrick(edit, this);
+    ItalicHandlerBrick *italicHandler = new ItalicHandlerBrick(italicFunction, this);
+    ItalicGuiBrick *italicGui = new ItalicGuiBrick(this);
+    ItalicManagerBrick *italicManager = new ItalicManagerBrick(italicHandler, italicGui, this);
 
-    connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this, openAction, saveAction, boldAction, italicAction, fontAction, colorAction, imageAction, alignLeftAction, alignCenterAction, alignRightAction, tableAction](int type) {
-        QTextEdit *textEdit = documentHandler->newDocument(static_cast<NewFileBrick::DocType>(type));
-        if (!textEdit) return;
+    // Save Action
+    SaveFunctionBrick *saveFunction = new SaveFunctionBrick(edit, this);
+    SaveHandlerBrick *saveHandler = new SaveHandlerBrick(saveFunction, this);
+    SaveGuiBrick *saveGui = new SaveGuiBrick(this);
+    SaveManagerBrick *saveManager = new SaveManagerBrick(saveHandler, saveGui, this);
 
-        auto *openFileBrick = new OpenFileBrick(textEdit, this);
-        auto *saveManagerBrick = new SaveManagerBrick(textEdit, this);
-        auto *boldBrick = new BoldBrick(textEdit, this);
-        auto *italicBrick = new ItalicBrick(textEdit, this);
-        auto *fontBrick = new FontBrick(textEdit, this);
-        auto *colorBrick = new ColorBrick(textEdit, this);
-        auto *insertBrick = new InsertBrick(textEdit, this);
-        auto *alignBrick = new AlignBrick(textEdit, this);
-        auto *tableBrick = new TableBrick(textEdit, this);
-        auto *tableHandlerBrick = new TableHandlerBrick(textEdit, this);
-        auto *resizeBrick = new ResizeBrick(textEdit, this);
-        auto *placeholderBrick = new PlaceholderBrick(textEdit, this);
-        resizeBrick->enableResize();
+    // GUI Manager
+    GuiManagerBrick *guiManager = new GuiManagerBrick(menuBar(), addToolBar("Tools"), this);
+    guiManager->addGuiBrick(boldGui);
+    guiManager->addGuiBrick(italicGui);
+    guiManager->addGuiBrick(saveGui);
 
-        activeTableHandler = tableHandlerBrick;
-
-        connect(openAction, &QAction::triggered, openFileBrick, &OpenFileBrick::openFile);
-        connect(saveAction, &QAction::triggered, saveManagerBrick, &SaveManagerBrick::triggerSave);
-        connect(boldAction, &QAction::triggered, boldBrick, &BoldBrick::applyBold);
-        connect(italicAction, &QAction::triggered, italicBrick, &ItalicBrick::applyItalic);
-        connect(fontAction, &QAction::triggered, fontBrick, &FontBrick::changeFont);
-        connect(colorAction, &QAction::triggered, colorBrick, &ColorBrick::changeColor);
-        connect(imageAction, &QAction::triggered, insertBrick, &InsertBrick::insertImage);
-        connect(alignLeftAction, &QAction::triggered, alignBrick, [alignBrick]() { alignBrick->align(Qt::AlignLeft); });
-        connect(alignCenterAction, &QAction::triggered, alignBrick, [alignBrick]() { alignBrick->align(Qt::AlignCenter); });
-        connect(alignRightAction, &QAction::triggered, alignBrick, [alignBrick]() { alignBrick->align(Qt::AlignRight); });
-        connect(tableAction, &QAction::triggered, tableBrick, &TableBrick::insertTable);
-
-        connect(menuManagerBrick, &MenuManagerBrick::saveAsTriggered, saveManagerBrick, &SaveManagerBrick::triggerSave);
-        connect(menuManagerBrick, &MenuManagerBrick::deleteTableTriggered, tableHandlerBrick, &TableHandlerBrick::deleteTable);
-        connect(menuManagerBrick, &MenuManagerBrick::moveTriggered, resizeBrick, &ResizeBrick::moveObject);
-
-        QMenu *tableMenu = menuManagerBrick->getMenuBar()->findChild<QMenu*>("tableMenu");
-        if (tableMenu) {
-            tableMenu->addAction("Move", [resizeBrick]() { resizeBrick->moveObject(); });
-            tableMenu->removeAction(tableMenu->findChild<QAction*>("Align Table Left"));
-            tableMenu->removeAction(tableMenu->findChild<QAction*>("Align Table Center"));
-            tableMenu->removeAction(tableMenu->findChild<QAction*>("Align Table Right"));
-        }
-
-        connect(mdiArea, &QMdiArea::subWindowActivated, this, [this, textEdit, tableHandlerBrick]() {
-            if (mdiArea->activeSubWindow() && mdiArea->activeSubWindow()->widget()) {
-                QTextEdit *activeEdit = qobject_cast<DocumentWindow*>(mdiArea->activeSubWindow()->widget())->getTextEdit();
-                if (activeEdit == textEdit) {
-                    activeTableHandler = tableHandlerBrick;
-                    qDebug() << "MainWindowBrick: activeTableHandler updated for textEdit:" << textEdit;
-                }
-            }
-        });
+    // Placeholder Example
+    connect(this, &MainWindowBrick::customContextMenuRequested, this, [this](int pos) {
+        auto *placeholderBrick = new PlaceholderBrick(edit, this);
+        placeholderBrick->insertPlaceholder(pos, PlaceholderBrick::Table);
     });
 
-    connect(openAction, &QAction::triggered, this, &MainWindowBrick::handleOpenFile);
+    // Connections
+    connect(boldGui, &BoldGuiBrick::triggered, boldHandler, &BoldHandlerBrick::handle);
+    connect(boldHandler, &BoldHandlerBrick::completed, boldManager, &BoldManagerBrick::validate);
+    connect(italicGui, &ItalicGuiBrick::triggered, italicHandler, &ItalicHandlerBrick::handle);
+    connect(italicHandler, &ItalicHandlerBrick::completed, italicManager, &ItalicManagerBrick::validate);
+    connect(saveGui, &SaveGuiBrick::triggered, saveHandler, &SaveHandlerBrick::handle);
+    connect(saveHandler, &SaveHandlerBrick::completed, saveManager, &SaveManagerBrick::validate);
 
     qDebug() << "MainWindowBrick ready.";
-}
-
-MainWindowBrick::~MainWindowBrick() {
-    delete toolBarBrick;
-    delete menuManagerBrick;
-    delete documentHandler;
-}
-
-void MainWindowBrick::handleOpenFile() {
-    documentHandler->openDocument(new OpenFileBrick(nullptr, this));
 }
