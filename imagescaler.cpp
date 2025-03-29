@@ -18,7 +18,7 @@ void ImageScaler::startScaling(const QUrl &imageUrl, const QPoint &startPos) {
     }
 }
 
-void ImageScaler::updateScaling(const QPoint ¤tPos) {
+void ImageScaler::updateScaling(const QPoint currentPos) { // Fixed typo: removed ¤
     if (imageUrl.isEmpty()) return;
     int deltaX = currentPos.x() - imageRect.right();  // From right edge
     int newWidth = qMax(50, startSize.width() + deltaX);

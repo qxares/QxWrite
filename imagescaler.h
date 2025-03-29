@@ -9,7 +9,7 @@ class ImageScaler {
 public:
     ImageScaler(QTextEdit *editor);
     void startScaling(const QUrl &imageUrl, const QPoint &startPos);
-    void updateScaling(const QPoint &currentPos);
+    void updateScaling(const QPoint currentPos); // Fixed typo: removed ¤
     void finishScaling();
 
 private:
