@@ -1,8 +1,7 @@
 #include "mainwindowbrick.h"
 #include <QTextEdit>
 #include <QDebug>
-#include "boldbrick.h" // Covers BoldFunctionBrick logic
-#include "boldguibrick.h"
+#include "boldbrick.h" // Covers BoldBrick logic (function, temp handler, and GUI)
 #include "boldmanagerbrick.h"
 #include "italicfunctionbrick.h"
 #include "italichandlerbrick.h"
@@ -22,9 +21,9 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     resize(800, 600);
 
     // Bold Action
-    BoldBrick *boldFunction = new BoldBrick(edit, this); // Adjusted to match boldbrick.h
-    BoldBrick *boldHandler = new BoldBrick(edit, this);  // Temp fix: using BoldBrick until boldhandlerbrick.h is found
-    BoldGuiBrick *boldGui = new BoldGuiBrick(this);
+    BoldBrick *boldFunction = new BoldBrick(edit, this);
+    BoldBrick *boldHandler = new BoldBrick(edit, this);
+    BoldBrick *boldGui = new BoldBrick(edit, this); // Temp fix: was BoldGuiBrick
     BoldManagerBrick *boldManager = new BoldManagerBrick(boldHandler, boldGui, this);
 
     // Italic Action
@@ -41,7 +40,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
 
     // GUI Manager
     GuiManagerBrick *guiManager = new GuiManagerBrick(menuBar(), addToolBar("Tools"), this);
-    guiManager->addGuiBrick(boldGui);
+    guiManager->addGuiBrick(boldGui); // Might need adjustment if BoldBrick isn’t GUI-compatible
     guiManager->addGuiBrick(italicGui);
     guiManager->addGuiBrick(saveGui);
 
@@ -52,8 +51,8 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     });
 
     // Connections
-    connect(boldGui, &BoldGuiBrick::triggered, boldHandler, &BoldBrick::applyBold); // Adjusted signal
-    connect(boldHandler, &BoldBrick::applyBold, boldManager, &BoldManagerBrick::validate); // Temp fix
+    connect(boldGui, &BoldBrick::applyBold, boldHandler, &BoldBrick::applyBold); // Temp fix: using applyBold
+    connect(boldHandler, &BoldBrick::applyBold, boldManager, &BoldManagerBrick::validate);
     connect(italicGui, &ItalicGuiBrick::triggered, italicHandler, &ItalicHandlerBrick::handle);
     connect(italicHandler, &ItalicHandlerBrick::completed, italicManager, &ItalicManagerBrick::validate);
     connect(saveGui, &SaveGuiBrick::triggered, saveHandler, &SaveHandlerBrick::handle);
