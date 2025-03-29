@@ -15,6 +15,8 @@ public:
     QGraphicsScene* scene() { return m_scene; }
     QGraphicsItem* itemAt(const QPoint &pos); // New method to find item at position
     QMap<QGraphicsPixmapItem*, QUrl> getImageUrls() const { return m_imageUrls; } // New method to get URL map
+    QGraphicsPixmapItem* getImageItem(const QUrl &url); // Added to fetch item by URL
+    void updateImage(const QUrl &url, const QPixmap &pixmap); // Added to update pixmap
 
 private:
     QGraphicsScene *m_scene;

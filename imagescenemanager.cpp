@@ -19,3 +19,17 @@ void ImageSceneManager::addImage(const QUrl &url, const QPixmap &pixmap, int pos
 QGraphicsItem* ImageSceneManager::itemAt(const QPoint &pos) {
     return m_scene->itemAt(pos.x(), pos.y(), QTransform()); // Fetch item at scene position
 }
+
+QGraphicsPixmapItem* ImageSceneManager::getImageItem(const QUrl &url) {
+    for (auto it = m_imageUrls.constBegin(); it != m_imageUrls.constEnd(); ++it) {
+        if (it.value() == url) return it.key();
+    }
+    return nullptr; // Return null if no match
+}
+
+void ImageSceneManager::updateImage(const QUrl &url, const QPixmap &pixmap) {
+    if (QGraphicsPixmapItem *item = getImageItem(url)) {
+        item->setPixmap(pixmap); // Update the pixmap
+        qDebug() << "Updated image for URL:" << url;
+    }
+}

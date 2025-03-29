@@ -1,4 +1,5 @@
 #include "imagemanipulator.h"
+#include <QGraphicsPixmapItem> // Added for QGraphicsPixmapItem
 #include <QInputDialog>
 #include <QDebug>
 
@@ -6,8 +7,8 @@ ImageManipulator::ImageManipulator(ImageSceneManager *sceneManager, ImageResizer
     : QObject(parent), sceneManager(sceneManager), resizer(resizer), selector(selector), parentWidget(parent) {}
 
 void ImageManipulator::moveImage() {
-    QMap<QUrl, QGraphicsPixmapItem*> imageMap = sceneManager->getImageUrls();
-    QList<QUrl> urls = imageMap.keys();
+    QMap<QGraphicsPixmapItem*, QUrl> imageMap = sceneManager->getImageUrls(); // Fixed map type
+    QList<QUrl> urls = imageMap.values(); // Use values() for URLs
     QUrl selectedUrl = selectImageFromDialog(urls);
     if (selectedUrl.isEmpty()) return;
 
@@ -24,8 +25,8 @@ void ImageManipulator::moveImage() {
 }
 
 void ImageManipulator::resizeImage() {
-    QMap<QUrl, QGraphicsPixmapItem*> imageMap = sceneManager->getImageUrls();
-    QList<QUrl> urls = imageMap.keys();
+    QMap<QGraphicsPixmapItem*, QUrl> imageMap = sceneManager->getImageUrls(); // Fixed map type
+    QList<QUrl> urls = imageMap.values(); // Use values() for URLs
     QUrl selectedUrl = selectImageFromDialog(urls);
     if (selectedUrl.isEmpty()) return;
 
