@@ -28,15 +28,16 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
 
     // Save Action
     SaveFunctionBrick *saveFunction = new SaveFunctionBrick(edit, this);
-    SaveGUIBrick *saveGui = new SaveGUIBrick(this); // Fixed typo: SaveGuiBrick -> SaveGUIBrick
-    SaveHandlerBrick *saveHandler = new SaveHandlerBrick(saveFunction, saveGui, this); // Added saveGui
-    SaveManagerBrick *saveManager = new SaveManagerBrick(saveHandler, saveGui, this);
+    SaveGUIBrick *saveGui = new SaveGUIBrick(edit, this); // Pass edit instead of this
+    SaveHandlerBrick *saveHandler = new SaveHandlerBrick(saveFunction, saveGui, this);
+    SaveManagerBrick *saveManager = new SaveManagerBrick(edit, this); // Pass edit instead of handler/gui
 
     // Toolbar Setup
     QToolBar *toolbar = addToolBar("Tools");
     toolbar->addAction("Bold", boldGui, &BoldBrick::applyBold);
     toolbar->addAction("Italic", italicGui, &ItalicBrick::applyItalic);
-    toolbar->addAction("Save", saveGui, &SaveGUIBrick::save); // Fixed signal: triggered -> save
+    QAction *saveAction = toolbar->addAction("Save"); // Use QAction for manual trigger
+    connect(saveAction, &QAction::triggered, saveManager, &SaveManagerBrick::triggerSave); // Toolbar triggers manager
 
     // Placeholder Example
     setContextMenuPolicy(Qt::CustomContextMenu); // Ensure custom context menu is enabled
@@ -49,7 +50,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     // Connections
     connect(boldGui, &BoldBrick::applyBold, boldHandler, &BoldBrick::applyBold);
     connect(italicGui, &ItalicBrick::applyItalic, italicHandler, &ItalicBrick::applyItalic);
-    connect(saveGui, &SaveGUIBrick::save, saveHandler, &SaveHandlerBrick::handleSave); // Fixed signal: triggered -> save, handle -> handleSave
+    connect(saveGui, &SaveGUIBrick::saveTriggered, saveHandler, &SaveHandlerBrick::handleSave); // Use new signal
     connect(saveHandler, &SaveHandlerBrick::completed, saveManager, &SaveManagerBrick::validate);
 
     qDebug() << "MainWindowBrick ready.";

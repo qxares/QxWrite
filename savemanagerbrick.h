@@ -15,6 +15,9 @@ public:
     void triggerSave();
     void setTextEdit(QTextEdit *edit);  // Added
 
+public slots:
+    void validate(); // Added slot for validation
+
 private:
     QTextEdit *m_textEdit;
     SaveFunctionBrick *m_function;

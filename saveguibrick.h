@@ -13,6 +13,9 @@ public:
     QString getSaveFileName();
     void setTextEdit(QTextEdit *edit);  // Added
 
+signals:
+    void saveTriggered(); // Added signal for save action
+
 private:
     QTextEdit *m_textEdit;
     DialogBrick *m_dialog;
