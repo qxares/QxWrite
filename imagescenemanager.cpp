@@ -12,5 +12,10 @@ void ImageSceneManager::addImage(const QUrl &url, const QPixmap &pixmap, int pos
     item->setData(0, url); // Store URL for reference
     item->setPos(position * 10, 0); // Simple mapping, adjust as needed
     m_scene->addItem(item);
+    m_imageUrls[item] = url; // Map the pixmap item to its URL
     qDebug() << "Added image to scene at position:" << position;
+}
+
+QGraphicsItem* ImageSceneManager::itemAt(const QPoint &pos) {
+    return m_scene->itemAt(pos.x(), pos.y(), QTransform()); // Fetch item at scene position
 }
