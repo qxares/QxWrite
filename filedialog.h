@@ -10,7 +10,7 @@ class FileDialog : public QDialog {
     Q_OBJECT
 public:
     enum FileMode { Import, Export };
-    explicit FileDialog(QWidget *parent = nullptr);
+    explicit FileDialog(QWidget *parent = nullptr, const QString &initialPath = "", FileMode mode = Import); // Updated constructor
     void configureForMode(FileMode mode);
     QString getSelectedFile();
 

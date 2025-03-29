@@ -34,7 +34,7 @@ void ContextMenuHandler::showContextMenu(const QPoint &pos) {
 }
 
 void ContextMenuHandler::insertImage() {
-    FileDialog dialog(parentWidget, QDir::homePath(), FileDialog::Import);
+    FileDialog dialog(parentWidget, QDir::homePath(), FileDialog::Import); // Matches new constructor
     if (dialog.exec()) {
         QString fileName = dialog.getSelectedFile();
         if (!fileName.isEmpty()) {
