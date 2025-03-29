@@ -30,3 +30,14 @@ void SaveManagerBrick::setTextEdit(QTextEdit *edit) {
     m_gui->setTextEdit(edit);  // Ensure GUI brick updates too
     qDebug() << "SaveManagerBrick: TextEdit updated to:" << m_textEdit;
 }
+
+void SaveManagerBrick::validate() {
+    if (!m_textEdit) {
+        qDebug() << "SaveManagerBrick: No text edit set for validation";
+        return;
+    }
+    // Basic validation: check if save was successful (stub for now)
+    QString currentText = m_textEdit->toPlainText();
+    qDebug() << "SaveManagerBrick: Validating save - text length:" << currentText.length();
+    // Add more validation logic here if needed (e.g., file exists, content matches)
+}
