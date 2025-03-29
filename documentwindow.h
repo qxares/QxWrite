@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMdiSubWindow>
 #include "newfilebrick.h"
+#include "imagescenemanager.h" // Added for ImageSceneManager
 
 class QTextEdit;
 class NewFileBrick;
@@ -12,7 +13,7 @@ class OpenFileBrick;
 class DocumentWindow : public QWidget {
     Q_OBJECT
 public:
-    explicit DocumentWindow(QWidget *parent = nullptr);
+    explicit DocumentWindow(ImageSceneManager *sceneManager, QWidget *parent = nullptr); // Updated constructor
     ~DocumentWindow();
     QTextEdit* getTextEdit() const;
     void clear();
@@ -28,6 +29,7 @@ private:
     QTextEdit *textEdit;
     NewFileBrick *newFileBrick;
     OpenFileBrick *openFileBrick;
+    ImageSceneManager *sceneManager; // Added to store the pointer
 };
 
 #endif // DOCUMENTWINDOW_H

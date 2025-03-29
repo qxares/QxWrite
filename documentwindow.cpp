@@ -1,32 +1,22 @@
 #include "documentwindow.h"
-#include "newfilebrick.h"
-#include "openfilebrick.h"
 #include <QTextEdit>
 #include <QVBoxLayout>
-#include <QDebug>
-#include <QMdiSubWindow>
-#include <QEvent>
+#include "openfilebrick.h"
 
-DocumentWindow::DocumentWindow(QWidget *parent) : QWidget(parent) {
-    QVBoxLayout *layout = new QVBoxLayout(this);
+DocumentWindow::DocumentWindow(ImageSceneManager *sceneManager, QWidget *parent)
+    : QWidget(parent), sceneManager(sceneManager) { // Updated constructor
     textEdit = new QTextEdit(this);
-    textEdit->setFrameStyle(QFrame::NoFrame);
-    textEdit->setAcceptRichText(true);
-    textEdit->installEventFilter(this);
+    newFileBrick = new NewFileBrick(this);
+    openFileBrick = new OpenFileBrick(this);
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(textEdit);
     setLayout(layout);
 
-    newFileBrick = new NewFileBrick(textEdit, this);
-    openFileBrick = new OpenFileBrick(textEdit, this);
-
-    qDebug() << "DocumentWindow initialized with textEdit:" << textEdit;
+    textEdit->installEventFilter(this);
 }
 
-DocumentWindow::~DocumentWindow() {
-    delete newFileBrick;
-    delete openFileBrick;
-    delete textEdit;
-}
+DocumentWindow::~DocumentWindow() {}
 
 QTextEdit* DocumentWindow::getTextEdit() const {
     return textEdit;
@@ -34,29 +24,13 @@ QTextEdit* DocumentWindow::getTextEdit() const {
 
 void DocumentWindow::clear() {
     textEdit->clear();
-    qDebug() << "DocumentWindow cleared";
 }
 
 void DocumentWindow::newFile(NewFileBrick::DocType type) {
     clear();
-    if (type == NewFileBrick::Document) {
-        textEdit->setDocumentTitle("Untitled Document");
-        QTextDocument *doc = textEdit->document();
-        doc->setDefaultFont(QFont("Times New Roman", 12));
-        qDebug() << "DocumentWindow: New QxDocument created";
-    } else {
-        newFileBrick->newFile(type);
-        qDebug() << "DocumentWindow: New file created, type:" << type;
-    }
+    // Add type-specific initialization later if needed
 }
 
 bool DocumentWindow::eventFilter(QObject *obj, QEvent *event) {
-    if (obj == textEdit) {
-        if (event->type() == QEvent::MouseButtonPress ||
-            event->type() == QEvent::MouseMove ||
-            event->type() == QEvent::MouseButtonRelease) {
-            return false; // Let QTextEdit handle selection
-        }
-    }
     return QWidget::eventFilter(obj, event);
 }
