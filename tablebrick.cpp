@@ -66,11 +66,7 @@ void TableBrick::insertTable() {
         format.setCellSpacing(2);
         format.setBorder(1);
         format.setAlignment(Qt::AlignLeft);
-        QVector<QTextLength> constraints;
-        for (int col = 0; col < cols; ++col) {
-            constraints.append(QTextLength(QTextLength::FixedLength, 120));
-        }
-        format.setColumnWidthConstraints(constraints);
+        format.setWidth(QTextLength(QTextLength::PercentageLength, 100)); // Full width
         table->setFormat(format);
 
         QTextCharFormat cellFormat;
@@ -83,17 +79,12 @@ void TableBrick::insertTable() {
             }
         }
 
-        QTextBlockFormat blockFormat;
-        blockFormat.setAlignment(Qt::AlignLeft);
-        cursor.setBlockFormat(blockFormat);
-
         cursor.endEditBlock();
         m_textEdit->setTextCursor(cursor);
-        qDebug() << "TableBrick: Inserted" << rows << "x" << cols << "table with 120px wide, 30px tall cells";
+        qDebug() << "TableBrick: Inserted" << rows << "x" << cols << "table with full width, 30px tall cells";
     }
 }
 
-// Stubs removed—handled by TableHandlerBrick
 void TableBrick::alignTableLeft() {}
 void TableBrick::alignTableCenter() {}
 void TableBrick::alignTableRight() {}

@@ -6,12 +6,14 @@
 #include <QScrollBar>
 #include <QDebug>
 #include <QMdiSubWindow>
+#include <QEvent>
 
 DocumentWindow::DocumentWindow(QWidget *parent) : QWidget(parent) {
     QVBoxLayout *layout = new QVBoxLayout(this);
     textEdit = new QTextEdit(this);
-    textEdit->setFrameStyle(QFrame::NoFrame);  // Clean look like a word processor
-    textEdit->setAcceptRichText(true);         // Enable rich text for formatting
+    textEdit->setFrameStyle(QFrame::NoFrame);
+    textEdit->setAcceptRichText(true);
+    textEdit->installEventFilter(this); // Install event filter for mouse events
     layout->addWidget(textEdit);
     setLayout(layout);
 
@@ -41,10 +43,21 @@ void DocumentWindow::newFile(NewFileBrick::DocType type) {
     if (type == NewFileBrick::Document) {
         textEdit->setDocumentTitle("Untitled Document");
         QTextDocument *doc = textEdit->document();
-        doc->setDefaultFont(QFont("Times New Roman", 12));  // Default word processor feel
+        doc->setDefaultFont(QFont("Times New Roman", 12));
         qDebug() << "DocumentWindow: New QxDocument created";
     } else {
         newFileBrick->newFile(type);
         qDebug() << "DocumentWindow: New file created, type:" << type;
     }
+}
+
+bool DocumentWindow::eventFilter(QObject *obj, QEvent *event) {
+    if (obj == textEdit) {
+        if (event->type() == QEvent::MouseButtonPress ||
+            event->type() == QEvent::MouseMove ||
+            event->type() == QEvent::MouseButtonRelease) {
+            return false; // Let QTextEdit handle mouse events for selection
+        }
+    }
+    return QWidget::eventFilter(obj, event);
 }

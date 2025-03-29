@@ -2,7 +2,7 @@
 #define DOCUMENTWINDOW_H
 
 #include <QWidget>
-#include <QMdiSubWindow>  // Added for QMdiSubWindow
+#include <QMdiSubWindow>
 #include "newfilebrick.h"
 
 class QTextEdit;
@@ -16,10 +16,13 @@ public:
     ~DocumentWindow();
     QTextEdit* getTextEdit() const;
     void clear();
-    void newFile(NewFileBrick::DocType type);  // Enhanced for QxDocument
+    void newFile(NewFileBrick::DocType type);
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *event) override; // Added for mouse event handling
 
 signals:
-    void customContextMenuRequested(QMdiSubWindow *subWindow, const QPoint &pos);  // Signal for context menu
+    void customContextMenuRequested(QMdiSubWindow *subWindow, const QPoint &pos);
 
 private:
     QTextEdit *textEdit;

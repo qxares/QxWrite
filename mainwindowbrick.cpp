@@ -26,7 +26,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     documentHandler = new DocumentHandlerBrick(this);
     toolBarBrick = new ToolBarBrick(this);
     menuManagerBrick = new MenuManagerBrick(this);
-    activeTableHandler = nullptr; // Initialize
+    activeTableHandler = nullptr;
 
     addToolBar(toolBarBrick->getToolBar());
     setMenuBar(menuManagerBrick->getMenuBar());
@@ -66,7 +66,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         auto *resizeBrick = new ResizeBrick(textEdit, this);
         resizeBrick->enableResize();
 
-        activeTableHandler = tableHandlerBrick; // Set for new document
+        activeTableHandler = tableHandlerBrick;
 
         connect(openAction, &QAction::triggered, openFileBrick, &OpenFileBrick::openFile);
         connect(saveAction, &QAction::triggered, saveManagerBrick, &SaveManagerBrick::triggerSave);
@@ -81,10 +81,10 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         connect(tableAction, &QAction::triggered, tableBrick, &TableBrick::insertTable);
 
         connect(menuManagerBrick, &MenuManagerBrick::saveAsTriggered, saveManagerBrick, &SaveManagerBrick::triggerSave);
-        connect(menuManagerBrick, &MenuManagerBrick::alignTableLeftTriggered, tableHandlerBrick, &TableHandlerBrick::alignTableLeft);
-        connect(menuManagerBrick, &MenuManagerBrick::alignTableCenterTriggered, tableHandlerBrick, &TableHandlerBrick::alignTableCenter);
-        connect(menuManagerBrick, &MenuManagerBrick::alignTableRightTriggered, tableHandlerBrick, &TableHandlerBrick::alignTableRight);
-        connect(menuManagerBrick, &MenuManagerBrick::deleteTableTriggered, tableHandlerBrick, &TableHandlerBrick::deleteTable);
+        connect(menuManagerBrick, &MenuManagerBrick::alignTableLeftTriggered, this, [this]() { if (activeTableHandler) activeTableHandler->alignTableLeft(); });
+        connect(menuManagerBrick, &MenuManagerBrick::alignTableCenterTriggered, this, [this]() { if (activeTableHandler) activeTableHandler->alignTableCenter(); });
+        connect(menuManagerBrick, &MenuManagerBrick::alignTableRightTriggered, this, [this]() { if (activeTableHandler) activeTableHandler->alignTableRight(); });
+        connect(menuManagerBrick, &MenuManagerBrick::deleteTableTriggered, this, [this]() { if (activeTableHandler) activeTableHandler->deleteTable(); });
         connect(menuManagerBrick, &MenuManagerBrick::moveTriggered, resizeBrick, &ResizeBrick::moveObject);
 
         QMenu *tableMenu = menuManagerBrick->getMenuBar()->findChild<QMenu*>("tableMenu");
@@ -97,6 +97,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
                 QTextEdit *activeEdit = qobject_cast<DocumentWindow*>(mdiArea->activeSubWindow()->widget())->getTextEdit();
                 if (activeEdit == textEdit) {
                     activeTableHandler = tableHandlerBrick;
+                    qDebug() << "MainWindowBrick: activeTableHandler updated for textEdit:" << textEdit;
                 }
             }
         });
