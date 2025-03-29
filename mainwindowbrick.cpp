@@ -27,8 +27,12 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     resize(800, 600);
     setWindowTitle("QxWrite");
 
-    // Debug visibility
+    // Force visibility and debug
+    edit->show();
+    centralWidget->show();
     qDebug() << "QTextEdit created at:" << edit << "Visible:" << edit->isVisible();
+    qDebug() << "CentralWidget visible:" << centralWidget->isVisible() << "Size:" << centralWidget->size();
+    qDebug() << "Layout contains QTextEdit:" << (layout->indexOf(edit) != -1);
 
     // Toolbar Setup
     QToolBar *toolbar = addToolBar("Tools");
