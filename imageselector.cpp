@@ -1,5 +1,6 @@
 #include "imageselector.h"
 #include "imagescenemanager.h"
+#include <QGraphicsPixmapItem> // Added for dynamic_cast
 #include <QDebug>
 
 ImageSelector::ImageSelector(QTextEdit *editor, QObject *parent) 
