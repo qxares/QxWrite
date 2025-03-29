@@ -1,8 +1,7 @@
 #include "mainwindowbrick.h"
 #include <QTextEdit>
 #include <QDebug>
-#include "boldbrick.h" // Fixed typo: was boldfunctionbrick.h
-#include "boldhandlerbrick.h"
+#include "boldbrick.h" // Covers BoldFunctionBrick logic
 #include "boldguibrick.h"
 #include "boldmanagerbrick.h"
 #include "italicfunctionbrick.h"
@@ -23,8 +22,8 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     resize(800, 600);
 
     // Bold Action
-    BoldFunctionBrick *boldFunction = new BoldFunctionBrick(edit, this);
-    BoldHandlerBrick *boldHandler = new BoldHandlerBrick(boldFunction, this);
+    BoldBrick *boldFunction = new BoldBrick(edit, this); // Adjusted to match boldbrick.h
+    BoldBrick *boldHandler = new BoldBrick(edit, this);  // Temp fix: using BoldBrick until boldhandlerbrick.h is found
     BoldGuiBrick *boldGui = new BoldGuiBrick(this);
     BoldManagerBrick *boldManager = new BoldManagerBrick(boldHandler, boldGui, this);
 
@@ -53,8 +52,8 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     });
 
     // Connections
-    connect(boldGui, &BoldGuiBrick::triggered, boldHandler, &BoldHandlerBrick::handle);
-    connect(boldHandler, &BoldHandlerBrick::completed, boldManager, &BoldManagerBrick::validate);
+    connect(boldGui, &BoldGuiBrick::triggered, boldHandler, &BoldBrick::applyBold); // Adjusted signal
+    connect(boldHandler, &BoldBrick::applyBold, boldManager, &BoldManagerBrick::validate); // Temp fix
     connect(italicGui, &ItalicGuiBrick::triggered, italicHandler, &ItalicHandlerBrick::handle);
     connect(italicHandler, &ItalicHandlerBrick::completed, italicManager, &ItalicManagerBrick::validate);
     connect(saveGui, &SaveGuiBrick::triggered, saveHandler, &SaveHandlerBrick::handle);
