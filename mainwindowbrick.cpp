@@ -2,6 +2,8 @@
 #include <QTextEdit>
 #include <QDebug>
 #include <QToolBar>
+#include <QVBoxLayout>
+#include <QWidget>
 #include "boldbrick.h"
 #include "italicbrick.h"
 #include "savefunctionbrick.h"
@@ -13,31 +15,39 @@
 MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     qDebug() << "MainWindowBrick starting...";
     
-    // Setup QTextEdit as central widget
+    // Central widget with layout
+    QWidget *centralWidget = new QWidget(this);
+    QVBoxLayout *layout = new QVBoxLayout(centralWidget);
     edit = new QTextEdit(this);
-    edit->setMinimumSize(600, 400); // Ensure it has a visible size
-    setCentralWidget(edit);
+    edit->setMinimumSize(600, 400);
+    layout->addWidget(edit);
+    centralWidget->setLayout(layout);
+    setCentralWidget(centralWidget);
+    
     resize(800, 600);
-    setWindowTitle("QxWrite"); // Give it a title for clarity
+    setWindowTitle("QxWrite");
+
+    // Debug visibility
+    qDebug() << "QTextEdit created at:" << edit << "Visible:" << edit->isVisible();
 
     // Toolbar Setup
     QToolBar *toolbar = addToolBar("Tools");
-    toolbar->setMovable(false); // Lock it in place for now
+    toolbar->setMovable(false);
 
     // Bold Action
     BoldBrick *boldBrick = new BoldBrick(edit, this);
-    QAction *boldAction = toolbar->addAction("Bold", boldBrick, &BoldBrick::applyBold);
+    toolbar->addAction("Bold", boldBrick, &BoldBrick::applyBold);
 
     // Italic Action
     ItalicBrick *italicBrick = new ItalicBrick(edit, this);
-    QAction *italicAction = toolbar->addAction("Italic", italicBrick, &ItalicBrick::applyItalic);
+    toolbar->addAction("Italic", italicBrick, &ItalicBrick::applyItalic);
 
     // Save Action
     SaveFunctionBrick *saveFunction = new SaveFunctionBrick(edit, this);
     SaveGUIBrick *saveGui = new SaveGUIBrick(edit, this);
     SaveHandlerBrick *saveHandler = new SaveHandlerBrick(saveFunction, saveGui, this);
     SaveManagerBrick *saveManager = new SaveManagerBrick(edit, this);
-    QAction *saveAction = toolbar->addAction("Save", saveManager, &SaveManagerBrick::triggerSave);
+    toolbar->addAction("Save", saveManager, &SaveManagerBrick::triggerSave);
 
     // Placeholder Context Menu
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -46,14 +56,14 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         placeholderBrick->insertPlaceholder(edit->textCursor().position(), PlaceholderBrick::Table);
     });
 
-    // Connections (simplified, no redundant handlers)
+    // Connections
     connect(saveHandler, &SaveHandlerBrick::completed, saveManager, &SaveManagerBrick::validate);
 
     qDebug() << "MainWindowBrick ready.";
 }
 
 MainWindowBrick::~MainWindowBrick() {
-    // Destructor stub; add cleanup if needed
+    // Cleanup if needed
 }
 
 void MainWindowBrick::handleOpenFile() {
