@@ -1,4 +1,5 @@
 #include "imagedraghandler.h"
+#include <QGraphicsPixmapItem> // Added for QGraphicsPixmapItem definition
 #include <QDebug>
 #include <QGraphicsView>
 
