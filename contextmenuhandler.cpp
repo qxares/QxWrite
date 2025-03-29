@@ -1,5 +1,6 @@
 #include "contextmenuhandler.h"
 #include <QMenu>
+#include <QDir> // Added for QDir::homePath()
 #include <QDebug>
 #include "filedialog.h"
 #include "imageplaceholder.h"
@@ -43,7 +44,7 @@ void ContextMenuHandler::insertImage() {
                 if (editor) {
                     QTextCursor cursor = editor->textCursor();
                     QPixmap pixmap = QPixmap::fromImage(placeholder.getImage());
-                    sceneManager->addImage(placeholder.getUrl(), pixmap, editor->cursorRect(cursor).topLeft());
+                    sceneManager->addImage(placeholder.getUrl(), pixmap, editor->cursorRect(cursor).topLeft().x()); // Use x() for int
                     cursor.insertText(" ");
                     qDebug() << "Inserted image at" << placeholder.getUrl() << "Size:" << pixmap.size();
                 }
