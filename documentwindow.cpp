@@ -6,8 +6,8 @@
 DocumentWindow::DocumentWindow(ImageSceneManager *sceneManager, QWidget *parent)
     : QWidget(parent), sceneManager(sceneManager) { // Updated constructor
     textEdit = new QTextEdit(this);
-    newFileBrick = new NewFileBrick(this);
-    openFileBrick = new OpenFileBrick(this);
+    newFileBrick = new NewFileBrick(textEdit, this); // Pass textEdit instead of this
+    openFileBrick = new OpenFileBrick(textEdit, this); // Pass textEdit instead of this
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(textEdit);
