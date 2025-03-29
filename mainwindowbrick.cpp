@@ -2,7 +2,7 @@
 #include <QTextEdit>
 #include <QDebug>
 #include "boldbrick.h" // Covers BoldBrick logic (function, handler, and GUI for now)
-#include "italicfunctionbrick.h"
+#include "italicbrick.h" // Fixed: was italicfunctionbrick.h
 #include "italichandlerbrick.h"
 #include "italicguibrick.h"
 #include "italicmanagerbrick.h"
