@@ -12,6 +12,9 @@ public:
     explicit SaveHandlerBrick(SaveFunctionBrick *saveFunction, SaveGUIBrick *saveGui, QObject *parent = nullptr);
     void handleSave();
 
+signals:
+    void completed(); // Added missing signal
+
 private:
     SaveFunctionBrick *m_saveFunction;
     SaveGUIBrick *m_saveGui;

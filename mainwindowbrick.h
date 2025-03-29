@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QMdiArea>
+#include <QTextEdit>
 
 class ToolBarBrick;
 class MenuManagerBrick;
@@ -19,6 +20,7 @@ private slots:
     void handleOpenFile();
 
 private:
+    QTextEdit *edit; // Added to class scope
     QMdiArea *mdiArea;
     ToolBarBrick *toolBarBrick;
     MenuManagerBrick *menuManagerBrick;

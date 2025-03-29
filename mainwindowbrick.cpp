@@ -19,36 +19,47 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     // Bold Action
     BoldBrick *boldFunction = new BoldBrick(edit, this);
     BoldBrick *boldHandler = new BoldBrick(edit, this);
-    BoldBrick *boldGui = new BoldBrick(edit, this); // Temp fix: was BoldGuiBrick
+    BoldBrick *boldGui = new BoldBrick(edit, this);
 
     // Italic Action
-    ItalicBrick *italicFunction = new ItalicBrick(edit, this); // Fixed: was ItalicFunctionBrick
-    ItalicBrick *italicHandler = new ItalicBrick(edit, this); // Temp fix: was ItalicHandlerBrick
-    ItalicBrick *italicGui = new ItalicBrick(edit, this); // Temp fix: was ItalicGuiBrick
+    ItalicBrick *italicFunction = new ItalicBrick(edit, this);
+    ItalicBrick *italicHandler = new ItalicBrick(edit, this);
+    ItalicBrick *italicGui = new ItalicBrick(edit, this);
 
     // Save Action
     SaveFunctionBrick *saveFunction = new SaveFunctionBrick(edit, this);
-    SaveHandlerBrick *saveHandler = new SaveHandlerBrick(saveFunction, this);
-    SaveGuiBrick *saveGui = new SaveGuiBrick(this);
+    SaveGUIBrick *saveGui = new SaveGUIBrick(this); // Fixed typo: SaveGuiBrick -> SaveGUIBrick
+    SaveHandlerBrick *saveHandler = new SaveHandlerBrick(saveFunction, saveGui, this); // Added saveGui
     SaveManagerBrick *saveManager = new SaveManagerBrick(saveHandler, saveGui, this);
 
     // Toolbar Setup
     QToolBar *toolbar = addToolBar("Tools");
     toolbar->addAction("Bold", boldGui, &BoldBrick::applyBold);
     toolbar->addAction("Italic", italicGui, &ItalicBrick::applyItalic);
-    toolbar->addAction("Save", saveGui, &SaveGuiBrick::triggered);
+    toolbar->addAction("Save", saveGui, &SaveGUIBrick::save); // Fixed signal: triggered -> save
 
     // Placeholder Example
-    connect(this, &MainWindowBrick::customContextMenuRequested, this, [this](int pos) {
+    setContextMenuPolicy(Qt::CustomContextMenu); // Ensure custom context menu is enabled
+    connect(this, &MainWindowBrick::customContextMenuRequested, this, [this](const QPoint &pos) {
+        Q_UNUSED(pos); // For now, ignore pos; adjust if PlaceholderBrick needs it
         auto *placeholderBrick = new PlaceholderBrick(edit, this);
-        placeholderBrick->insertPlaceholder(pos, PlaceholderBrick::Table);
+        placeholderBrick->insertPlaceholder(0, PlaceholderBrick::Table); // Default pos 0
     });
 
     // Connections
-    connect(boldGui, &BoldBrick::applyBold, boldHandler, &BoldBrick::applyBold); // Temp fix: no manager yet
-    connect(italicGui, &ItalicBrick::applyItalic, italicHandler, &ItalicBrick::applyItalic); // Temp fix: no manager yet
-    connect(saveGui, &SaveGuiBrick::triggered, saveHandler, &SaveHandlerBrick::handle);
+    connect(boldGui, &BoldBrick::applyBold, boldHandler, &BoldBrick::applyBold);
+    connect(italicGui, &ItalicBrick::applyItalic, italicHandler, &ItalicBrick::applyItalic);
+    connect(saveGui, &SaveGUIBrick::save, saveHandler, &SaveHandlerBrick::handleSave); // Fixed signal: triggered -> save, handle -> handleSave
     connect(saveHandler, &SaveHandlerBrick::completed, saveManager, &SaveManagerBrick::validate);
 
     qDebug() << "MainWindowBrick ready.";
+}
+
+MainWindowBrick::~MainWindowBrick() {
+    // Destructor stub; add cleanup if needed
+}
+
+void MainWindowBrick::handleOpenFile() {
+    // Stub for open file slot
+    qDebug() << "Open file triggered (stub)";
 }
