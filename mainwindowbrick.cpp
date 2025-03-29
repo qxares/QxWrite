@@ -18,7 +18,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     // Central widget with layout
     QWidget *centralWidget = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout(centralWidget);
-    edit = new QTextEdit(this);
+    edit = new QTextEdit(centralWidget); // Parent to centralWidget
     edit->setMinimumSize(600, 400);
     layout->addWidget(edit);
     centralWidget->setLayout(layout);
@@ -28,8 +28,8 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     setWindowTitle("QxWrite");
 
     // Force visibility and debug
-    edit->show();
-    centralWidget->show();
+    edit->setVisible(true);
+    centralWidget->setVisible(true);
     qDebug() << "QTextEdit created at:" << edit << "Visible:" << edit->isVisible();
     qDebug() << "CentralWidget visible:" << centralWidget->isVisible() << "Size:" << centralWidget->size();
     qDebug() << "Layout contains QTextEdit:" << (layout->indexOf(edit) != -1);
@@ -63,8 +63,10 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     // Connections
     connect(saveHandler, &SaveHandlerBrick::completed, saveManager, &SaveManagerBrick::validate);
 
-    // Force layout update and final debug
-    update();
+    // Force layout update and repaint
+    layout->activate();
+    centralWidget->update();
+    edit->repaint();
     show();
     qDebug() << "After show - QTextEdit visible:" << edit->isVisible() << "Geometry:" << edit->geometry();
     qDebug() << "After show - CentralWidget visible:" << centralWidget->isVisible() << "Geometry:" << centralWidget->geometry();

@@ -2,7 +2,6 @@
 #define MAINWINDOWBRICK_H
 
 #include <QMainWindow>
-#include <QMdiArea>
 #include <QTextEdit>
 
 class ToolBarBrick;
@@ -20,8 +19,7 @@ private slots:
     void handleOpenFile();
 
 private:
-    QTextEdit *edit; // Added to class scope
-    QMdiArea *mdiArea;
+    QTextEdit *edit; // Text editor widget
     ToolBarBrick *toolBarBrick;
     MenuManagerBrick *menuManagerBrick;
     DocumentHandlerBrick *documentHandler;
