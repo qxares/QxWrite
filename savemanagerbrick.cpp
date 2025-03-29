@@ -3,6 +3,7 @@
 #include "saveguibrick.h"
 #include "savehandlerbrick.h"
 #include <QDebug>
+#include <QTextEdit> // Added to resolve incomplete type
 
 SaveManagerBrick::SaveManagerBrick(QTextEdit *edit, QObject *parent) : QObject(parent), m_textEdit(edit) {
     m_function = new SaveFunctionBrick(m_textEdit, this);
