@@ -3,7 +3,6 @@
 #include "openfilebrick.h"
 #include <QTextEdit>
 #include <QVBoxLayout>
-#include <QScrollBar>
 #include <QDebug>
 #include <QMdiSubWindow>
 #include <QEvent>
@@ -13,7 +12,7 @@ DocumentWindow::DocumentWindow(QWidget *parent) : QWidget(parent) {
     textEdit = new QTextEdit(this);
     textEdit->setFrameStyle(QFrame::NoFrame);
     textEdit->setAcceptRichText(true);
-    textEdit->installEventFilter(this); // Install event filter for mouse events
+    textEdit->installEventFilter(this);
     layout->addWidget(textEdit);
     setLayout(layout);
 
@@ -56,7 +55,7 @@ bool DocumentWindow::eventFilter(QObject *obj, QEvent *event) {
         if (event->type() == QEvent::MouseButtonPress ||
             event->type() == QEvent::MouseMove ||
             event->type() == QEvent::MouseButtonRelease) {
-            return false; // Let QTextEdit handle mouse events for selection
+            return false; // Let QTextEdit handle selection
         }
     }
     return QWidget::eventFilter(obj, event);

@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QTextEdit>
-#include <Qt>
 
 class TableHandlerBrick : public QObject {
     Q_OBJECT
@@ -12,14 +11,10 @@ public:
     void setTextEdit(QTextEdit *textEdit);
 
 public slots:
-    void alignTableLeft();
-    void alignTableCenter();
-    void alignTableRight();
     void deleteTable();
 
 private:
-    QTextTable* findTableInDocument(); // Renamed and improved
-    void alignTable(Qt::Alignment alignment);
+    QTextTable* findTableInDocument();
     QTextEdit *m_textEdit;
 };
 

@@ -9,25 +9,11 @@ class TableBrick : public QObject {
 public:
     explicit TableBrick(QTextEdit *textEdit, QObject *parent = nullptr);
     void setTextEdit(QTextEdit *textEdit);
+
+public slots:
     void insertTable();
-    void insertRowBefore();
-    void insertRowAfter();
-    void insertRowAbove();
-    void insertRowBelow();
-    void insertColumnBefore();
-    void insertColumnAfter();
-    void insertColumnAbove();
-    void insertColumnBelow();
-    void deleteRow();
-    void deleteColumn();
-    void mergeCells();
-    void deleteTable();
-    void alignTableLeft();
-    void alignTableCenter();
-    void alignTableRight();
 
 private:
-    void alignTable(Qt::Alignment alignment); // Helper for alignment
     QTextEdit *m_textEdit;
 };
 

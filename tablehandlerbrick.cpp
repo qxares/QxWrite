@@ -16,13 +16,11 @@ QTextTable* TableHandlerBrick::findTableInDocument() {
     QTextTable *table = cursor.currentTable();
 
     if (!table) {
-        // Search entire document for any table
         QTextDocument *doc = m_textEdit->document();
-        cursor.setPosition(0); // Start at beginning
+        cursor.setPosition(0);
         while (!cursor.atEnd()) {
             table = cursor.currentTable();
             if (table) {
-                // Move cursor to table start for operations
                 cursor = table->firstCursorPosition();
                 m_textEdit->setTextCursor(cursor);
                 break;
@@ -32,33 +30,6 @@ QTextTable* TableHandlerBrick::findTableInDocument() {
     }
     return table;
 }
-
-void TableHandlerBrick::alignTable(Qt::Alignment alignment) {
-    QTextTable *table = findTableInDocument();
-    if (!table) {
-        qDebug() << "TableHandlerBrick: No table found for alignment";
-        return;
-    }
-
-    QTextCursor cursor = m_textEdit->textCursor();
-    cursor.beginEditBlock();
-    QTextTableFormat format = table->format();
-    format.setAlignment(alignment);
-    table->setFormat(format);
-
-    QTextBlockFormat blockFormat;
-    blockFormat.setAlignment(alignment);
-    cursor.setBlockFormat(blockFormat);
-
-    cursor.endEditBlock();
-    m_textEdit->viewport()->update();
-    qDebug() << "TableHandlerBrick: Aligned table to" << (alignment == Qt::AlignLeft ? "left" : 
-                                                         alignment == Qt::AlignCenter ? "center" : "right");
-}
-
-void TableHandlerBrick::alignTableLeft() { alignTable(Qt::AlignLeft); }
-void TableHandlerBrick::alignTableCenter() { alignTable(Qt::AlignCenter); }
-void TableHandlerBrick::alignTableRight() { alignTable(Qt::AlignRight); }
 
 void TableHandlerBrick::deleteTable() {
     QTextTable *table = findTableInDocument();

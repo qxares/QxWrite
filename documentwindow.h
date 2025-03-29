@@ -19,7 +19,7 @@ public:
     void newFile(NewFileBrick::DocType type);
 
 protected:
-    bool eventFilter(QObject *obj, QEvent *event) override; // Added for mouse event handling
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 signals:
     void customContextMenuRequested(QMdiSubWindow *subWindow, const QPoint &pos);

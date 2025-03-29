@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTextEdit>
+#include <Qt>
 
 class AlignBrick : public QObject {
     Q_OBJECT

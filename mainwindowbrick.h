@@ -7,7 +7,7 @@
 class ToolBarBrick;
 class MenuManagerBrick;
 class DocumentHandlerBrick;
-class TableHandlerBrick; // Added for activeTableHandler
+class TableHandlerBrick;
 
 class MainWindowBrick : public QMainWindow {
     Q_OBJECT
@@ -23,7 +23,7 @@ private:
     ToolBarBrick *toolBarBrick;
     MenuManagerBrick *menuManagerBrick;
     DocumentHandlerBrick *documentHandler;
-    TableHandlerBrick *activeTableHandler; // Added to track active document's TableHandlerBrick
+    TableHandlerBrick *activeTableHandler; // Tracks active document's TableHandlerBrick
 };
 
 #endif // MAINWINDOWBRICK_H

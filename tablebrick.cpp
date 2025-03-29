@@ -1,4 +1,5 @@
 #include "tablebrick.h"
+#include "placeholderbrick.h"
 #include <QTextCursor>
 #include <QTextTable>
 #include <QDebug>
@@ -65,8 +66,7 @@ void TableBrick::insertTable() {
         format.setCellPadding(5);
         format.setCellSpacing(2);
         format.setBorder(1);
-        format.setAlignment(Qt::AlignLeft);
-        format.setWidth(QTextLength(QTextLength::PercentageLength, 100)); // Full width
+        format.setWidth(QTextLength(QTextLength::PercentageLength, 100));
         table->setFormat(format);
 
         QTextCharFormat cellFormat;
@@ -79,24 +79,10 @@ void TableBrick::insertTable() {
             }
         }
 
+        PlaceholderBrick placeholder(m_textEdit, this);
+        placeholder.insertPlaceholder(cursor.position(), PlaceholderBrick::Table);
         cursor.endEditBlock();
         m_textEdit->setTextCursor(cursor);
-        qDebug() << "TableBrick: Inserted" << rows << "x" << cols << "table with full width, 30px tall cells";
+        qDebug() << "TableBrick: Inserted" << rows << "x" << cols << "table with placeholder";
     }
 }
-
-void TableBrick::alignTableLeft() {}
-void TableBrick::alignTableCenter() {}
-void TableBrick::alignTableRight() {}
-void TableBrick::insertRowBefore() {}
-void TableBrick::insertRowAfter() {}
-void TableBrick::insertRowAbove() {}
-void TableBrick::insertRowBelow() {}
-void TableBrick::insertColumnBefore() {}
-void TableBrick::insertColumnAfter() {}
-void TableBrick::insertColumnAbove() {}
-void TableBrick::insertColumnBelow() {}
-void TableBrick::deleteRow() {}
-void TableBrick::deleteColumn() {}
-void TableBrick::mergeCells() {}
-void TableBrick::deleteTable() {}

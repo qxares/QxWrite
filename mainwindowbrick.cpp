@@ -15,6 +15,7 @@
 #include "tablehandlerbrick.h"
 #include "documenthandlerbrick.h"
 #include "resizebrick.h"
+#include "placeholderbrick.h"
 #include <QMdiArea>
 #include <QMenu>
 #include <QDebug>
@@ -64,6 +65,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         auto *tableBrick = new TableBrick(textEdit, this);
         auto *tableHandlerBrick = new TableHandlerBrick(textEdit, this);
         auto *resizeBrick = new ResizeBrick(textEdit, this);
+        auto *placeholderBrick = new PlaceholderBrick(textEdit, this);
         resizeBrick->enableResize();
 
         activeTableHandler = tableHandlerBrick;
@@ -81,15 +83,15 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         connect(tableAction, &QAction::triggered, tableBrick, &TableBrick::insertTable);
 
         connect(menuManagerBrick, &MenuManagerBrick::saveAsTriggered, saveManagerBrick, &SaveManagerBrick::triggerSave);
-        connect(menuManagerBrick, &MenuManagerBrick::alignTableLeftTriggered, this, [this]() { if (activeTableHandler) activeTableHandler->alignTableLeft(); });
-        connect(menuManagerBrick, &MenuManagerBrick::alignTableCenterTriggered, this, [this]() { if (activeTableHandler) activeTableHandler->alignTableCenter(); });
-        connect(menuManagerBrick, &MenuManagerBrick::alignTableRightTriggered, this, [this]() { if (activeTableHandler) activeTableHandler->alignTableRight(); });
-        connect(menuManagerBrick, &MenuManagerBrick::deleteTableTriggered, this, [this]() { if (activeTableHandler) activeTableHandler->deleteTable(); });
+        connect(menuManagerBrick, &MenuManagerBrick::deleteTableTriggered, tableHandlerBrick, &TableHandlerBrick::deleteTable);
         connect(menuManagerBrick, &MenuManagerBrick::moveTriggered, resizeBrick, &ResizeBrick::moveObject);
 
         QMenu *tableMenu = menuManagerBrick->getMenuBar()->findChild<QMenu*>("tableMenu");
         if (tableMenu) {
             tableMenu->addAction("Move", [resizeBrick]() { resizeBrick->moveObject(); });
+            tableMenu->removeAction(tableMenu->findChild<QAction*>("Align Table Left"));
+            tableMenu->removeAction(tableMenu->findChild<QAction*>("Align Table Center"));
+            tableMenu->removeAction(tableMenu->findChild<QAction*>("Align Table Right"));
         }
 
         connect(mdiArea, &QMdiArea::subWindowActivated, this, [this, textEdit, tableHandlerBrick]() {
