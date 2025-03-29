@@ -1,13 +1,13 @@
 #include "mainwindowbrick.h"
 #include <QTextEdit>
 #include <QDebug>
+#include <QToolBar>
 #include "boldbrick.h" // Covers BoldBrick logic (function, handler, and GUI for now)
 #include "italicbrick.h" // Covers ItalicBrick logic (function, handler, and GUI for now)
 #include "savefunctionbrick.h"
 #include "savehandlerbrick.h"
 #include "saveguibrick.h"
 #include "savemanagerbrick.h"
-#include "guimanagerbrick.h"
 #include "placeholderbrick.h"
 
 MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
@@ -32,11 +32,11 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     SaveGuiBrick *saveGui = new SaveGuiBrick(this);
     SaveManagerBrick *saveManager = new SaveManagerBrick(saveHandler, saveGui, this);
 
-    // GUI Manager
-    GuiManagerBrick *guiManager = new GuiManagerBrick(menuBar(), addToolBar("Tools"), this);
-    guiManager->addGuiBrick(boldGui); // Might need adjustment if BoldBrick isn’t GUI-compatible
-    guiManager->addGuiBrick(italicGui); // Might need adjustment if ItalicBrick isn’t GUI-compatible
-    guiManager->addGuiBrick(saveGui);
+    // Toolbar Setup
+    QToolBar *toolbar = addToolBar("Tools");
+    toolbar->addAction("Bold", boldGui, &BoldBrick::applyBold);
+    toolbar->addAction("Italic", italicGui, &ItalicBrick::applyItalic);
+    toolbar->addAction("Save", saveGui, &SaveGuiBrick::triggered);
 
     // Placeholder Example
     connect(this, &MainWindowBrick::customContextMenuRequested, this, [this](int pos) {
