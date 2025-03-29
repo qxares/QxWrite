@@ -2,8 +2,7 @@
 #include <QTextEdit>
 #include <QDebug>
 #include "boldbrick.h" // Covers BoldBrick logic (function, handler, and GUI for now)
-#include "italicbrick.h" // Fixed: was italicfunctionbrick.h
-#include "italichandlerbrick.h"
+#include "italicbrick.h" // Covers ItalicBrick logic (function, handler, and GUI for now)
 #include "italicguibrick.h"
 #include "italicmanagerbrick.h"
 #include "savefunctionbrick.h"
@@ -25,8 +24,8 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     BoldBrick *boldGui = new BoldBrick(edit, this); // Temp fix: was BoldGuiBrick
 
     // Italic Action
-    ItalicFunctionBrick *italicFunction = new ItalicFunctionBrick(edit, this);
-    ItalicHandlerBrick *italicHandler = new ItalicHandlerBrick(italicFunction, this);
+    ItalicBrick *italicFunction = new ItalicBrick(edit, this); // Fixed: was ItalicFunctionBrick
+    ItalicBrick *italicHandler = new ItalicBrick(edit, this); // Temp fix: was ItalicHandlerBrick
     ItalicGuiBrick *italicGui = new ItalicGuiBrick(this);
     ItalicManagerBrick *italicManager = new ItalicManagerBrick(italicHandler, italicGui, this);
 
@@ -50,8 +49,8 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
 
     // Connections
     connect(boldGui, &BoldBrick::applyBold, boldHandler, &BoldBrick::applyBold); // Temp fix: no manager yet
-    connect(italicGui, &ItalicGuiBrick::triggered, italicHandler, &ItalicHandlerBrick::handle);
-    connect(italicHandler, &ItalicHandlerBrick::completed, italicManager, &ItalicManagerBrick::validate);
+    connect(italicGui, &ItalicGuiBrick::triggered, italicHandler, &ItalicBrick::applyItalic); // Fixed signal
+    connect(italicHandler, &ItalicBrick::applyItalic, italicManager, &ItalicManagerBrick::validate); // Temp fix
     connect(saveGui, &SaveGuiBrick::triggered, saveHandler, &SaveHandlerBrick::handle);
     connect(saveHandler, &SaveHandlerBrick::completed, saveManager, &SaveManagerBrick::validate);
 
