@@ -26,7 +26,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     documentHandler = new DocumentHandlerBrick(this);
     toolBarBrick = new ToolBarBrick(this);
     menuManagerBrick = new MenuManagerBrick(this);
-    activeTableHandler = nullptr; // Initialize
+    activeTableHandler = nullptr;
 
     addToolBar(toolBarBrick->getToolBar());
     setMenuBar(menuManagerBrick->getMenuBar());
@@ -66,7 +66,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         auto *resizeBrick = new ResizeBrick(textEdit, this);
         resizeBrick->enableResize();
 
-        activeTableHandler = tableHandlerBrick; // Set for new document
+        activeTableHandler = tableHandlerBrick;
 
         connect(openAction, &QAction::triggered, openFileBrick, &OpenFileBrick::openFile);
         connect(saveAction, &QAction::triggered, saveManagerBrick, &SaveManagerBrick::triggerSave);
@@ -81,13 +81,24 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         connect(tableAction, &QAction::triggered, tableBrick, &TableBrick::insertTable);
 
         connect(menuManagerBrick, &MenuManagerBrick::saveAsTriggered, saveManagerBrick, &SaveManagerBrick::triggerSave);
+        connect(menuManagerBrick, &MenuManagerBrick::insertRowBeforeTriggered, tableBrick, &TableBrick::insertRowBefore);
+        connect(menuManagerBrick, &MenuManagerBrick::insertRowAfterTriggered, tableBrick, &TableBrick::insertRowAfter);
+        connect(menuManagerBrick, &MenuManagerBrick::insertRowAboveTriggered, tableBrick, &TableBrick::insertRowAbove);
+        connect(menuManagerBrick, &MenuManagerBrick::insertRowBelowTriggered, tableBrick, &TableBrick::insertRowBelow);
+        connect(menuManagerBrick, &MenuManagerBrick::insertColumnBeforeTriggered, tableBrick, &TableBrick::insertColumnBefore);
+        connect(menuManagerBrick, &MenuManagerBrick::insertColumnAfterTriggered, tableBrick, &TableBrick::insertColumnAfter);
+        connect(menuManagerBrick, &MenuManagerBrick::insertColumnAboveTriggered, tableBrick, &TableBrick::insertColumnAbove);
+        connect(menuManagerBrick, &MenuManagerBrick::insertColumnBelowTriggered, tableBrick, &TableBrick::insertColumnBelow);
+        connect(menuManagerBrick, &MenuManagerBrick::deleteRowTriggered, tableBrick, &TableBrick::deleteRow);
+        connect(menuManagerBrick, &MenuManagerBrick::deleteColumnTriggered, tableBrick, &TableBrick::deleteColumn);
+        connect(menuManagerBrick, &MenuManagerBrick::mergeCellsTriggered, tableBrick, &TableBrick::mergeCells);
+        connect(menuManagerBrick, &MenuManagerBrick::deleteTableTriggered, tableHandlerBrick, &TableHandlerBrick::deleteTable);
         connect(menuManagerBrick, &MenuManagerBrick::alignTableLeftTriggered, tableHandlerBrick, &TableHandlerBrick::alignTableLeft);
         connect(menuManagerBrick, &MenuManagerBrick::alignTableCenterTriggered, tableHandlerBrick, &TableHandlerBrick::alignTableCenter);
         connect(menuManagerBrick, &MenuManagerBrick::alignTableRightTriggered, tableHandlerBrick, &TableHandlerBrick::alignTableRight);
-        connect(menuManagerBrick, &MenuManagerBrick::deleteTableTriggered, tableHandlerBrick, &TableHandlerBrick::deleteTable);
         connect(menuManagerBrick, &MenuManagerBrick::moveTriggered, resizeBrick, &ResizeBrick::moveObject);
 
-        QMenu *tableMenu = menuManagerBrick->getMenuBar()->findChild<QMenu*>("Table"); // Fixed from "tableMenu"
+        QMenu *tableMenu = menuManagerBrick->getMenuBar()->findChild<QMenu*>("Table");
         if (tableMenu) {
             tableMenu->addAction("Move", [resizeBrick]() { resizeBrick->moveObject(); });
         }

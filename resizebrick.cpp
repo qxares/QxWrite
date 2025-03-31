@@ -4,7 +4,7 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include <QApplication>
-#include <QAbstractTextDocumentLayout> // Added for documentLayout()
+#include <QAbstractTextDocumentLayout>
 
 ResizeBrick::ResizeBrick(QTextEdit *textEdit, QObject *parent) : QObject(parent), 
     m_textEdit(textEdit), m_resizing(false), m_currentTable(nullptr) {}
@@ -21,18 +21,16 @@ void ResizeBrick::enableResize() {
 
 bool ResizeBrick::eventFilter(QObject *obj, QEvent *event) {
     if (obj == m_textEdit->viewport()) {
-        switch (event->type()) {
-            case QEvent::MouseButtonPress:
-                mousePressEvent(static_cast<QMouseEvent*>(event));
-                return true;
-            case QEvent::MouseMove:
-                mouseMoveEvent(static_cast<QMouseEvent*>(event));
-                return true;
-            case QEvent::MouseButtonRelease:
-                mouseReleaseEvent(static_cast<QMouseEvent*>(event));
-                return true;
-            default:
-                return false;
+        if (event->type() == QEvent::MouseButtonPress) {
+            mousePressEvent(static_cast<QMouseEvent*>(event));
+            if (m_resizing) return true; // Consume only if resizing starts
+            return false; // Let QTextEdit handle selection
+        } else if (event->type() == QEvent::MouseMove) {
+            mouseMoveEvent(static_cast<QMouseEvent*>(event));
+            return m_resizing; // Consume only during resize
+        } else if (event->type() == QEvent::MouseButtonRelease) {
+            mouseReleaseEvent(static_cast<QMouseEvent*>(event));
+            return m_resizing; // Consume only if resizing was active
         }
     }
     return QObject::eventFilter(obj, event);
@@ -45,7 +43,7 @@ void ResizeBrick::mousePressEvent(QMouseEvent *event) {
         if (m_currentTable) {
             QRectF tableRect = m_textEdit->document()->documentLayout()->frameBoundingRect(m_currentTable);
             QPointF clickPos = event->pos();
-            if ((tableRect.bottomRight() - clickPos).manhattanLength() < 10) { // Near bottom-right
+            if ((tableRect.bottomRight() - clickPos).manhattanLength() < 10) {
                 m_resizing = true;
                 m_startPos = event->pos();
                 QApplication::setOverrideCursor(Qt::SizeFDiagCursor);
@@ -62,7 +60,7 @@ void ResizeBrick::mouseMoveEvent(QMouseEvent *event) {
         QVector<QTextLength> constraints = format.columnWidthConstraints();
         int cols = m_currentTable->columns();
         for (int i = 0; i < cols; ++i) {
-            qreal newWidth = qMax(50.0, constraints[i].rawValue() + delta.x() / cols); // Min width 50px
+            qreal newWidth = qMax(50.0, constraints[i].rawValue() + delta.x() / cols);
             constraints[i] = QTextLength(QTextLength::FixedLength, newWidth);
         }
         format.setColumnWidthConstraints(constraints);
@@ -102,7 +100,7 @@ void ResizeBrick::moveObject() {
         QPoint currentPos = QCursor::pos();
         int dx = currentPos.x() - initialPos.x();
         QTextBlockFormat blockFormat = block.blockFormat();
-        blockFormat.setLeftMargin(qMax(0, dx)); // No negative margin
+        blockFormat.setLeftMargin(qMax(0, dx));
         cursor.setBlockFormat(blockFormat);
         m_textEdit->update();
     }
