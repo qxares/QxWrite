@@ -87,7 +87,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         connect(menuManagerBrick, &MenuManagerBrick::deleteTableTriggered, tableHandlerBrick, &TableHandlerBrick::deleteTable);
         connect(menuManagerBrick, &MenuManagerBrick::moveTriggered, resizeBrick, &ResizeBrick::moveObject);
 
-        QMenu *tableMenu = menuManagerBrick->getMenuBar()->findChild<QMenu*>("tableMenu");
+        QMenu *tableMenu = menuManagerBrick->getMenuBar()->findChild<QMenu*>("Table"); // Fixed from "tableMenu"
         if (tableMenu) {
             tableMenu->addAction("Move", [resizeBrick]() { resizeBrick->moveObject(); });
         }

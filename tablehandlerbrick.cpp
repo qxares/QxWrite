@@ -16,13 +16,10 @@ QTextTable* TableHandlerBrick::findTableInDocument() {
     QTextTable *table = cursor.currentTable();
 
     if (!table) {
-        // Search entire document for any table
-        QTextDocument *doc = m_textEdit->document();
         cursor.setPosition(0); // Start at beginning
         while (!cursor.atEnd()) {
             table = cursor.currentTable();
             if (table) {
-                // Move cursor to table start for operations
                 cursor = table->firstCursorPosition();
                 m_textEdit->setTextCursor(cursor);
                 break;
