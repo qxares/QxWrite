@@ -2,7 +2,7 @@ QT += core gui  # Explicitly include Qt modules
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets  # For Qt5 compatibility
 
-TARGET = qxwrite
+TARGET = QxWrite
 TEMPLATE = app
 
 SOURCES += \
