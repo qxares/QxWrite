@@ -2,7 +2,7 @@
 #include "dialogbrick.h"
 #include <QTextEdit>
 #include <QFile>
-#include <QFileInfo>  // Added for QFileInfo
+#include <QFileInfo>
 #include <QTextStream>
 #include <QProcess>
 #include <QDebug>
@@ -25,7 +25,7 @@ void ExportBrick::exportFile() {
     }
     DialogBrick dialog(this);
     QString fileName = dialog.getSaveFileName(nullptr, "Export File", "/home/ares", 
-                                              "Documents (*.doc *.docx *.odt *.pdf);;All Files (*)");
+                                              "Word (*.doc);;Word XML (*.docx);;OpenDocument (*.odt);;PDF (*.pdf);;All Files (*)");
     if (fileName.isEmpty()) {
         qDebug() << "ExportBrick: No file selected";
         return;
@@ -45,6 +45,7 @@ void ExportBrick::exportFile() {
         out.setCodec("UTF-8");
         out << m_textEdit->toHtml();
         htmlFile.close();
+        qDebug() << "ExportBrick: Temp HTML written to:" << tempHtml;
     } else {
         qDebug() << "ExportBrick: Failed to write temp HTML:" << tempHtml;
         QMessageBox::critical(qobject_cast<QWidget*>(parent()), "Export Error", 
@@ -54,13 +55,29 @@ void ExportBrick::exportFile() {
 
     QProcess process;
     bool success = false;
+    QString errorMsg;
     if (ext == "doc" || ext == "docx" || ext == "odt") {
-        process.start("libreoffice", QStringList() << "--headless" << "--convert-to" << ext << tempHtml 
-                      << "--outdir" << QFileInfo(fileName).absolutePath());
+        QStringList args = QStringList() << "--headless" << "--convert-to" << ext << tempHtml 
+                         << "--outdir" << QFileInfo(fileName).absolutePath();
+        process.start("libreoffice", args);
         success = process.waitForFinished(10000);
+        if (success && process.exitCode() == 0) {
+            qDebug() << "ExportBrick: LibreOffice conversion successful for:" << fileName;
+        } else {
+            errorMsg = process.error() == QProcess::FailedToStart ? 
+                       "LibreOffice not found or failed to start" : process.readAllStandardError();
+            success = false;
+        }
     } else if (ext == "pdf") {
         process.start("pandoc", QStringList() << tempHtml << "-o" << fileName);
         success = process.waitForFinished(10000);
+        if (success && process.exitCode() == 0) {
+            qDebug() << "ExportBrick: Pandoc conversion successful for:" << fileName;
+        } else {
+            errorMsg = process.error() == QProcess::FailedToStart ? 
+                       "Pandoc not found or failed to start" : process.readAllStandardError();
+            success = false;
+        }
     }
 
     if (success) {
@@ -68,8 +85,8 @@ void ExportBrick::exportFile() {
         QFile::remove(tempHtml);  // Clean up
         m_textEdit->document()->setModified(false);
     } else {
-        qDebug() << "ExportBrick: Export failed for:" << fileName << process.errorString();
+        qDebug() << "ExportBrick: Export failed for:" << fileName << "Error:" << errorMsg;
         QMessageBox::critical(qobject_cast<QWidget*>(parent()), "Export Error", 
-                              "Failed to export file: " + fileName);
+                              "Failed to export file: " + fileName + "\nError: " + errorMsg);
     }
 }
