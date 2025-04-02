@@ -15,6 +15,7 @@ QString DialogBrick::getOpenFileName(QWidget *parent, const QString &caption, co
     qDebug() << "DialogBrick: getOpenFileName called with parent:" << parent
              << "caption:" << caption << "dir:" << dialog.directory().path()
              << "filter:" << filter;
+    qDebug() << "DialogBrick: Dialog visible:" << dialog.isVisible();
 
     QStringList files;
     if (dialog.exec() == QDialog::Accepted) {
@@ -43,6 +44,7 @@ QString DialogBrick::getSaveFileName(QWidget *parent, const QString &caption, co
     qDebug() << "DialogBrick: getSaveFileName called with parent:" << parent
              << "caption:" << caption << "dir:" << dialog.directory().path()
              << "filter:" << filter;
+    qDebug() << "DialogBrick: Dialog visible:" << dialog.isVisible();
 
     QStringList files;
     if (dialog.exec() == QDialog::Accepted) {

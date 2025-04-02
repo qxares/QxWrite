@@ -23,7 +23,7 @@ void ImportBrick::importFile() {
     }
 
     DialogBrick dialog(this);
-    QString fileName = dialog.getOpenFileName(nullptr, "Import File", "", 
+    QString fileName = dialog.getOpenFileName(nullptr, "Import File", "/home/ares/test", 
                                               "Text (*.txt);;HTML (*.html);;Word (*.doc);;Word XML (*.docx);;OpenDocument (*.odt);;PDF (*.pdf);;All Files (*)");
     if (fileName.isEmpty()) {
         qDebug() << "ImportBrick: No file selected";
