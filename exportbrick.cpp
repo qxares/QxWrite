@@ -2,6 +2,7 @@
 #include "dialogbrick.h"
 #include <QTextEdit>
 #include <QFile>
+#include <QFileInfo>  // Added for QFileInfo
 #include <QTextStream>
 #include <QProcess>
 #include <QDebug>
