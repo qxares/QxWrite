@@ -1,7 +1,8 @@
 #include "openfilebrick.h"
-#include "dialogbrick.h"
+#include <QFileDialog>
 #include <QTextEdit>
 #include <QFile>
+#include <QFileInfo>
 #include <QTextStream>
 #include <QTextDocument>
 #include <QMessageBox>
@@ -9,7 +10,6 @@
 
 OpenFileBrick::OpenFileBrick(QTextEdit *edit, QObject *parent) 
     : QObject(parent), m_textEdit(edit) {
-    m_dialog = new DialogBrick(this);
     qDebug() << "OpenFileBrick initialized, target edit:" << m_textEdit;
 }
 
@@ -23,49 +23,59 @@ void OpenFileBrick::openFile() {
         qDebug() << "OpenFileBrick: No text edit set, cannot open file";
         return;
     }
-    QWidget *parentWidget = m_textEdit->parentWidget();
+    QWidget *parentWidget = qobject_cast<QWidget*>(parent());
+    if (!parentWidget) {
+        qDebug() << "OpenFileBrick: No parent widget for dialog, using null parent";
+        parentWidget = nullptr;
+    }
     qDebug() << "OpenFileBrick: openFile triggered, parent:" << parentWidget;
 
-    QString fileName = m_dialog->getOpenFileName(
-        parentWidget,
-        "Open File",
-        "/home/ares",
-        "Text Files (*.txt *.md);;All Files (*)"
-    );
+    QFileDialog dialog(parentWidget, "Open File", "/home/ares",
+                       "Text Files (*.txt);;Rich Text Files (*.rtf);;HTML Files (*.html *.htm);;All Files (*)");
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
 
-    if (!fileName.isEmpty()) {
-        QFile file(fileName);
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            QTextStream in(&file);
-            in.setCodec("UTF-8"); // Ensure UTF-8 encoding
-            QString content = in.readAll();
-            file.close();
-
-            if (!content.isEmpty()) {
-                // Try loading as HTML first (for rich text support)
-                QTextDocument doc;
-                doc.setHtml(content);
-                QString plainText = doc.toPlainText();
-                if (!plainText.isEmpty() && plainText != content) {
-                    m_textEdit->setHtml(content);
-                    qDebug() << "OpenFileBrick: Loaded file as HTML:" << fileName;
-                } else {
-                    // Fall back to plain text
-                    m_textEdit->setPlainText(content);
-                    qDebug() << "OpenFileBrick: Loaded file as plain text:" << fileName;
-                }
-            } else {
-                qDebug() << "OpenFileBrick: File is empty:" << fileName;
-                QMessageBox::warning(parentWidget, "Open File", "The selected file is empty.");
-            }
-        } else {
-            qDebug() << "OpenFileBrick: Failed to open file:" << fileName
-                     << "Error:" << file.errorString();
-            QMessageBox::critical(parentWidget, "Open File", 
-                                  QString("Failed to open file: %1\nError: %2")
-                                  .arg(fileName).arg(file.errorString()));
-        }
-    } else {
-        qDebug() << "OpenFileBrick: No file selected";
+    dialog.selectFile("");
+    if (dialog.exec() != QDialog::Accepted || dialog.selectedFiles().isEmpty()) {
+        qDebug() << "OpenFileBrick: No file selected or dialog canceled";
+        return;
     }
+
+    QString fileName = dialog.selectedFiles().first();
+    QFile file(fileName);
+
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "OpenFileBrick: Failed to open file:" << fileName
+                 << "Error:" << file.errorString();
+        QMessageBox::critical(parentWidget, "Open File",
+                              QString("Failed to open file: %1\nError: %2")
+                              .arg(fileName).arg(file.errorString()));
+        return;
+    }
+
+    QTextStream in(&file);
+    in.setCodec("UTF-8");
+    QString content = in.readAll();
+    file.close();
+
+    if (content.isEmpty()) {
+        qDebug() << "OpenFileBrick: File is empty:" << fileName;
+        QMessageBox::warning(parentWidget, "Open File", "The selected file is empty.");
+        return;
+    }
+
+    QString ext = QFileInfo(fileName).suffix().toLower();
+    if (ext == "txt") {
+        m_textEdit->setPlainText(content);
+        qDebug() << "OpenFileBrick: Loaded .txt file:" << fileName;
+    } else if (ext == "rtf" || ext == "html" || ext == "htm") {
+        m_textEdit->setHtml(content);
+        qDebug() << "OpenFileBrick: Loaded" << ext << "file as HTML:" << fileName;
+    } else {
+        m_textEdit->setPlainText(content);
+        qDebug() << "OpenFileBrick: Loaded unknown file as plain text:" << fileName;
+    }
+
+    m_textEdit->document()->setModified(false); // Reset modified flag after load
 }

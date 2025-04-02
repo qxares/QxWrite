@@ -21,6 +21,7 @@ public:
     void deleteRow();
     void deleteColumn();
     void mergeCells();
+    void splitCells(); // Updated method for splitting cells with explicit row/col dialog
     void deleteTable();
     void alignTableLeft();
     void alignTableCenter();

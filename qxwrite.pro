@@ -1,6 +1,8 @@
-QT       += core gui widgets printsupport
+QT += core gui  # Explicitly include Qt modules
 
-TARGET = QxWrite
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets  # For Qt5 compatibility
+
+TARGET = qxwrite
 TEMPLATE = app
 
 SOURCES += \
@@ -27,7 +29,9 @@ SOURCES += \
     listbrick.cpp \
     tablebrick.cpp \
     tablehandlerbrick.cpp \
-    resizebrick.cpp
+    resizebrick.cpp \
+    importbrick.cpp \
+    exportbrick.cpp
 
 HEADERS += \
     mainwindowbrick.h \
@@ -52,7 +56,6 @@ HEADERS += \
     listbrick.h \
     tablebrick.h \
     tablehandlerbrick.h \
-    resizebrick.h
-
-RESOURCES += \
-    icons.qrc
+    resizebrick.h \
+    importbrick.h \
+    exportbrick.h

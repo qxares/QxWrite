@@ -10,7 +10,7 @@ QString DialogBrick::getOpenFileName(QWidget *parent, const QString &caption, co
     QFileDialog dialog(parent, caption, !dir.isEmpty() ? dir : lastDir, filter);
     dialog.setFileMode(QFileDialog::ExistingFile);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
-    dialog.setOption(QFileDialog::DontUseNativeDialog, true); // Force Qt dialog
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
 
     qDebug() << "DialogBrick: getOpenFileName called with parent:" << parent
              << "caption:" << caption << "dir:" << dialog.directory().path()
@@ -30,7 +30,7 @@ QString DialogBrick::getOpenFileName(QWidget *parent, const QString &caption, co
     qDebug() << "DialogBrick: QFileDialog returned: \"\"";
     qDebug() << "DialogBrick: Open cancelled";
     qDebug() << "DialogBrick: File view contents in" << dialog.directory().path() << ":"
-             << QDir(dialog.directory().path()).entryList(QDir::Files | QDir::Dirs | QDir::NoDot);
+             << QDir(dialog.directory().path()).entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
     return QString();
 }
 

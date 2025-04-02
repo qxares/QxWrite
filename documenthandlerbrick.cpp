@@ -63,10 +63,10 @@ QTextEdit* DocumentHandlerBrick::newDocument(NewFileBrick::DocType type) {
 void DocumentHandlerBrick::openDocument(OpenFileBrick *openFileBrick) {
     if (!mdiArea) {
         qDebug() << "DocumentHandlerBrick: No MDI area to handle open document!";
+        delete openFileBrick;
         return;
     }
     DocumentWindow *docWindow = new DocumentWindow(nullptr);
-    docWindow->newFile(NewFileBrick::Document);
     QMdiSubWindow *subWindow = mdiArea->addSubWindow(docWindow);
     subWindow->setWindowTitle("QxDocument");
     subWindow->resize(400, 300);
@@ -84,9 +84,38 @@ void DocumentHandlerBrick::openDocument(OpenFileBrick *openFileBrick) {
     subWindow->show();
     cascadeWindows(NewFileBrick::Document);
 
-    openFileBrick->setTextEdit(docWindow->getTextEdit());
+    QTextEdit *textEdit = docWindow->getTextEdit();
+    if (!textEdit) {
+        qDebug() << "DocumentHandlerBrick: Failed to get textEdit from DocumentWindow!";
+        delete openFileBrick;
+        subWindow->close();
+        return;
+    }
+
+    openFileBrick->setTextEdit(textEdit);
     openFileBrick->openFile();
-    qDebug() << "DocumentHandlerBrick: Opened document in new window";
+    if (!textEdit->toPlainText().isEmpty()) {
+        qDebug() << "DocumentHandlerBrick: Opened document in new window";
+    }
+}
+
+QTextEdit* DocumentHandlerBrick::getActiveTextEdit() {
+    QMdiSubWindow *activeWindow = mdiArea->activeSubWindow();
+    if (!activeWindow) {
+        qDebug() << "DocumentHandlerBrick: No active subwindow!";
+        return nullptr;
+    }
+    DocumentWindow *docWindow = qobject_cast<DocumentWindow*>(activeWindow->widget());
+    if (!docWindow) {
+        qDebug() << "DocumentHandlerBrick: Active subwindow has no DocumentWindow!";
+        return nullptr;
+    }
+    QTextEdit *textEdit = docWindow->getTextEdit();
+    if (!textEdit) {
+        qDebug() << "DocumentHandlerBrick: No textEdit in active DocumentWindow!";
+        return nullptr;
+    }
+    return textEdit;
 }
 
 void DocumentHandlerBrick::cascadeWindows(NewFileBrick::DocType type) {
@@ -94,7 +123,7 @@ void DocumentHandlerBrick::cascadeWindows(NewFileBrick::DocType type) {
     if (type == NewFileBrick::Document) {
         windowList = &documentWindows;
     } else if (type == NewFileBrick::Note) {
-        windowList = &noteWindows; // Fixed typo from ¬eWindows
+        windowList = &noteWindows; // Fixed ¬eWindows typo
     } else if (type == NewFileBrick::Sheet) {
         windowList = &sheetWindows;
     }
@@ -162,7 +191,7 @@ void DocumentHandlerBrick::moveCascade(QMdiSubWindow *subWindow) {
     if (documentWindows.contains(subWindow)) {
         windowList = &documentWindows;
     } else if (noteWindows.contains(subWindow)) {
-        windowList = &noteWindows; // Fixed typo from ¬eWindows
+        windowList = &noteWindows; // Fixed ¬eWindows typo
     } else if (sheetWindows.contains(subWindow)) {
         windowList = &sheetWindows;
     }

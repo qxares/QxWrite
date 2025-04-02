@@ -1,4 +1,5 @@
 #include "tablehandlerbrick.h"
+#include "tablebrick.h"
 #include <QTextCursor>
 #include <QTextTable>
 #include <QDebug>
@@ -58,19 +59,6 @@ void TableHandlerBrick::alignTableCenter() { alignTable(Qt::AlignCenter); }
 void TableHandlerBrick::alignTableRight() { alignTable(Qt::AlignRight); }
 
 void TableHandlerBrick::deleteTable() {
-    QTextTable *table = findTableInDocument();
-    if (!table) {
-        qDebug() << "TableHandlerBrick: No table found to delete";
-        return;
-    }
-
-    QTextCursor cursor = table->firstCursorPosition();
-    cursor.beginEditBlock();
-    int rows = table->rows();
-    int cols = table->columns();
-    cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor, rows * cols);
-    cursor.removeSelectedText();
-    cursor.endEditBlock();
-    m_textEdit->setTextCursor(cursor);
-    qDebug() << "TableHandlerBrick: Table deleted (" << rows << "x" << cols << ")";
+    TableBrick tableBrick(m_textEdit, this);
+    tableBrick.deleteTable();
 }

@@ -2,8 +2,8 @@
 #define DOCUMENTHANDLERBRICK_H
 
 #include <QObject>
-#include <QList>  // For QList<QMdiSubWindow*>
-#include <QMdiSubWindow>  // Added for QMdiSubWindow
+#include <QList>
+#include <QMdiSubWindow>
 #include "newfilebrick.h"
 #include "documentwindow.h"
 
@@ -15,19 +15,20 @@ class DocumentHandlerBrick : public QObject {
     Q_OBJECT
 public:
     explicit DocumentHandlerBrick(QWidget *parent = nullptr);
-    QTextEdit* newDocument(NewFileBrick::DocType type); // Changed to return QTextEdit*
-    void openDocument(OpenFileBrick *openFileBrick); // New method for opening files
+    QTextEdit* newDocument(NewFileBrick::DocType type);
+    void openDocument(OpenFileBrick *openFileBrick);
+    QTextEdit* getActiveTextEdit(); // New method to get active window's QTextEdit
 
 private slots:
-    void showContextMenu(QMdiSubWindow *subWindow, const QPoint &pos);  // Handle context menu
-    void moveCascade(QMdiSubWindow *subWindow);  // Move the cascade
+    void showContextMenu(QMdiSubWindow *subWindow, const QPoint &pos);
+    void moveCascade(QMdiSubWindow *subWindow);
 
 private:
-    void cascadeWindows(NewFileBrick::DocType type); // Cascade windows of a specific type
-    QMdiArea *mdiArea;  // Manage subwindows here
-    QList<QMdiSubWindow*> documentWindows; // QxDocuments
-    QList<QMdiSubWindow*> noteWindows;     // QxNotes
-    QList<QMdiSubWindow*> sheetWindows;    // QxSheets
+    void cascadeWindows(NewFileBrick::DocType type);
+    QMdiArea *mdiArea;
+    QList<QMdiSubWindow*> documentWindows;
+    QList<QMdiSubWindow*> noteWindows;
+    QList<QMdiSubWindow*> sheetWindows;
 };
 
 #endif // DOCUMENTHANDLERBRICK_H

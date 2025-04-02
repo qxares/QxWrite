@@ -29,7 +29,11 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
     QAction *newSheet = newMenu->addAction("QxSheet");
     newActionMenu->setMenu(newMenu);
 
+    QAction *importAction = fileMenu->addAction("Import");  // New Import action
+    QAction *exportAction = fileMenu->addAction("Export");  // New Export action
     QAction *saveAsAction = fileMenu->addAction("Save As");
+    QAction *exitAction = fileMenu->addAction("Exit");
+
     if (openAction) {
         QAction *menuOpen = new QAction("Open", this);
         menuOpen->setToolTip(openAction->toolTip());
@@ -75,6 +79,7 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
     QAction *insertColumnMenu = insertMenu->addAction("Add Column");
     QMenu *deleteMenu = new QMenu("Delete", tableMenu);
     QAction *mergeCells = tableMenu->addAction("Merge Cells");
+    QAction *splitCells = tableMenu->addAction("Split Cells");
 
     QMenu *rowMenu = new QMenu("Row", insertMenu);
     QAction *insertRowBefore = rowMenu->addAction("Insert Before");
@@ -115,6 +120,7 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
     QObject::connect(deleteColumn, &QAction::triggered, this, &MenuManagerBrick::deleteColumnTriggered);
     QObject::connect(deleteTable, &QAction::triggered, this, &MenuManagerBrick::deleteTableTriggered);
     QObject::connect(mergeCells, &QAction::triggered, this, &MenuManagerBrick::mergeCellsTriggered);
+    QObject::connect(splitCells, &QAction::triggered, this, &MenuManagerBrick::splitCellsTriggered);
     QObject::connect(alignTableLeft, &QAction::triggered, this, &MenuManagerBrick::alignTableLeftTriggered);
     QObject::connect(alignTableCenter, &QAction::triggered, this, &MenuManagerBrick::alignTableCenterTriggered);
     QObject::connect(alignTableRight, &QAction::triggered, this, &MenuManagerBrick::alignTableRightTriggered);
@@ -158,7 +164,10 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
     QObject::connect(newNote, &QAction::triggered, this, [this]() { emit newFileTriggered(0); });
     QObject::connect(newDoc, &QAction::triggered, this, [this]() { emit newFileTriggered(1); });
     QObject::connect(newSheet, &QAction::triggered, this, [this]() { emit newFileTriggered(2); });
+    QObject::connect(importAction, &QAction::triggered, this, &MenuManagerBrick::importTriggered);  // Connect Import
+    QObject::connect(exportAction, &QAction::triggered, this, &MenuManagerBrick::exportTriggered);  // Connect Export
     QObject::connect(saveAsAction, &QAction::triggered, this, [this]() { emit saveAsTriggered(); });
+    QObject::connect(exitAction, &QAction::triggered, this, &MenuManagerBrick::exitTriggered);
 
     qDebug() << "Menus set up. Format menu actions:" << formatMenu->actions().count();
 }

@@ -7,9 +7,12 @@
 class BoldBrick : public QObject {
     Q_OBJECT
 public:
-    explicit BoldBrick(QTextEdit *edit, QObject *parent = nullptr);
-    void applyBold();
+    explicit BoldBrick(QTextEdit *edit = nullptr, QObject *parent = nullptr);
     void setTextEdit(QTextEdit *edit);
+
+public slots:
+    void applyBold();
+    void resetTextEdit(); // Add this
 
 private:
     QTextEdit *m_textEdit;

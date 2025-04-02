@@ -1,0 +1,15 @@
+DocumentHandlerBrick: QMdiArea hooked at: QMdiArea(0x604a5b0f8ad0)
+ToolBarBrick: "Open" icon loaded from ":/icons/icons/open.svg"
+ToolBarBrick: "Save" icon loaded from ":/icons/icons/save.svg"
+ToolBarBrick: "Bold" icon loaded from ":/icons/icons/bold.svg"
+ToolBarBrick: "Italic" icon loaded from ":/icons/icons/italic.svg"
+ToolBarBrick: "Font" icon loaded from ":/icons/icons/font.svg"
+ToolBarBrick: "Color" icon loaded from ":/icons/icons/color.svg"
+ToolBarBrick: "Insert Image" icon loaded from ":/icons/icons/image.svg"
+ToolBarBrick: "Align Left" icon loaded from ":/icons/icons/align-left.svg"
+ToolBarBrick: "Align Center" icon loaded from ":/icons/icons/align-center.svg"
+ToolBarBrick: "Align Right" icon loaded from ":/icons/icons/align-right.svg"
+ToolBarBrick initialized with toolbar: QToolBar(0x604a5b0a5020)
+MenuManagerBrick initialized, menuBar: QMenuBar(0x604a5b0f9600)
+Menus set up. Format menu actions: 10
+MainWindowBrick ready.

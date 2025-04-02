@@ -22,6 +22,8 @@ public:
 signals:
     void newFileTriggered(int type);
     void saveAsTriggered();
+    void importTriggered();  // New signal
+    void exportTriggered();  // New signal
     void numberingTriggered();
     void bulletsTriggered();
     void insertTableTriggered();
@@ -36,11 +38,13 @@ signals:
     void deleteRowTriggered();
     void deleteColumnTriggered();
     void mergeCellsTriggered();
+    void splitCellsTriggered();
     void deleteTableTriggered();
     void alignTableLeftTriggered();
     void alignTableCenterTriggered();
     void alignTableRightTriggered();
-    void moveTriggered(); // Added for ResizeBrick::moveObject
+    void moveTriggered();
+    void exitTriggered();
 
 private:
     QMenuBar *menuBar;
