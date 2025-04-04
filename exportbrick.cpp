@@ -7,6 +7,7 @@
 #include <QProcess>
 #include <QDebug>
 #include <QMessageBox>
+#include <QDir>
 
 ExportBrick::ExportBrick(QTextEdit *edit, QObject *parent) 
     : QObject(parent), m_textEdit(edit) {
@@ -48,21 +49,28 @@ void ExportBrick::exportFile() {
     }
     QTextStream out(&htmlFile);
     out.setCodec("UTF-8");
-    out << "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head><body>" 
-        << m_textEdit->toHtml() << "</body></html>";
+    out << "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head><body><p>" 
+        << m_textEdit->toPlainText() << "</p></body></html>";
     htmlFile.close();
     qDebug() << "ExportBrick: Temp HTML written to:" << tempHtml;
 
     QString outputDir = QFileInfo(baseFileName).absolutePath();
-    QStringList formats = {"txt", "html", "doc", "docx", "odt", "pdf"};
+    QStringList formats = {"txt", "html", "odt", "doc", "docx", "pdf"};
     bool atLeastOneSuccess = false;
 
     // Pre-cleanup
-    QStringList existingFiles = QDir(outputDir).entryList(QStringList() << "test0001.*" << "qxwrite_temp_export.*", QDir::Files);
+    QStringList existingFiles = QDir(outputDir).entryList(QStringList() << "test_002.*" << "qxwrite_temp_export.*", QDir::Files);
     for (const QString &file : existingFiles) {
         QFile::remove(outputDir + "/" + file);
         qDebug() << "ExportBrick: Pre-removed:" << outputDir + "/" + file;
     }
+
+    // Check for LibreOffice availability
+    QProcess checkLibreOffice;
+    checkLibreOffice.start("libreoffice", QStringList() << "--version");
+    bool hasLibreOffice = checkLibreOffice.waitForFinished(5000) && checkLibreOffice.exitCode() == 0;
+
+    QString odtFileName = baseFileName + ".odt"; // Store for doc/docx conversion
 
     for (const QString &ext : formats) {
         QString fileName = baseFileName + "." + ext;
@@ -101,13 +109,18 @@ void ExportBrick::exportFile() {
             } else {
                 qDebug() << "ExportBrick: Failed to write HTML file:" << fileName;
             }
-        } else if (ext == "doc" || ext == "docx" || ext == "odt") {
+        } else if (ext == "odt") {
+            if (!hasLibreOffice) {
+                qDebug() << "ExportBrick: Skipping ODT export - LibreOffice not installed";
+                continue;
+            }
             QProcess process;
-            QString tempOutput = outputDir + "/qxwrite_temp_export." + ext;
-            QStringList args = {"--headless", "--convert-to", ext, tempHtml, "--outdir", outputDir};
+            QString tempOutput = outputDir + "/qxwrite_temp_export.odt";
+            QStringList args = {"--headless", "--convert-to", "odt", tempHtml, "--outdir", outputDir};
             process.start("libreoffice", args);
             if (process.waitForFinished(30000) && process.exitCode() == 0) {
                 qDebug() << "ExportBrick: Temp output exists:" << QFile::exists(tempOutput);
+                qDebug() << "ExportBrick: Files in output dir:" << QDir(outputDir).entryList(QDir::Files);
                 if (QFile::exists(tempOutput)) {
                     QFile::remove(fileName); // Force remove if exists
                     if (QFile::rename(tempOutput, fileName)) {
@@ -116,13 +129,51 @@ void ExportBrick::exportFile() {
                     } else {
                         qDebug() << "ExportBrick: Failed to rename" << tempOutput << "to" << fileName;
                     }
+                } else if (QFile::exists(fileName)) {
+                    qDebug() << "ExportBrick: LibreOffice exported directly to:" << fileName;
+                    atLeastOneSuccess = true;
                 } else {
-                    qDebug() << "ExportBrick: LibreOffice ran but temp file not found:" << tempOutput;
+                    qDebug() << "ExportBrick: LibreOffice ran but no output found for:" << fileName;
                 }
             } else {
                 QString errorMsg = process.error() == QProcess::FailedToStart ? 
                                    "LibreOffice not found" : process.readAllStandardError();
                 qDebug() << "ExportBrick: LibreOffice failed for:" << fileName << "Error:" << errorMsg;
+            }
+        } else if (ext == "doc" || ext == "docx") {
+            if (!hasLibreOffice) {
+                qDebug() << "ExportBrick: Skipping" << ext << "export - LibreOffice not installed";
+                continue;
+            }
+            if (QFile::exists(odtFileName)) {
+                QProcess process;
+                QString tempOutput = outputDir + "/qxwrite_temp_export." + ext;
+                QStringList args = {"--headless", "--convert-to", ext, odtFileName, "--outdir", outputDir};
+                process.start("libreoffice", args);
+                if (process.waitForFinished(30000) && process.exitCode() == 0) {
+                    qDebug() << "ExportBrick: Temp output exists:" << QFile::exists(tempOutput);
+                    qDebug() << "ExportBrick: Files in output dir:" << QDir(outputDir).entryList(QDir::Files);
+                    if (QFile::exists(tempOutput)) {
+                        QFile::remove(fileName); // Force remove if exists
+                        if (QFile::rename(tempOutput, fileName)) {
+                            qDebug() << "ExportBrick: LibreOffice converted ODT to:" << fileName;
+                            atLeastOneSuccess = true;
+                        } else {
+                            qDebug() << "ExportBrick: Failed to rename" << tempOutput << "to" << fileName;
+                        }
+                    } else if (QFile::exists(fileName)) {
+                        qDebug() << "ExportBrick: LibreOffice converted ODT directly to:" << fileName;
+                        atLeastOneSuccess = true;
+                    } else {
+                        qDebug() << "ExportBrick: LibreOffice ran but no output found for:" << fileName;
+                    }
+                } else {
+                    QString errorMsg = process.error() == QProcess::FailedToStart ? 
+                                       "LibreOffice not found" : process.readAllStandardError();
+                    qDebug() << "ExportBrick: LibreOffice failed to convert ODT to:" << fileName << "Error:" << errorMsg;
+                }
+            } else {
+                qDebug() << "ExportBrick: ODT file not found for conversion to:" << fileName;
             }
         } else if (ext == "pdf") {
             QProcess process;
