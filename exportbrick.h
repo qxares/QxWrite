@@ -1,17 +1,18 @@
+// exportbrick.h
 #ifndef EXPORTBRICK_H
 #define EXPORTBRICK_H
 
 #include <QObject>
-#include <QString>
-
-class QTextEdit;
+#include <QTextEdit>
 
 class ExportBrick : public QObject {
     Q_OBJECT
 public:
     explicit ExportBrick(QTextEdit *edit, QObject *parent = nullptr);
-    void exportFile();
     void setTextEdit(QTextEdit *edit);
+
+public slots:
+    void exportFile();
 
 private:
     QTextEdit *m_textEdit;

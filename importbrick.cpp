@@ -1,3 +1,4 @@
+// importbrick.cpp
 #include "importbrick.h"
 #include "dialogbrick.h"
 #include <QTextEdit>
@@ -23,8 +24,8 @@ void ImportBrick::importFile() {
     }
 
     DialogBrick dialog(this);
-    QString fileName = dialog.getOpenFileName(nullptr, "Import File", "/home/ares/test", 
-                                              "Text (*.txt);;HTML (*.html);;Word (*.doc);;Word XML (*.docx);;OpenDocument (*.odt);;PDF (*.pdf);;All Files (*)");
+    QString filter = "Text (*.txt);;HTML (*.html);;Word (*.doc);;Word XML (*.docx);;OpenDocument (*.odt);;PDF (*.pdf);;All Files (*)";
+    QString fileName = dialog.getOpenFileName(nullptr, "Import File", "/home/ares/test", filter);
     if (fileName.isEmpty()) {
         qDebug() << "ImportBrick: No file selected";
         return;
@@ -32,6 +33,8 @@ void ImportBrick::importFile() {
 
     QString ext = QFileInfo(fileName).suffix().toLower();
     QString content;
+
+    qDebug() << "ImportBrick: Importing file:" << fileName << "with extension:" << ext;
 
     if (ext == "txt") {
         QFile file(fileName);
@@ -42,7 +45,7 @@ void ImportBrick::importFile() {
         QTextStream in(&file);
         content = in.readAll();
         file.close();
-        textEdit->setPlainText(content);  // Plain text for .txt
+        textEdit->setPlainText(content);
         qDebug() << "ImportBrick: Imported plain text file:" << fileName;
     } else if (ext == "html") {
         QFile file(fileName);
@@ -53,30 +56,31 @@ void ImportBrick::importFile() {
         QTextStream in(&file);
         content = in.readAll();
         file.close();
-        textEdit->setHtml(content);  // HTML for .html
+        textEdit->setHtml(content);
         qDebug() << "ImportBrick: Imported HTML file:" << fileName;
     } else if (ext == "doc" || ext == "docx" || ext == "odt" || ext == "pdf") {
-        // Convert to HTML using LibreOffice
-        QString tempHtml = "/tmp/qxwrite_temp_import.html";
+        QString tempHtml = QFileInfo(fileName).baseName() + ".html";
+        QString tempPath = "/tmp/" + tempHtml;
         QProcess process;
-        process.start("libreoffice", QStringList() << "--headless" << "--convert-to" << "html" 
-                      << fileName << "--outdir" << "/tmp");
-        if (process.waitForFinished(10000) && process.exitCode() == 0) {
-            QFile htmlFile(tempHtml);
+        QStringList args = {"--headless", "--convert-to", "html", fileName, "--outdir", "/tmp"};
+        process.start("libreoffice", args);
+        if (process.waitForFinished(15000) && process.exitCode() == 0) {
+            QFile htmlFile(tempPath);
             if (htmlFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
                 QTextStream in(&htmlFile);
                 content = in.readAll();
-                qDebug() << "ImportBrick: Temp HTML content:" << content.left(500);  // Log first 500 chars
+                qDebug() << "ImportBrick: Temp HTML content (first 500 chars):" << content.left(500);
                 htmlFile.close();
-                QFile::remove(tempHtml);
-                textEdit->setHtml(content);  // Load as HTML
+                QFile::remove(tempPath);
+                textEdit->setHtml(content);
                 qDebug() << "ImportBrick: Converted and imported:" << fileName;
             } else {
-                qDebug() << "ImportBrick: Failed to read temp HTML:" << tempHtml;
+                qDebug() << "ImportBrick: Failed to read temp HTML:" << tempPath;
                 return;
             }
         } else {
-            qDebug() << "ImportBrick: Conversion failed for:" << fileName << process.errorString();
+            qDebug() << "ImportBrick: Conversion failed for:" << fileName
+                     << "Error:" << process.errorString() << "Output:" << process.readAllStandardError();
             return;
         }
     } else {
