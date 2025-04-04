@@ -1,7 +1,6 @@
 *.o
-moc_*
-qrc_*
+moc_*.cpp
+moc_predefs.h
+Makefile
 QxWrite
-*.save
-*.core
-*~
+qrc_*.cpp
