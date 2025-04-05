@@ -119,7 +119,6 @@ void TranslatorBrick::translateText() {
             qDebug() << "TranslatorBrick: No text available to translate";
             return;
         }
-        textEdit->setTextCursor(cursor);
         qDebug() << "TranslatorBrick: Selected all text for translation:" << selectedText;
     }
 
@@ -164,8 +163,7 @@ void TranslatorBrick::translateText() {
     cursor.removeSelectedText();
     cursor.insertText(translatedText);
     cursor.endEditBlock();
-    cursor.setPosition(cursor.selectionStart());
-    cursor.setPosition(cursor.selectionEnd(), QTextCursor::KeepAnchor);
+    cursor.setPosition(cursor.position(), QTextCursor::KeepAnchor);
     textEdit->setTextCursor(cursor);
     
     qDebug() << "TranslatorBrick: Translated text inserted:" << translatedText;
