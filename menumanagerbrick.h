@@ -16,14 +16,15 @@ public:
                     QAction *colorAction, QAction *imageAction, QAction *alignLeftAction,
                     QAction *alignCenterAction, QAction *alignRightAction,
                     QAction *numberingAction, QAction *bulletsAction,
-                    QAction *tableAction = nullptr);
+                    QAction *tableAction = nullptr,
+                    QAction *translateAction = nullptr);  // Add translator action
     QMenuBar* getMenuBar() const;
 
 signals:
     void newFileTriggered(int type);
     void saveAsTriggered();
-    void importTriggered();  // New signal
-    void exportTriggered();  // New signal
+    void importTriggered();
+    void exportTriggered();
     void numberingTriggered();
     void bulletsTriggered();
     void insertTableTriggered();
@@ -45,6 +46,7 @@ signals:
     void alignTableRightTriggered();
     void moveTriggered();
     void exitTriggered();
+    void translateTriggered();  // New signal for translation
 
 private:
     QMenuBar *menuBar;
@@ -52,6 +54,7 @@ private:
     QMenu *editMenu;
     QMenu *formatMenu;
     QMenu *tableMenu;
+    QMenu *toolsMenu;  // New Tools menu
 };
 
 #endif // MENUMANAGERBRICK_H

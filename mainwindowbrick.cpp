@@ -17,11 +17,13 @@
 #include "tablehandlerbrick.h"
 #include "documenthandlerbrick.h"
 #include "resizebrick.h"
+#include "translatorbrick.h"
 #include <QMdiArea>
 #include <QMenu>
 #include <QDebug>
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QWidgetAction>  // Added for source language QComboBox in menu
 
 MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     mdiArea = new QMdiArea(this);
@@ -31,8 +33,9 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     toolBarBrick = new ToolBarBrick(this);
     menuManagerBrick = new MenuManagerBrick(this);
     boldBrick = new BoldBrick(nullptr, documentHandler);
-    importBrick = new ImportBrick(nullptr, this);  // Global instance
-    exportBrick = new ExportBrick(nullptr, this);  // Global instance
+    importBrick = new ImportBrick(nullptr, this);
+    exportBrick = new ExportBrick(nullptr, this);
+    translatorBrick = new TranslatorBrick(nullptr, this);
     activeTableHandler = nullptr;
 
     addToolBar(toolBarBrick->getToolBar());
@@ -53,20 +56,38 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     QAction *numberingAction = new QAction("Numbering", this);
     QAction *bulletsAction = new QAction("Bullets", this);
     QAction *tableAction = new QAction("Insert Table", this);
+    QAction *translateAction = new QAction("Translate", this);
+    translateAction->setData(QVariant::fromValue(translatorBrick->getTargetLanguageComboBox()));  // Attach target combo
 
     menuManagerBrick->setupMenus(openAction, saveAction, boldAction, italicAction, fontAction,
                                  colorAction, imageAction, alignLeftAction, alignCenterAction,
-                                 alignRightAction, numberingAction, bulletsAction, tableAction);
+                                 alignRightAction, numberingAction, bulletsAction, tableAction,
+                                 translateAction);
+
+    // Add source language submenu under Tools with reset action
+    QMenu *toolsMenu = menuManagerBrick->getMenuBar()->findChild<QMenu*>("Tools");
+    if (toolsMenu) {
+        QMenu *sourceMenu = toolsMenu->addMenu("Translate From");
+        sourceMenu->addAction(QAction::tr("Source Language"))->setEnabled(false);  // Placeholder label
+        sourceMenu->addSeparator();
+        QWidgetAction *sourceWidgetAction = new QWidgetAction(this);
+        sourceWidgetAction->setDefaultWidget(translatorBrick->getSourceLanguageComboBox());
+        sourceMenu->addAction(sourceWidgetAction);
+        QAction *resetAction = sourceMenu->addAction("Reset");
+        connect(resetAction, &QAction::triggered, translatorBrick, &TranslatorBrick::resetTranslation);
+    }
 
     connect(boldAction, &QAction::triggered, boldBrick, &BoldBrick::applyBold);
     connect(menuManagerBrick, &MenuManagerBrick::importTriggered, this, &MainWindowBrick::handleImportFile);
     connect(menuManagerBrick, &MenuManagerBrick::exportTriggered, exportBrick, &ExportBrick::exportFile);
+    connect(menuManagerBrick, &MenuManagerBrick::translateTriggered, translatorBrick, &TranslatorBrick::translateText);
 
     connect(mdiArea, &QMdiArea::subWindowActivated, this, [this]() {
         QTextEdit *activeEdit = documentHandler->getActiveTextEdit();
         boldBrick->setTextEdit(activeEdit);
-        importBrick->setTextEdit(activeEdit);  // Sync with active document
-        exportBrick->setTextEdit(activeEdit);  // Sync with active document
+        importBrick->setTextEdit(activeEdit);
+        exportBrick->setTextEdit(activeEdit);
+        translatorBrick->setTextEdit(activeEdit);
         qDebug() << "MainWindowBrick: BoldBrick synced with active textEdit:" << activeEdit;
     });
 
@@ -146,7 +167,6 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     connect(openAction, &QAction::triggered, this, &MainWindowBrick::handleOpenFile);
     connect(menuManagerBrick, &MenuManagerBrick::exitTriggered, this, &MainWindowBrick::exitApplication);
 
-    // Debug File menu contents
     QMenu *fileMenu = menuManagerBrick->getMenuBar()->findChild<QMenu*>("File");
     if (fileMenu) {
         qDebug() << "File menu actions:" << fileMenu->actions().count();
@@ -165,6 +185,8 @@ MainWindowBrick::~MainWindowBrick() {
     qDebug() << "MainWindowBrick: ImportBrick destroyed";
     delete exportBrick;
     qDebug() << "MainWindowBrick: ExportBrick destroyed";
+    delete translatorBrick;
+    qDebug() << "MainWindowBrick: TranslatorBrick destroyed";
     delete documentHandler;
     qDebug() << "MainWindowBrick: DocumentHandlerBrick destroyed";
     delete toolBarBrick;

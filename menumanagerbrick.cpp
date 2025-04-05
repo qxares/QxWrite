@@ -2,6 +2,9 @@
 #include <QMenuBar>
 #include <QMenu>
 #include <QDebug>
+#include <QAction>
+#include <QWidgetAction>
+#include <QComboBox>  // Added to fix QComboBox recognition
 
 MenuManagerBrick::MenuManagerBrick(QWidget *parent) : QObject(parent) {
     menuBar = new QMenuBar(parent);
@@ -9,10 +12,12 @@ MenuManagerBrick::MenuManagerBrick(QWidget *parent) : QObject(parent) {
     editMenu = new QMenu("Edit", menuBar);
     formatMenu = new QMenu("Format", menuBar);
     tableMenu = new QMenu("Table", menuBar);
+    toolsMenu = new QMenu("Tools", menuBar);  // Initialize Tools menu
     menuBar->addMenu(fileMenu);
     menuBar->addMenu(editMenu);
     menuBar->addMenu(formatMenu);
     menuBar->addMenu(tableMenu);
+    menuBar->addMenu(toolsMenu);  // Add Tools to menu bar
     qDebug() << "MenuManagerBrick initialized, menuBar:" << menuBar;
 }
 
@@ -21,7 +26,7 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
                                   QAction *colorAction, QAction *imageAction, QAction *alignLeftAction,
                                   QAction *alignCenterAction, QAction *alignRightAction,
                                   QAction *numberingAction, QAction *bulletsAction,
-                                  QAction *tableAction) {
+                                  QAction *tableAction, QAction *translateAction) {
     QAction *newActionMenu = fileMenu->addAction("New");
     QMenu *newMenu = new QMenu();
     QAction *newNote = newMenu->addAction("QxNote");
@@ -29,8 +34,8 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
     QAction *newSheet = newMenu->addAction("QxSheet");
     newActionMenu->setMenu(newMenu);
 
-    QAction *importAction = fileMenu->addAction("Import");  // New Import action
-    QAction *exportAction = fileMenu->addAction("Export");  // New Export action
+    QAction *importAction = fileMenu->addAction("Import");
+    QAction *exportAction = fileMenu->addAction("Export");
     QAction *saveAsAction = fileMenu->addAction("Save As");
     QAction *exitAction = fileMenu->addAction("Exit");
 
@@ -108,6 +113,16 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
     QAction *alignTableRight = alignMenu->addAction("Right");
     tableMenu->addMenu(alignMenu);
 
+    // Add Translate To submenu under Tools
+    QMenu *translateMenu = new QMenu("Translate To", toolsMenu);
+    toolsMenu->addMenu(translateMenu);
+    if (translateAction) {
+        QWidgetAction *comboAction = new QWidgetAction(translateMenu);
+        comboAction->setDefaultWidget(translateAction->data().value<QComboBox*>());  // Use TranslatorBrick's QComboBox
+        translateMenu->addAction(comboAction);
+        QObject::connect(translateAction, &QAction::triggered, this, &MenuManagerBrick::translateTriggered);
+    }
+
     QObject::connect(insertRowBefore, &QAction::triggered, this, &MenuManagerBrick::insertRowBeforeTriggered);
     QObject::connect(insertRowAfter, &QAction::triggered, this, &MenuManagerBrick::insertRowAfterTriggered);
     QObject::connect(insertRowAbove, &QAction::triggered, this, &MenuManagerBrick::insertRowAboveTriggered);
@@ -164,8 +179,8 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
     QObject::connect(newNote, &QAction::triggered, this, [this]() { emit newFileTriggered(0); });
     QObject::connect(newDoc, &QAction::triggered, this, [this]() { emit newFileTriggered(1); });
     QObject::connect(newSheet, &QAction::triggered, this, [this]() { emit newFileTriggered(2); });
-    QObject::connect(importAction, &QAction::triggered, this, &MenuManagerBrick::importTriggered);  // Connect Import
-    QObject::connect(exportAction, &QAction::triggered, this, &MenuManagerBrick::exportTriggered);  // Connect Export
+    QObject::connect(importAction, &QAction::triggered, this, &MenuManagerBrick::importTriggered);
+    QObject::connect(exportAction, &QAction::triggered, this, &MenuManagerBrick::exportTriggered);
     QObject::connect(saveAsAction, &QAction::triggered, this, [this]() { emit saveAsTriggered(); });
     QObject::connect(exitAction, &QAction::triggered, this, &MenuManagerBrick::exitTriggered);
 

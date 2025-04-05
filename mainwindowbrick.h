@@ -9,6 +9,7 @@
 #include "tablehandlerbrick.h"
 #include "importbrick.h"  // Add for ImportBrick
 #include "exportbrick.h"  // Add for ExportBrick
+#include "translatorbrick.h"  // Added for TranslatorBrick
 
 class QMdiArea;
 
@@ -36,6 +37,7 @@ private:
     TableHandlerBrick *activeTableHandler;
     ImportBrick *importBrick;  // Declare global instance
     ExportBrick *exportBrick;  // Declare global instance
+    TranslatorBrick *translatorBrick;  // Added global instance
 };
 
 #endif // MAINWINDOWBRICK_H

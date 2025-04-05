@@ -1,0 +1,42 @@
+┌───────────────────────────┬───────────────────────────┬───────────────────────────┬───────────────────────────┐
+│ Afrikaans          - [1m  af[22m │ Finnish            - [1m  fi[22m │ Lao                - [1m  lo[22m │ Serbian (Latin)    -[1msr-Latn[22m
+│ Albanian           - [1m  sq[22m │ French             - [1m  fr[22m │ Latin              - [1m  la[22m │ Sesotho            - [1m  st[22m │
+│ Amharic            - [1m  am[22m │ French (Canadian)  - [1mfr-CA[22m│ Latvian            - [1m  lv[22m │ Shona              - [1m  sn[22m │
+│ Arabic             - [1m  ar[22m │ Frisian            - [1m  fy[22m │ Lingala            - [1m  ln[22m │ Sindhi             - [1m  sd[22m │
+│ Armenian           - [1m  hy[22m │ Galician           - [1m  gl[22m │ Lithuanian         - [1m  lt[22m │ Sinhala            - [1m  si[22m │
+│ Assamese           - [1m  as[22m │ Georgian           - [1m  ka[22m │ Luganda            - [1m  lg[22m │ Slovak             - [1m  sk[22m │
+│ Aymara             - [1m  ay[22m │ German             - [1m  de[22m │ Luxembourgish      - [1m  lb[22m │ Slovenian          - [1m  sl[22m │
+│ Azerbaijani        - [1m  az[22m │ Greek              - [1m  el[22m │ Macedonian         - [1m  mk[22m │ Somali             - [1m  so[22m │
+│ Bambara            - [1m  bm[22m │ Guarani            - [1m  gn[22m │ Maithili           - [1m mai[22m │ Spanish            - [1m  es[22m │
+│ Bashkir            - [1m  ba[22m │ Gujarati           - [1m  gu[22m │ Malagasy           - [1m  mg[22m │ Sundanese          - [1m  su[22m │
+│ Basque             - [1m  eu[22m │ Haitian Creole     - [1m  ht[22m │ Malay              - [1m  ms[22m │ Swahili            - [1m  sw[22m │
+│ Belarusian         - [1m  be[22m │ Hausa              - [1m  ha[22m │ Malayalam          - [1m  ml[22m │ Swedish            - [1m  sv[22m │
+│ Bengali            - [1m  bn[22m │ Hawaiian           - [1m haw[22m │ Maltese            - [1m  mt[22m │ Tahitian           - [1m  ty[22m │
+│ Bhojpuri           - [1m bho[22m │ Hebrew             - [1m  he[22m │ Maori              - [1m  mi[22m │ Tajik              - [1m  tg[22m │
+│ Bosnian            - [1m  bs[22m │ Hill Mari          - [1m mrj[22m │ Marathi            - [1m  mr[22m │ Tamil              - [1m  ta[22m │
+│ Bulgarian          - [1m  bg[22m │ Hindi              - [1m  hi[22m │ Meiteilon          [1mmni-Mtei[22m Tatar              - [1m  tt[22m │
+│ Cantonese          - [1m yue[22m │ Hmong              - [1m hmn[22m │ Mizo               - [1m lus[22m │ Telugu             - [1m  te[22m │
+│ Catalan            - [1m  ca[22m │ Hungarian          - [1m  hu[22m │ Mongolian          - [1m  mn[22m │ Thai               - [1m  th[22m │
+│ Cebuano            - [1m ceb[22m │ Icelandic          - [1m  is[22m │ Mongolian (Tradi...-[1mmn-Mong[22m Tibetan            - [1m  bo[22m │
+│ Chichewa           - [1m  ny[22m │ Igbo               - [1m  ig[22m │ Myanmar            - [1m  my[22m │ Tigrinya           - [1m  ti[22m │
+│ Chinese (Literary) - [1m lzh[22m │ Ilocano            - [1m ilo[22m │ Nepali             - [1m  ne[22m │ Tongan             - [1m  to[22m │
+│ Chinese (Simplif...- [1mzh-CN[22m│ Indonesian         - [1m  id[22m │ Norwegian          - [1m  no[22m │ Tsonga             - [1m  ts[22m │
+│ Chinese (Traditi...- [1mzh-TW[22m│ Inuinnaqtun        - [1m ikt[22m │ Odia               - [1m  or[22m │ Turkish            - [1m  tr[22m │
+│ Chuvash            - [1m  cv[22m │ Inuktitut          - [1m  iu[22m │ Oromo              - [1m  om[22m │ Turkmen            - [1m  tk[22m │
+│ Corsican           - [1m  co[22m │ Inuktitut (Latin)  -[1miu-Latn[22m Papiamento         - [1m pap[22m │ Twi                - [1m  tw[22m │
+│ Croatian           - [1m  hr[22m │ Irish              - [1m  ga[22m │ Pashto             - [1m  ps[22m │ Udmurt             - [1m udm[22m │
+│ Czech              - [1m  cs[22m │ Italian            - [1m  it[22m │ Persian            - [1m  fa[22m │ Ukrainian          - [1m  uk[22m │
+│ Danish             - [1m  da[22m │ Japanese           - [1m  ja[22m │ Polish             - [1m  pl[22m │ Upper Sorbian      - [1m hsb[22m │
+│ Dari               - [1m prs[22m │ Javanese           - [1m  jv[22m │ Portuguese (Braz...- [1mpt-BR[22m│ Urdu               - [1m  ur[22m │
+│ Dhivehi            - [1m  dv[22m │ Kannada            - [1m  kn[22m │ Portuguese (Euro...- [1mpt-PT[22m│ Uyghur             - [1m  ug[22m │
+│ Dogri              - [1m doi[22m │ Kazakh             - [1m  kk[22m │ Punjabi            - [1m  pa[22m │ Uzbek              - [1m  uz[22m │
+│ Dutch              - [1m  nl[22m │ Khmer              - [1m  km[22m │ Quechua            - [1m  qu[22m │ Vietnamese         - [1m  vi[22m │
+│ Eastern Mari       - [1m mhr[22m │ Kinyarwanda        - [1m  rw[22m │ Querétaro Otomi    - [1m otq[22m │ Welsh              - [1m  cy[22m │
+│ English            - [1m  en[22m │ Klingon            [1mtlh-Latn[22m Romanian           - [1m  ro[22m │ Xhosa              - [1m  xh[22m │
+│ Esperanto          - [1m  eo[22m │ Konkani            - [1m gom[22m │ Russian            - [1m  ru[22m │ Yakut              - [1m sah[22m │
+│ Estonian           - [1m  et[22m │ Korean             - [1m  ko[22m │ Samoan             - [1m  sm[22m │ Yiddish            - [1m  yi[22m │
+│ Ewe                - [1m  ee[22m │ Krio               - [1m kri[22m │ Sanskrit           - [1m  sa[22m │ Yoruba             - [1m  yo[22m │
+│ Faroese            - [1m  fo[22m │ Kurdish (Central)  - [1m ckb[22m │ Scots Gaelic       - [1m  gd[22m │ Yucatec Maya       - [1m yua[22m │
+│ Fijian             - [1m  fj[22m │ Kurdish (Northern) - [1m  ku[22m │ Sepedi             - [1m nso[22m │ Zulu               - [1m  zu[22m │
+│ Filipino           - [1m  tl[22m │ Kyrgyz             - [1m  ky[22m │ Serbian (Cyrillic) -[1msr-Cyrl[22m                           │
+└───────────────────────────┴───────────────────────────┴───────────────────────────┴───────────────────────────┘

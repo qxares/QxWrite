@@ -77,7 +77,9 @@ SOURCES       = main.cpp \
 		tablehandlerbrick.cpp \
 		resizebrick.cpp \
 		importbrick.cpp \
-		exportbrick.cpp moc_mainwindowbrick.cpp \
+		exportbrick.cpp \
+		translatorbrick.cpp \
+		resetbrick.cpp moc_mainwindowbrick.cpp \
 		moc_toolbarbrick.cpp \
 		moc_menumanagerbrick.cpp \
 		moc_newfilebrick.cpp \
@@ -101,7 +103,9 @@ SOURCES       = main.cpp \
 		moc_tablehandlerbrick.cpp \
 		moc_resizebrick.cpp \
 		moc_importbrick.cpp \
-		moc_exportbrick.cpp
+		moc_exportbrick.cpp \
+		moc_translatorbrick.cpp \
+		moc_resetbrick.cpp
 OBJECTS       = main.o \
 		mainwindowbrick.o \
 		toolbarbrick.o \
@@ -128,6 +132,8 @@ OBJECTS       = main.o \
 		resizebrick.o \
 		importbrick.o \
 		exportbrick.o \
+		translatorbrick.o \
+		resetbrick.o \
 		moc_mainwindowbrick.o \
 		moc_toolbarbrick.o \
 		moc_menumanagerbrick.o \
@@ -152,7 +158,9 @@ OBJECTS       = main.o \
 		moc_tablehandlerbrick.o \
 		moc_resizebrick.o \
 		moc_importbrick.o \
-		moc_exportbrick.o
+		moc_exportbrick.o \
+		moc_translatorbrick.o \
+		moc_resetbrick.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -255,7 +263,9 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		tablehandlerbrick.h \
 		resizebrick.h \
 		importbrick.h \
-		exportbrick.h main.cpp \
+		exportbrick.h \
+		translatorbrick.h \
+		resetbrick.h main.cpp \
 		mainwindowbrick.cpp \
 		toolbarbrick.cpp \
 		menumanagerbrick.cpp \
@@ -280,7 +290,9 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		tablehandlerbrick.cpp \
 		resizebrick.cpp \
 		importbrick.cpp \
-		exportbrick.cpp
+		exportbrick.cpp \
+		translatorbrick.cpp \
+		resetbrick.cpp
 QMAKE_TARGET  = QxWrite
 DESTDIR       = 
 TARGET        = QxWrite
@@ -466,8 +478,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindowbrick.h toolbarbrick.h menumanagerbrick.h newfilebrick.h openfilebrick.h savemanagerbrick.h boldbrick.h italicbrick.h fontbrick.h colorbrick.h insertbrick.h alignbrick.h dialogbrick.h documentwindow.h savefunctionbrick.h saveguibrick.h savehandlerbrick.h iconbrick.h documenthandlerbrick.h listbrick.h tablebrick.h tablehandlerbrick.h resizebrick.h importbrick.h exportbrick.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainwindowbrick.cpp toolbarbrick.cpp menumanagerbrick.cpp newfilebrick.cpp openfilebrick.cpp savemanagerbrick.cpp boldbrick.cpp italicbrick.cpp fontbrick.cpp colorbrick.cpp insertbrick.cpp alignbrick.cpp dialogbrick.cpp documentwindow.cpp savefunctionbrick.cpp saveguibrick.cpp savehandlerbrick.cpp iconbrick.cpp documenthandlerbrick.cpp listbrick.cpp tablebrick.cpp tablehandlerbrick.cpp resizebrick.cpp importbrick.cpp exportbrick.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindowbrick.h toolbarbrick.h menumanagerbrick.h newfilebrick.h openfilebrick.h savemanagerbrick.h boldbrick.h italicbrick.h fontbrick.h colorbrick.h insertbrick.h alignbrick.h dialogbrick.h documentwindow.h savefunctionbrick.h saveguibrick.h savehandlerbrick.h iconbrick.h documenthandlerbrick.h listbrick.h tablebrick.h tablehandlerbrick.h resizebrick.h importbrick.h exportbrick.h translatorbrick.h resetbrick.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp mainwindowbrick.cpp toolbarbrick.cpp menumanagerbrick.cpp newfilebrick.cpp openfilebrick.cpp savemanagerbrick.cpp boldbrick.cpp italicbrick.cpp fontbrick.cpp colorbrick.cpp insertbrick.cpp alignbrick.cpp dialogbrick.cpp documentwindow.cpp savefunctionbrick.cpp saveguibrick.cpp savehandlerbrick.cpp iconbrick.cpp documenthandlerbrick.cpp listbrick.cpp tablebrick.cpp tablehandlerbrick.cpp resizebrick.cpp importbrick.cpp exportbrick.cpp translatorbrick.cpp resetbrick.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -499,9 +511,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindowbrick.cpp moc_toolbarbrick.cpp moc_menumanagerbrick.cpp moc_newfilebrick.cpp moc_openfilebrick.cpp moc_savemanagerbrick.cpp moc_boldbrick.cpp moc_italicbrick.cpp moc_fontbrick.cpp moc_colorbrick.cpp moc_insertbrick.cpp moc_alignbrick.cpp moc_dialogbrick.cpp moc_documentwindow.cpp moc_savefunctionbrick.cpp moc_saveguibrick.cpp moc_savehandlerbrick.cpp moc_iconbrick.cpp moc_documenthandlerbrick.cpp moc_listbrick.cpp moc_tablebrick.cpp moc_tablehandlerbrick.cpp moc_resizebrick.cpp moc_importbrick.cpp moc_exportbrick.cpp
+compiler_moc_header_make_all: moc_mainwindowbrick.cpp moc_toolbarbrick.cpp moc_menumanagerbrick.cpp moc_newfilebrick.cpp moc_openfilebrick.cpp moc_savemanagerbrick.cpp moc_boldbrick.cpp moc_italicbrick.cpp moc_fontbrick.cpp moc_colorbrick.cpp moc_insertbrick.cpp moc_alignbrick.cpp moc_dialogbrick.cpp moc_documentwindow.cpp moc_savefunctionbrick.cpp moc_saveguibrick.cpp moc_savehandlerbrick.cpp moc_iconbrick.cpp moc_documenthandlerbrick.cpp moc_listbrick.cpp moc_tablebrick.cpp moc_tablehandlerbrick.cpp moc_resizebrick.cpp moc_importbrick.cpp moc_exportbrick.cpp moc_translatorbrick.cpp moc_resetbrick.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindowbrick.cpp moc_toolbarbrick.cpp moc_menumanagerbrick.cpp moc_newfilebrick.cpp moc_openfilebrick.cpp moc_savemanagerbrick.cpp moc_boldbrick.cpp moc_italicbrick.cpp moc_fontbrick.cpp moc_colorbrick.cpp moc_insertbrick.cpp moc_alignbrick.cpp moc_dialogbrick.cpp moc_documentwindow.cpp moc_savefunctionbrick.cpp moc_saveguibrick.cpp moc_savehandlerbrick.cpp moc_iconbrick.cpp moc_documenthandlerbrick.cpp moc_listbrick.cpp moc_tablebrick.cpp moc_tablehandlerbrick.cpp moc_resizebrick.cpp moc_importbrick.cpp moc_exportbrick.cpp
+	-$(DEL_FILE) moc_mainwindowbrick.cpp moc_toolbarbrick.cpp moc_menumanagerbrick.cpp moc_newfilebrick.cpp moc_openfilebrick.cpp moc_savemanagerbrick.cpp moc_boldbrick.cpp moc_italicbrick.cpp moc_fontbrick.cpp moc_colorbrick.cpp moc_insertbrick.cpp moc_alignbrick.cpp moc_dialogbrick.cpp moc_documentwindow.cpp moc_savefunctionbrick.cpp moc_saveguibrick.cpp moc_savehandlerbrick.cpp moc_iconbrick.cpp moc_documenthandlerbrick.cpp moc_listbrick.cpp moc_tablebrick.cpp moc_tablehandlerbrick.cpp moc_resizebrick.cpp moc_importbrick.cpp moc_exportbrick.cpp moc_translatorbrick.cpp moc_resetbrick.cpp
 moc_mainwindowbrick.cpp: mainwindowbrick.h \
 		documenthandlerbrick.h \
 		newfilebrick.h \
@@ -512,6 +524,8 @@ moc_mainwindowbrick.cpp: mainwindowbrick.h \
 		tablehandlerbrick.h \
 		importbrick.h \
 		exportbrick.h \
+		translatorbrick.h \
+		resetbrick.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include mainwindowbrick.h -o moc_mainwindowbrick.cpp
@@ -639,6 +653,17 @@ moc_exportbrick.cpp: exportbrick.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include exportbrick.h -o moc_exportbrick.cpp
 
+moc_translatorbrick.cpp: translatorbrick.h \
+		resetbrick.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include translatorbrick.h -o moc_translatorbrick.cpp
+
+moc_resetbrick.cpp: resetbrick.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/ares/Downloads/editor/QxWriteProject/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/ares/Downloads/editor/QxWriteProject -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include resetbrick.h -o moc_resetbrick.cpp
+
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
@@ -664,7 +689,9 @@ main.o: main.cpp mainwindowbrick.h \
 		boldbrick.h \
 		tablehandlerbrick.h \
 		importbrick.h \
-		exportbrick.h
+		exportbrick.h \
+		translatorbrick.h \
+		resetbrick.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 mainwindowbrick.o: mainwindowbrick.cpp mainwindowbrick.h \
@@ -677,6 +704,8 @@ mainwindowbrick.o: mainwindowbrick.cpp mainwindowbrick.h \
 		tablehandlerbrick.h \
 		importbrick.h \
 		exportbrick.h \
+		translatorbrick.h \
+		resetbrick.h \
 		openfilebrick.h \
 		savemanagerbrick.h \
 		italicbrick.h \
@@ -781,6 +810,13 @@ exportbrick.o: exportbrick.cpp exportbrick.h \
 		dialogbrick.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o exportbrick.o exportbrick.cpp
 
+translatorbrick.o: translatorbrick.cpp translatorbrick.h \
+		resetbrick.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o translatorbrick.o translatorbrick.cpp
+
+resetbrick.o: resetbrick.cpp resetbrick.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o resetbrick.o resetbrick.cpp
+
 moc_mainwindowbrick.o: moc_mainwindowbrick.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindowbrick.o moc_mainwindowbrick.cpp
 
@@ -855,6 +891,12 @@ moc_importbrick.o: moc_importbrick.cpp
 
 moc_exportbrick.o: moc_exportbrick.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_exportbrick.o moc_exportbrick.cpp
+
+moc_translatorbrick.o: moc_translatorbrick.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_translatorbrick.o moc_translatorbrick.cpp
+
+moc_resetbrick.o: moc_resetbrick.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_resetbrick.o moc_resetbrick.cpp
 
 ####### Install
 
