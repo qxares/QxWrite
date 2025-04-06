@@ -248,7 +248,9 @@ void MainWindowBrick::showAboutDialog() {
     shadowEffect->setBlurRadius(15);
     shadowEffect->setXOffset(5);
     shadowEffect->setYOffset(5);
-    shadowEffect->setColor(QColor(0, 0, 255, 180));  // Blue shadow with same intensity as green (180 alpha)
+    QColor shadowColor(0, 0, 255, 180);  // Blue shadow with same intensity as green (180 alpha)
+    shadowEffect->setColor(shadowColor);
+    qDebug() << "MainWindowBrick: Applying shadow color (R,G,B,A):" << shadowColor.red() << shadowColor.green() << shadowColor.blue() << shadowColor.alpha();
     aboutBox->setGraphicsEffect(shadowEffect);
 
     aboutBox->exec();
