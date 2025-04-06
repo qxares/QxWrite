@@ -12,12 +12,14 @@ MenuManagerBrick::MenuManagerBrick(QWidget *parent) : QObject(parent) {
     editMenu = new QMenu("Edit", menuBar);
     formatMenu = new QMenu("Format", menuBar);
     tableMenu = new QMenu("Table", menuBar);
-    toolsMenu = new QMenu("Tools", menuBar);  // Initialize Tools menu
+    toolsMenu = new QMenu("Tools", menuBar);
+    helpMenu = new QMenu("Help", menuBar);  // Initialize Help menu
     menuBar->addMenu(fileMenu);
     menuBar->addMenu(editMenu);
     menuBar->addMenu(formatMenu);
     menuBar->addMenu(tableMenu);
-    menuBar->addMenu(toolsMenu);  // Add Tools to menu bar
+    menuBar->addMenu(toolsMenu);
+    menuBar->addMenu(helpMenu);  // Add Help to menu bar
     qDebug() << "MenuManagerBrick initialized, menuBar:" << menuBar;
 }
 
@@ -25,7 +27,6 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
                                   QAction *boldAction, QAction *italicAction, QAction *fontAction,
                                   QAction *colorAction, QAction *imageAction, QAction *alignLeftAction,
                                   QAction *alignCenterAction, QAction *alignRightAction,
-                                  QAction *numberingAction, QAction *bulletsAction,
                                   QAction *tableAction, QAction *translateAction) {
     QAction *newActionMenu = fileMenu->addAction("New");
     QMenu *newMenu = new QMenu();
@@ -118,10 +119,14 @@ void MenuManagerBrick::setupMenus(QAction *openAction, QAction *saveAction,
     toolsMenu->addMenu(translateMenu);
     if (translateAction) {
         QWidgetAction *comboAction = new QWidgetAction(translateMenu);
-        comboAction->setDefaultWidget(translateAction->data().value<QComboBox*>());  // Use TranslatorBrick's QComboBox
+        comboAction->setDefaultWidget(translateAction->data().value<QComboBox*>());
         translateMenu->addAction(comboAction);
         QObject::connect(translateAction, &QAction::triggered, this, &MenuManagerBrick::translateTriggered);
     }
+
+    // Add About item under Help
+    QAction *aboutAction = helpMenu->addAction("About");
+    QObject::connect(aboutAction, &QAction::triggered, this, &MenuManagerBrick::aboutTriggered);
 
     QObject::connect(insertRowBefore, &QAction::triggered, this, &MenuManagerBrick::insertRowBeforeTriggered);
     QObject::connect(insertRowAfter, &QAction::triggered, this, &MenuManagerBrick::insertRowAfterTriggered);

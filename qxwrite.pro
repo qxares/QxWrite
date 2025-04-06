@@ -1,65 +1,80 @@
-QT += core gui
+# qxwrite.pro
+QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = QxWrite
-TEMPLATE = app
+CONFIG += c++17
+
+# You can make your code fail to compile if it uses deprecated APIs.
+# In order to do so, uncomment the following line.
+#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    alignbrick.cpp \
+    boldbrick.cpp \
+    colorbrick.cpp \
+    dialogbrick.cpp \
+    documenthandlerbrick.cpp \
+    documentwindow.cpp \
+    exportbrick.cpp \
+    exportguibrick.cpp \
+    filehandlerbrick.cpp \
+    filetranslatorbrick.cpp \
+    fontbrick.cpp \
+    importbrick.cpp \
+    insertbrick.cpp \
+    italicbrick.cpp \
     main.cpp \
     mainwindowbrick.cpp \
-    toolbarbrick.cpp \
     menumanagerbrick.cpp \
     newfilebrick.cpp \
     openfilebrick.cpp \
-    savemanagerbrick.cpp \
-    boldbrick.cpp \
-    italicbrick.cpp \
-    fontbrick.cpp \
-    colorbrick.cpp \
-    insertbrick.cpp \
-    alignbrick.cpp \
-    dialogbrick.cpp \
-    documentwindow.cpp \
+    resetbrick.cpp \
+    resizebrick.cpp \
     savefunctionbrick.cpp \
     saveguibrick.cpp \
     savehandlerbrick.cpp \
-    iconbrick.cpp \
-    documenthandlerbrick.cpp \
-    listbrick.cpp \
-    tablebrick.cpp \
-    tablehandlerbrick.cpp \
-    resizebrick.cpp \
-    importbrick.cpp \
-    exportbrick.cpp \
-    translatorbrick.cpp \
-    resetbrick.cpp # Added
+    savemanagerbrick.cpp \
+    toolbarbrick.cpp \
+    translatorbrick.cpp
 
 HEADERS += \
+    alignbrick.h \
+    boldbrick.h \
+    colorbrick.h \
+    dialogbrick.h \
+    documenthandlerbrick.h \
+    documentwindow.h \
+    exportbrick.h \
+    exportguibrick.h \
+    filehandlerbrick.h \
+    filetranslatorbrick.h \
+    fontbrick.h \
+    importbrick.h \
+    insertbrick.h \
+    italicbrick.h \
     mainwindowbrick.h \
-    toolbarbrick.h \
     menumanagerbrick.h \
     newfilebrick.h \
     openfilebrick.h \
-    savemanagerbrick.h \
-    boldbrick.h \
-    italicbrick.h \
-    fontbrick.h \
-    colorbrick.h \
-    insertbrick.h \
-    alignbrick.h \
-    dialogbrick.h \
-    documentwindow.h \
+    resetbrick.h \
+    resizebrick.h \
     savefunctionbrick.h \
     saveguibrick.h \
     savehandlerbrick.h \
-    iconbrick.h \
-    documenthandlerbrick.h \
-    listbrick.h \
-    tablebrick.h \
-    tablehandlerbrick.h \
-    resizebrick.h \
-    importbrick.h \
-    exportbrick.h \
-    translatorbrick.h \
-    resetbrick.h # Added
+    savemanagerbrick.h \
+    toolbarbrick.h \
+    translatorbrick.h
+
+RESOURCES += \
+    icons.qrc
+
+# Default rules for deployment.
+qnx: target.path = /tmp/$${TARGET}/bin
+else: unix:!android: target.path = /opt/$${TARGET}/bin
+!isEmpty(target.path): INSTALLS += target
+
+# Debug config
+CONFIG(debug, debug|release) {
+    DEFINES += QT_DEBUG
+}

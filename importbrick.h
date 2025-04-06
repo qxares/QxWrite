@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTextEdit>
+#include "filetranslatorbrick.h"
 
 class ImportBrick : public QObject {
     Q_OBJECT
@@ -15,6 +16,7 @@ public slots:
 
 private:
     QTextEdit *textEdit;
+    FileTranslatorBrick *fileTranslator;  // Added for file format conversion
 };
 
 #endif // IMPORTBRICK_H

@@ -15,9 +15,8 @@ public:
                     QAction *boldAction, QAction *italicAction, QAction *fontAction,
                     QAction *colorAction, QAction *imageAction, QAction *alignLeftAction,
                     QAction *alignCenterAction, QAction *alignRightAction,
-                    QAction *numberingAction, QAction *bulletsAction,
                     QAction *tableAction = nullptr,
-                    QAction *translateAction = nullptr);  // Add translator action
+                    QAction *translateAction = nullptr);  // Removed numberingAction and bulletsAction
     QMenuBar* getMenuBar() const;
 
 signals:
@@ -46,7 +45,8 @@ signals:
     void alignTableRightTriggered();
     void moveTriggered();
     void exitTriggered();
-    void translateTriggered();  // New signal for translation
+    void translateTriggered();  // Signal for translation
+    void aboutTriggered();     // Signal for About dialog
 
 private:
     QMenuBar *menuBar;
@@ -54,7 +54,8 @@ private:
     QMenu *editMenu;
     QMenu *formatMenu;
     QMenu *tableMenu;
-    QMenu *toolsMenu;  // New Tools menu
+    QMenu *toolsMenu;
+    QMenu *helpMenu;  // New Help menu
 };
 
 #endif // MENUMANAGERBRICK_H

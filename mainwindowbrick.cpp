@@ -12,9 +12,9 @@
 #include "colorbrick.h"
 #include "insertbrick.h"
 #include "alignbrick.h"
-#include "listbrick.h"
-#include "tablebrick.h"
-#include "tablehandlerbrick.h"
+//#include "listbrick.h"
+//#include "tablebrick.h"
+//#include "tablehandlerbrick.h"
 #include "documenthandlerbrick.h"
 #include "resizebrick.h"
 #include "translatorbrick.h"
@@ -24,6 +24,7 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QWidgetAction>  // Added for source language QComboBox in menu
+#include <QGraphicsDropShadowEffect>  // For shadow effect
 
 MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     mdiArea = new QMdiArea(this);
@@ -36,7 +37,6 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     importBrick = new ImportBrick(nullptr, this);
     exportBrick = new ExportBrick(nullptr, this);
     translatorBrick = new TranslatorBrick(nullptr, this);
-    activeTableHandler = nullptr;
 
     addToolBar(toolBarBrick->getToolBar());
     setMenuBar(menuManagerBrick->getMenuBar());
@@ -53,16 +53,12 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     QAction *alignLeftAction = toolBarBrick->getAction("alignLeft");
     QAction *alignCenterAction = toolBarBrick->getAction("alignCenter");
     QAction *alignRightAction = toolBarBrick->getAction("alignRight");
-    QAction *numberingAction = new QAction("Numbering", this);
-    QAction *bulletsAction = new QAction("Bullets", this);
-    QAction *tableAction = new QAction("Insert Table", this);
     QAction *translateAction = new QAction("Translate", this);
     translateAction->setData(QVariant::fromValue(translatorBrick->getTargetLanguageComboBox()));  // Attach target combo
 
     menuManagerBrick->setupMenus(openAction, saveAction, boldAction, italicAction, fontAction,
                                  colorAction, imageAction, alignLeftAction, alignCenterAction,
-                                 alignRightAction, numberingAction, bulletsAction, tableAction,
-                                 translateAction);
+                                 alignRightAction, nullptr, translateAction);  // Removed nullptrs for numberingAction and bulletsAction
 
     // Add source language submenu under Tools with reset action
     QMenu *toolsMenu = menuManagerBrick->getMenuBar()->findChild<QMenu*>("Tools");
@@ -81,6 +77,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
     connect(menuManagerBrick, &MenuManagerBrick::importTriggered, this, &MainWindowBrick::handleImportFile);
     connect(menuManagerBrick, &MenuManagerBrick::exportTriggered, exportBrick, &ExportBrick::exportFile);
     connect(menuManagerBrick, &MenuManagerBrick::translateTriggered, translatorBrick, &TranslatorBrick::translateText);
+    connect(menuManagerBrick, &MenuManagerBrick::aboutTriggered, this, &MainWindowBrick::showAboutDialog);
 
     connect(mdiArea, &QMdiArea::subWindowActivated, this, [this]() {
         QTextEdit *activeEdit = documentHandler->getActiveTextEdit();
@@ -91,7 +88,7 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         qDebug() << "MainWindowBrick: BoldBrick synced with active textEdit:" << activeEdit;
     });
 
-    connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this, openAction, saveAction, italicAction, fontAction, colorAction, imageAction, alignLeftAction, alignCenterAction, alignRightAction, numberingAction, bulletsAction, tableAction](int type) {
+    connect(menuManagerBrick, &MenuManagerBrick::newFileTriggered, this, [this, openAction, saveAction, italicAction, fontAction, colorAction, imageAction, alignLeftAction, alignCenterAction, alignRightAction](int type) {
         QTextEdit *textEdit = documentHandler->newDocument(static_cast<NewFileBrick::DocType>(type));
         if (!textEdit) return;
 
@@ -102,13 +99,8 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         auto *colorBrick = new ColorBrick(textEdit, this);
         auto *insertBrick = new InsertBrick(textEdit, this);
         auto *alignBrick = new AlignBrick(textEdit, this);
-        auto *listBrick = new ListBrick(textEdit, this);
-        auto *tableBrick = new TableBrick(textEdit, this);
-        auto *tableHandlerBrick = new TableHandlerBrick(textEdit, this);
         auto *resizeBrick = new ResizeBrick(textEdit, this);
         resizeBrick->enableResize();
-
-        activeTableHandler = tableHandlerBrick;
 
         connect(openAction, &QAction::triggered, openFileBrick, &OpenFileBrick::openFile);
         connect(saveAction, &QAction::triggered, saveManagerBrick, &SaveManagerBrick::triggerSave);
@@ -119,29 +111,8 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
         connect(alignLeftAction, &QAction::triggered, alignBrick, [alignBrick]() { alignBrick->align(Qt::AlignLeft); });
         connect(alignCenterAction, &QAction::triggered, alignBrick, [alignBrick]() { alignBrick->align(Qt::AlignCenter); });
         connect(alignRightAction, &QAction::triggered, alignBrick, [alignBrick]() { alignBrick->align(Qt::AlignRight); });
-        connect(numberingAction, &QAction::triggered, listBrick, &ListBrick::toggleNumbering);
-        connect(bulletsAction, &QAction::triggered, listBrick, &ListBrick::toggleBullets);
-        connect(tableAction, &QAction::triggered, tableBrick, &TableBrick::insertTable);
 
         connect(menuManagerBrick, &MenuManagerBrick::saveAsTriggered, saveManagerBrick, &SaveManagerBrick::triggerSaveAs);
-        connect(menuManagerBrick, &MenuManagerBrick::numberingTriggered, listBrick, &ListBrick::toggleNumbering);
-        connect(menuManagerBrick, &MenuManagerBrick::bulletsTriggered, listBrick, &ListBrick::toggleBullets);
-        connect(menuManagerBrick, &MenuManagerBrick::insertRowBeforeTriggered, tableBrick, &TableBrick::insertRowBefore);
-        connect(menuManagerBrick, &MenuManagerBrick::insertRowAfterTriggered, tableBrick, &TableBrick::insertRowAfter);
-        connect(menuManagerBrick, &MenuManagerBrick::insertRowAboveTriggered, tableBrick, &TableBrick::insertRowAbove);
-        connect(menuManagerBrick, &MenuManagerBrick::insertRowBelowTriggered, tableBrick, &TableBrick::insertRowBelow);
-        connect(menuManagerBrick, &MenuManagerBrick::insertColumnBeforeTriggered, tableBrick, &TableBrick::insertColumnBefore);
-        connect(menuManagerBrick, &MenuManagerBrick::insertColumnAfterTriggered, tableBrick, &TableBrick::insertColumnAfter);
-        connect(menuManagerBrick, &MenuManagerBrick::insertColumnAboveTriggered, tableBrick, &TableBrick::insertColumnAbove);
-        connect(menuManagerBrick, &MenuManagerBrick::insertColumnBelowTriggered, tableBrick, &TableBrick::insertColumnBelow);
-        connect(menuManagerBrick, &MenuManagerBrick::deleteRowTriggered, tableBrick, &TableBrick::deleteRow);
-        connect(menuManagerBrick, &MenuManagerBrick::deleteColumnTriggered, tableBrick, &TableBrick::deleteColumn);
-        connect(menuManagerBrick, &MenuManagerBrick::mergeCellsTriggered, tableBrick, &TableBrick::mergeCells);
-        connect(menuManagerBrick, &MenuManagerBrick::splitCellsTriggered, tableBrick, &TableBrick::splitCells);
-        connect(menuManagerBrick, &MenuManagerBrick::deleteTableTriggered, tableBrick, &TableBrick::deleteTable);
-        connect(menuManagerBrick, &MenuManagerBrick::alignTableLeftTriggered, tableHandlerBrick, &TableHandlerBrick::alignTableLeft);
-        connect(menuManagerBrick, &MenuManagerBrick::alignTableCenterTriggered, tableHandlerBrick, &TableHandlerBrick::alignTableCenter);
-        connect(menuManagerBrick, &MenuManagerBrick::alignTableRightTriggered, tableHandlerBrick, &TableHandlerBrick::alignTableRight);
         connect(menuManagerBrick, &MenuManagerBrick::moveTriggered, resizeBrick, &ResizeBrick::moveObject);
 
         QMenu *tableMenu = menuManagerBrick->getMenuBar()->findChild<QMenu*>("Table");
@@ -149,11 +120,11 @@ MainWindowBrick::MainWindowBrick(QWidget *parent) : QMainWindow(parent) {
             tableMenu->addAction("Move", [resizeBrick]() { resizeBrick->moveObject(); });
         }
 
-        connect(mdiArea, &QMdiArea::subWindowActivated, this, [this, textEdit, tableHandlerBrick]() {
+        connect(mdiArea, &QMdiArea::subWindowActivated, this, [this, textEdit]() {
             if (mdiArea->activeSubWindow() && mdiArea->activeSubWindow()->widget()) {
                 QTextEdit *activeEdit = qobject_cast<DocumentWindow*>(mdiArea->activeSubWindow()->widget())->getTextEdit();
                 if (activeEdit == textEdit) {
-                    activeTableHandler = tableHandlerBrick;
+                    // No tableHandlerBrick to set
                 }
             }
         });
@@ -264,4 +235,22 @@ void MainWindowBrick::closeEvent(QCloseEvent *event) {
     }
     qDebug() << "MainWindowBrick: All subwindows closed, accepting close event.";
     event->accept();
+}
+
+void MainWindowBrick::showAboutDialog() {
+    QMessageBox *aboutBox = new QMessageBox(this);
+    aboutBox->setWindowTitle("About QxWrite");
+    aboutBox->setText("QxWrite - Created by Mac & Grok, xAI");
+    aboutBox->setStandardButtons(QMessageBox::Ok);
+
+    // Apply shadow effect
+    QGraphicsDropShadowEffect *shadowEffect = new QGraphicsDropShadowEffect(this);
+    shadowEffect->setBlurRadius(15);
+    shadowEffect->setXOffset(5);
+    shadowEffect->setYOffset(5);
+    shadowEffect->setColor(QColor(0, 0, 255, 180));  // Blue shadow with same intensity as green (180 alpha)
+    aboutBox->setGraphicsEffect(shadowEffect);
+
+    aboutBox->exec();
+    delete aboutBox;  // Clean up to avoid memory leak
 }

@@ -1,70 +1,53 @@
-// dialogbrick.cpp
 #include "dialogbrick.h"
-#include <QFileDialog>
 #include <QDebug>
+#include <QFileDialog>
 
-DialogBrick::DialogBrick(QObject *parent) : QObject(parent), lastDir(QDir::homePath()) {
+DialogBrick::DialogBrick(QObject *parent) : QObject(parent), lastDir("/home/ares") {
     qDebug() << "DialogBrick initialized with lastDir:" << lastDir;
 }
 
 QString DialogBrick::getOpenFileName(QWidget *parent, const QString &caption, const QString &dir, const QString &filter) {
-    QFileDialog dialog(parent, caption, !dir.isEmpty() ? dir : lastDir);
-    dialog.setFileMode(QFileDialog::ExistingFile);
+    QFileDialog dialog(parent, caption, dir.isEmpty() ? lastDir : dir, filter);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
-    dialog.setOption(QFileDialog::DontUseNativeDialog, true);  // Custom Qt dialog
-    QStringList filters = filter.split(";;", Qt::SkipEmptyParts);
-    dialog.setNameFilters(filters);  // Split filter for proper display
-
-    qDebug() << "DialogBrick: getOpenFileName called with parent:" << parent
-             << "caption:" << caption << "dir:" << dialog.directory().path()
-             << "filter:" << filter;
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true); // Force Qt dialog, not Nemo
+    dialog.setWindowTitle("QxWrite Open File"); // Custom title for vibe
+    qDebug() << "DialogBrick: getOpenFileName called with parent:" << parent 
+             << "caption:" << caption << "dir:" << dir << "filter:" << filter;
     qDebug() << "DialogBrick: Dialog visible:" << dialog.isVisible();
 
-    QStringList files;
     if (dialog.exec() == QDialog::Accepted) {
-        files = dialog.selectedFiles();
-        qDebug() << "DialogBrick: Selected filter:" << dialog.selectedNameFilter();
-        if (!files.isEmpty()) {
-            lastDir = QFileInfo(files.first()).absolutePath();
-            qDebug() << "DialogBrick: Updated lastDir to:" << lastDir;
-            qDebug() << "DialogBrick: QFileDialog returned:" << files.first();
-            return files.first();
-        }
+        QString fileName = dialog.selectedFiles().first();
+        selectedFilter = dialog.selectedNameFilter();
+        lastDir = QFileInfo(fileName).absolutePath();
+        qDebug() << "DialogBrick: Selected filter:" << selectedFilter;
+        qDebug() << "DialogBrick: Updated lastDir to:" << lastDir;
+        qDebug() << "DialogBrick: QFileDialog returned:" << fileName;
+        return fileName;
     }
-
-    qDebug() << "DialogBrick: QFileDialog returned: \"\"";
-    qDebug() << "DialogBrick: Open cancelled";
-    qDebug() << "DialogBrick: File view contents in" << dialog.directory().path() << ":"
-             << QDir(dialog.directory().path()).entryList(dialog.nameFilters(), QDir::Files | QDir::NoDotAndDotDot);
-    qDebug() << "DialogBrick: Raw dir contents:" << QDir(dialog.directory().path()).entryList(QDir::Files | QDir::NoDotAndDotDot);
-    return QString();
+    return "";
 }
 
 QString DialogBrick::getSaveFileName(QWidget *parent, const QString &caption, const QString &dir, const QString &filter) {
-    QFileDialog dialog(parent, caption, !dir.isEmpty() ? dir : lastDir);
-    dialog.setFileMode(QFileDialog::AnyFile);
+    QFileDialog dialog(parent, caption, dir.isEmpty() ? lastDir : dir, filter);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setOption(QFileDialog::DontUseNativeDialog, true);  // Custom Qt dialog
-    QStringList filters = filter.split(";;", Qt::SkipEmptyParts);
-    dialog.setNameFilters(filters);  // Split filter for proper display
-
-    qDebug() << "DialogBrick: getSaveFileName called with parent:" << parent
-             << "caption:" << caption << "dir:" << dialog.directory().path()
-             << "filter:" << filter;
+    dialog.setOption(QFileDialog::DontUseNativeDialog, true); // Force Qt dialog, not Nemo
+    dialog.setWindowTitle("QxWrite Save File"); // Custom title for vibe
+    qDebug() << "DialogBrick: getSaveFileName called with parent:" << parent 
+             << "caption:" << caption << "dir:" << dir << "filter:" << filter;
     qDebug() << "DialogBrick: Dialog visible:" << dialog.isVisible();
 
-    QStringList files;
     if (dialog.exec() == QDialog::Accepted) {
-        files = dialog.selectedFiles();
-        qDebug() << "DialogBrick: Selected filter:" << dialog.selectedNameFilter();
-        if (!files.isEmpty()) {
-            lastDir = QFileInfo(files.first()).absolutePath();
-            qDebug() << "DialogBrick: Updated lastDir to:" << lastDir;
-            qDebug() << "DialogBrick: QFileDialog returned:" << files.first();
-            return files.first();
-        }
+        QString fileName = dialog.selectedFiles().first();
+        selectedFilter = dialog.selectedNameFilter();
+        lastDir = QFileInfo(fileName).absolutePath();
+        qDebug() << "DialogBrick: Selected filter:" << selectedFilter;
+        qDebug() << "DialogBrick: Updated lastDir to:" << lastDir;
+        qDebug() << "DialogBrick: QFileDialog returned:" << fileName;
+        return fileName;
     }
+    return "";
+}
 
-    qDebug() << "DialogBrick: QFileDialog returned: \"\"";
-    return QString();
+QString DialogBrick::getSelectedFilter() const {
+    return selectedFilter;
 }
