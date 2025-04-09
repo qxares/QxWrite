@@ -49,12 +49,13 @@ QString PandocHandlerBrick::convertToHtml(const QString &inputFile, const QStrin
     file.close();
     QFile::remove(expectedHtml);
 
-    // Inject CSS to enforce tight spacing and visible text
+    // Inject CSS to enforce single spacing and visible text
     QString styledContent = "<!DOCTYPE html><html><head><meta charset=\"UTF-8\">"
                             "<style>"
-                            "body { font-family: 'Ubuntu', sans-serif; margin: 0; padding: 0; color: black; background: white; }"
+                            "body { font-family: 'Ubuntu', sans-serif; margin: 0; padding: 0; color: black; background: white; line-height: 1; }"
                             "p { margin: 0; padding: 0; line-height: 1; color: black; }"
-                            "div { margin: 0; padding: 0; }"
+                            "div { margin: 0; padding: 0; line-height: 1; }"
+                            "br { display: none; }"
                             "b { font-weight: bold; }"
                             "i { font-style: italic; }"
                             "* { display: block; visibility: visible; }"
@@ -75,8 +76,8 @@ bool PandocHandlerBrick::convertFromHtml(const QString &htmlFile, const QString 
         "--standalone",
         "--from", "html",
         "-t", format,
-        "--metadata", "margin-top=1em",
-        "--metadata", "margin-bottom=1em",
+        "--metadata", "margin-top=0.5em",
+        "--metadata", "margin-bottom=0.5em",
         "--metadata", "fontfamily=Ubuntu",
         htmlFile,
         "-o", absoluteOutputFile

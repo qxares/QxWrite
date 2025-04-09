@@ -38,59 +38,26 @@ void DocxFileBrick::exportFile(const QString &filePath) {
         return;
     }
 
-    QString templatePath = "/home/ares/Downloads/editor/QxWriteProject/templates/template docx.ott";
-    QString tempOdt = "/tmp/qxwrite_docxfilebrick_temp.odt";
-
-    // Copy template to temp file
-    if (!QFile::copy(templatePath, tempOdt)) {
-        qDebug() << "DocxFileBrick: Failed to copy template to:" << tempOdt;
-        QMessageBox::critical(nullptr, "Export Error", "Failed to prepare temp file.");
+    // Write HTML to temp file
+    QString tempHtml = "/tmp/qxwrite_docxfilebrick_temp.html";
+    QFile htmlFile(tempHtml);
+    if (!htmlFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qDebug() << "DocxFileBrick: Failed to write temp HTML:" << tempHtml;
+        QMessageBox::critical(nullptr, "Export Error", "Failed to create temp HTML file.");
         return;
     }
+    QTextStream out(&htmlFile);
+    out << textEdit->toHtml();
+    htmlFile.close();
 
-    // Write content to temp ODT
-    QTextDocumentWriter writer(tempOdt, "odf");
-    if (!writer.write(textEdit->document())) {
-        qDebug() << "DocxFileBrick: Failed to write to temp ODT:" << tempOdt;
-        QMessageBox::critical(nullptr, "Export Error", "Failed to write content to temp file.");
-        QFile::remove(tempOdt);
-        return;
-    }
-    qDebug() << "DocxFileBrick: Temp ODT written to:" << tempOdt;
-
-    // Convert ODT to DOCX using soffice
-    QProcess process;
-    QStringList args;
-    args << "--headless" << "--convert-to" << "docx" << tempOdt << "--outdir" << QFileInfo(filePath).absolutePath();
-    qDebug() << "DocxFileBrick: Running soffice command: soffice" << args.join(" ");
-    process.start("soffice", args);
-
-    if (!process.waitForFinished(15000) || process.exitCode() != 0) {
-        qDebug() << "DocxFileBrick: soffice conversion failed:" << process.errorString()
-                 << "Output:" << process.readAllStandardError();
-        QFile::remove(tempOdt);
-        QMessageBox::critical(nullptr, "Export Error", "Failed to convert to " + filePath);
-        return;
-    }
-
-    QString tempDocx = QFileInfo(filePath).absolutePath() + "/qxwrite_docxfilebrick_temp.docx";
-    if (!QFile::exists(tempDocx)) {
-        qDebug() << "DocxFileBrick: DOCX file not created:" << tempDocx;
-        QFile::remove(tempOdt);
-        QMessageBox::critical(nullptr, "Export Error", "Conversion failed to produce " + filePath);
-        return;
-    }
-
-    // Rename to final file
-    if (QFile::exists(filePath)) QFile::remove(filePath);
-    if (!QFile::rename(tempDocx, filePath)) {
-        qDebug() << "DocxFileBrick: Failed to rename" << tempDocx << "to" << filePath;
-        QFile::remove(tempOdt);
-        QFile::remove(tempDocx);
-        QMessageBox::critical(nullptr, "Export Error", "Failed to finalize " + filePath);
+    // Convert HTML to DOCX with Pandoc
+    if (!pandocBrick->convertFromHtml(tempHtml, filePath, "docx")) {
+        qDebug() << "DocxFileBrick: Pandoc conversion failed for:" << filePath;
+        QMessageBox::critical(nullptr, "Export Error", "Failed to export to DOCX.");
+        QFile::remove(tempHtml);
         return;
     }
 
     qDebug() << "DocxFileBrick: Exported docx to:" << filePath;
-    QFile::remove(tempOdt);
+    QFile::remove(tempHtml);
 }

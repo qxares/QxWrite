@@ -36,24 +36,26 @@ void OdtFileBrick::exportFile(const QString &filePath) {
         return;
     }
 
-    QString templatePath = "/home/ares/Downloads/editor/QxWriteProject/templates/template odt.ott";
-    QString tempOdt = filePath;
-
-    // Copy template to target file
-    if (!QFile::copy(templatePath, tempOdt)) {
-        qDebug() << "OdtFileBrick: Failed to copy template to:" << tempOdt;
-        QMessageBox::critical(nullptr, "Export Error", "Failed to prepare target file.");
+    // Write HTML to temp file
+    QString tempHtml = "/tmp/qxwrite_odtfilebrick_temp.html";
+    QFile htmlFile(tempHtml);
+    if (!htmlFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qDebug() << "OdtFileBrick: Failed to write temp HTML:" << tempHtml;
+        QMessageBox::critical(nullptr, "Export Error", "Failed to create temp HTML file.");
         return;
     }
+    QTextStream out(&htmlFile);
+    out << textEdit->toHtml();
+    htmlFile.close();
 
-    // Write content to ODT
-    QTextDocumentWriter writer(tempOdt, "odf");
-    if (!writer.write(textEdit->document())) {
-        qDebug() << "OdtFileBrick: Failed to write to ODT:" << tempOdt;
-        QMessageBox::critical(nullptr, "Export Error", "Failed to write content to " + filePath);
-        QFile::remove(tempOdt);
+    // Convert HTML to ODT with Pandoc
+    if (!pandocBrick->convertFromHtml(tempHtml, filePath, "odt")) {
+        qDebug() << "OdtFileBrick: Pandoc conversion failed for:" << filePath;
+        QMessageBox::critical(nullptr, "Export Error", "Failed to export to ODT.");
+        QFile::remove(tempHtml);
         return;
     }
 
     qDebug() << "OdtFileBrick: Exported odt to:" << filePath;
+    QFile::remove(tempHtml);
 }
