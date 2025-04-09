@@ -7,29 +7,27 @@
 class TableBrick : public QObject {
     Q_OBJECT
 public:
-    explicit TableBrick(QTextEdit *textEdit, QObject *parent = nullptr);
-    void setTextEdit(QTextEdit *textEdit);
+    explicit TableBrick(QTextEdit *edit, QObject *parent = nullptr);
+    void setTextEdit(QTextEdit *edit);
+
+public slots:
     void insertTable();
-    void insertRowBefore();
-    void insertRowAfter();
-    void insertRowAbove();
-    void insertRowBelow();
-    void insertColumnBefore();
-    void insertColumnAfter();
-    void insertColumnAbove();
-    void insertColumnBelow();
+    void addRowBefore();
+    void addRowAfter();
+    void addColumnBefore();
+    void addColumnAfter();
     void deleteRow();
     void deleteColumn();
-    void mergeCells();
-    void splitCells(); // Updated method for splitting cells with explicit row/col dialog
     void deleteTable();
     void alignTableLeft();
     void alignTableCenter();
     void alignTableRight();
+    void mergeCells();
+    void splitCells();
 
 private:
-    void alignTable(Qt::Alignment alignment); // Helper for alignment
-    QTextEdit *m_textEdit;
+    QTextEdit *targetEdit;
+    QTextTable* getCurrentTable();
 };
 
 #endif // TABLEBRICK_H

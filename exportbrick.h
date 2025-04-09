@@ -3,7 +3,9 @@
 
 #include <QObject>
 #include "exportguibrick.h"
-#include "filehandlerbrick.h"
+#include "htmlfilebrick.h"
+#include "docxfilebrick.h"
+#include "odtfilebrick.h"
 
 class QTextEdit;
 
@@ -17,7 +19,9 @@ public:
 private:
     QTextEdit *m_textEdit;
     ExportGUIBrick *guiBrick;
-    FileHandlerBrick *fileHandler;
+    HtmlFileBrick *htmlBrick;
+    DocxFileBrick *docxBrick;
+    OdtFileBrick *odtBrick;
 };
 
 #endif // EXPORTBRICK_H

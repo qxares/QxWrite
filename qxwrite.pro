@@ -1,4 +1,5 @@
-# qxwrite.pro
+TARGET = QxWrite
+
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -14,6 +15,7 @@ SOURCES += \
     boldbrick.cpp \
     colorbrick.cpp \
     dialogbrick.cpp \
+    docxfilebrick.cpp \
     documenthandlerbrick.cpp \
     documentwindow.cpp \
     exportbrick.cpp \
@@ -21,20 +23,25 @@ SOURCES += \
     filehandlerbrick.cpp \
     filetranslatorbrick.cpp \
     fontbrick.cpp \
+    htmlfilebrick.cpp \
     importbrick.cpp \
     insertbrick.cpp \
     italicbrick.cpp \
+    listbrick.cpp \
     main.cpp \
     mainwindowbrick.cpp \
     menumanagerbrick.cpp \
     newfilebrick.cpp \
+    odtfilebrick.cpp \
     openfilebrick.cpp \
+    pandocfilebrick.cpp \
     resetbrick.cpp \
     resizebrick.cpp \
     savefunctionbrick.cpp \
     saveguibrick.cpp \
     savehandlerbrick.cpp \
     savemanagerbrick.cpp \
+    tablebrick.cpp \
     toolbarbrick.cpp \
     translatorbrick.cpp
 
@@ -43,6 +50,7 @@ HEADERS += \
     boldbrick.h \
     colorbrick.h \
     dialogbrick.h \
+    docxfilebrick.h \
     documenthandlerbrick.h \
     documentwindow.h \
     exportbrick.h \
@@ -50,22 +58,28 @@ HEADERS += \
     filehandlerbrick.h \
     filetranslatorbrick.h \
     fontbrick.h \
+    htmlfilebrick.h \
     importbrick.h \
     insertbrick.h \
     italicbrick.h \
+    listbrick.h \
     mainwindowbrick.h \
     menumanagerbrick.h \
     newfilebrick.h \
+    odtfilebrick.h \
     openfilebrick.h \
+    pandocfilebrick.h \
     resetbrick.h \
     resizebrick.h \
     savefunctionbrick.h \
     saveguibrick.h \
     savehandlerbrick.h \
     savemanagerbrick.h \
+    tablebrick.h \
     toolbarbrick.h \
     translatorbrick.h
 
+# Assuming icons.qrc exists for your icons
 RESOURCES += \
     icons.qrc
 
@@ -73,8 +87,3 @@ RESOURCES += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-# Debug config
-CONFIG(debug, debug|release) {
-    DEFINES += QT_DEBUG
-}

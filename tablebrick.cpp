@@ -1,374 +1,280 @@
 #include "tablebrick.h"
 #include <QTextCursor>
 #include <QTextTable>
+#include <QTextTableFormat>
+#include <QInputDialog>
 #include <QDebug>
 #include <QDialog>
 #include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QLabel>
-#include <QSpinBox>
+#include <QComboBox>
 #include <QPushButton>
 
-TableBrick::TableBrick(QTextEdit *textEdit, QObject *parent) : QObject(parent), m_textEdit(textEdit) {}
+TableBrick::TableBrick(QTextEdit *edit, QObject *parent) : QObject(parent), targetEdit(edit) {
+    qDebug() << "TableBrick initialized, target edit:" << targetEdit;
+}
 
-void TableBrick::setTextEdit(QTextEdit *textEdit) {
-    m_textEdit = textEdit;
+void TableBrick::setTextEdit(QTextEdit *edit) {
+    targetEdit = edit;
+    qDebug() << "TableBrick: TextEdit updated to:" << targetEdit;
 }
 
 void TableBrick::insertTable() {
-    if (!m_textEdit) {
-        qDebug() << "TableBrick: No text edit set for table insertion";
-        return;
-    }
+    if (targetEdit) {
+        bool ok;
+        int rows = QInputDialog::getInt(nullptr, "Insert Table", "Rows:", 2, 1, 100, 1, &ok);
+        if (!ok) return;
+        int cols = QInputDialog::getInt(nullptr, "Insert Table", "Columns:", 2, 1, 100, 1, &ok);
+        if (!ok) return;
 
-    QDialog dialog;
-    dialog.setWindowTitle("Insert Table");
-    QVBoxLayout *layout = new QVBoxLayout(&dialog);
-
-    QHBoxLayout *rowLayout = new QHBoxLayout();
-    QLabel *rowLabel = new QLabel("Rows:");
-    QSpinBox *rowSpin = new QSpinBox();
-    rowSpin->setRange(1, 100);
-    rowSpin->setValue(3);
-    rowLayout->addWidget(rowLabel);
-    rowLayout->addWidget(rowSpin);
-
-    QHBoxLayout *colLayout = new QHBoxLayout();
-    QLabel *colLabel = new QLabel("Columns:");
-    QSpinBox *colSpin = new QSpinBox();
-    colSpin->setRange(1, 100);
-    colSpin->setValue(3);
-    colLayout->addWidget(colLabel);
-    colLayout->addWidget(colSpin);
-
-    QHBoxLayout *buttonLayout = new QHBoxLayout();
-    QPushButton *okButton = new QPushButton("OK");
-    QPushButton *cancelButton = new QPushButton("Cancel");
-    buttonLayout->addWidget(okButton);
-    buttonLayout->addWidget(cancelButton);
-
-    layout->addLayout(rowLayout);
-    layout->addLayout(colLayout);
-    layout->addLayout(buttonLayout);
-
-    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
-    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
-
-    if (dialog.exec() == QDialog::Accepted) {
-        int rows = rowSpin->value();
-        int cols = colSpin->value();
-
-        QTextCursor cursor = m_textEdit->textCursor();
-        cursor.beginEditBlock();
-        QTextTable *table = cursor.insertTable(rows, cols);
-        QTextTableFormat format;
-        format.setCellPadding(5);
-        format.setCellSpacing(2);
-        format.setBorder(1);
-        format.setAlignment(Qt::AlignLeft);
+        QTextCursor cursor = targetEdit->textCursor();
+        QTextTableFormat tableFormat;
         QVector<QTextLength> constraints;
-        for (int col = 0; col < cols; ++col) {
-            constraints.append(QTextLength(QTextLength::FixedLength, 120));
+        for (int i = 0; i < cols; ++i) {
+            constraints.append(QTextLength(QTextLength::FixedLength, 20 * targetEdit->fontMetrics().averageCharWidth()));
         }
-        format.setColumnWidthConstraints(constraints);
-        table->setFormat(format);
-
-        QTextCharFormat cellFormat;
-        cellFormat.setProperty(QTextFormat::BlockBottomMargin, 30);
-        for (int row = 0; row < rows; ++row) {
-            for (int col = 0; col < cols; ++col) {
-                QTextTableCell cell = table->cellAt(row, col);
-                QTextCursor cellCursor = cell.firstCursorPosition();
-                cellCursor.mergeBlockCharFormat(cellFormat);
-            }
+        tableFormat.setColumnWidthConstraints(constraints);
+        QTextTable *table = cursor.insertTable(rows, cols, tableFormat);
+        if (table) {
+            qDebug() << "TableBrick: Table inserted with" << rows << "rows and" << cols << "columns, width set to 20 chars";
+        } else {
+            qDebug() << "TableBrick: Failed to insert table";
         }
-
-        QTextBlockFormat blockFormat;
-        blockFormat.setAlignment(Qt::AlignLeft);
-        cursor.setBlockFormat(blockFormat);
-
-        cursor.endEditBlock();
-        m_textEdit->setTextCursor(cursor);
-        qDebug() << "TableBrick: Inserted" << rows << "x" << cols << "table with 120px wide, 30px tall cells";
+    } else {
+        qDebug() << "TableBrick: No target edit set for table insertion";
     }
 }
 
-void TableBrick::insertRowBefore() {
-    QTextCursor cursor = m_textEdit->textCursor();
-    QTextTable *table = cursor.currentTable();
-    if (!table) {
-        qDebug() << "TableBrick: No table at cursor to insert row before";
-        return;
-    }
-    int row = cursor.currentTable()->cellAt(cursor).row();
-    cursor.beginEditBlock();
-    table->insertRows(row, 1);
-    cursor.endEditBlock();
-    qDebug() << "TableBrick: Inserted row before row" << row;
+QTextTable* TableBrick::getCurrentTable() {
+    if (!targetEdit) return nullptr;
+    QTextCursor cursor = targetEdit->textCursor();
+    return cursor.currentTable();
 }
 
-void TableBrick::insertRowAfter() {
-    QTextCursor cursor = m_textEdit->textCursor();
-    QTextTable *table = cursor.currentTable();
-    if (!table) {
-        qDebug() << "TableBrick: No table at cursor to insert row after";
-        return;
+void TableBrick::addRowBefore() {
+    QTextTable *table = getCurrentTable();
+    if (table) {
+        QTextCursor cursor = targetEdit->textCursor();
+        QTextTableCell cell = table->cellAt(cursor);
+        if (cell.isValid()) {
+            table->insertRows(cell.row(), 1);
+            qDebug() << "TableBrick: Added row before row" << cell.row();
+        } else {
+            qDebug() << "TableBrick: No valid cell selected for row insertion";
+        }
+    } else {
+        qDebug() << "TableBrick: No table at cursor to add row";
     }
-    int row = cursor.currentTable()->cellAt(cursor).row() + 1;
-    cursor.beginEditBlock();
-    table->insertRows(row, 1);
-    cursor.endEditBlock();
-    qDebug() << "TableBrick: Inserted row after row" << (row - 1);
 }
 
-void TableBrick::insertRowAbove() { insertRowBefore(); } // Alias for clarity
-void TableBrick::insertRowBelow() { insertRowAfter(); }  // Alias for clarity
-
-void TableBrick::insertColumnBefore() {
-    QTextCursor cursor = m_textEdit->textCursor();
-    QTextTable *table = cursor.currentTable();
-    if (!table) {
-        qDebug() << "TableBrick: No table at cursor to insert column before";
-        return;
+void TableBrick::addRowAfter() {
+    QTextTable *table = getCurrentTable();
+    if (table) {
+        QTextCursor cursor = targetEdit->textCursor();
+        QTextTableCell cell = table->cellAt(cursor);
+        if (cell.isValid()) {
+            table->insertRows(cell.row() + 1, 1);
+            qDebug() << "TableBrick: Added row after row" << cell.row();
+        } else {
+            qDebug() << "TableBrick: No valid cell selected for row insertion";
+        }
+    } else {
+        qDebug() << "TableBrick: No table at cursor to add row";
     }
-    int col = cursor.currentTable()->cellAt(cursor).column();
-    cursor.beginEditBlock();
-    table->insertColumns(col, 1);
-    QTextTableFormat format = table->format();
-    QVector<QTextLength> constraints = format.columnWidthConstraints();
-    constraints.insert(col, QTextLength(QTextLength::FixedLength, 120));
-    format.setColumnWidthConstraints(constraints);
-    table->setFormat(format);
-    cursor.endEditBlock();
-    qDebug() << "TableBrick: Inserted column before column" << col;
 }
 
-void TableBrick::insertColumnAfter() {
-    QTextCursor cursor = m_textEdit->textCursor();
-    QTextTable *table = cursor.currentTable();
-    if (!table) {
-        qDebug() << "TableBrick: No table at cursor to insert column after";
-        return;
+void TableBrick::addColumnBefore() {
+    QTextTable *table = getCurrentTable();
+    if (table) {
+        QTextCursor cursor = targetEdit->textCursor();
+        QTextTableCell cell = table->cellAt(cursor);
+        if (cell.isValid()) {
+            table->insertColumns(cell.column(), 1);
+            qDebug() << "TableBrick: Added column before column" << cell.column();
+        } else {
+            qDebug() << "TableBrick: No valid cell selected for column insertion";
+        }
+    } else {
+        qDebug() << "TableBrick: No table at cursor to add column";
     }
-    int col = cursor.currentTable()->cellAt(cursor).column() + 1;
-    cursor.beginEditBlock();
-    table->insertColumns(col, 1);
-    QTextTableFormat format = table->format();
-    QVector<QTextLength> constraints = format.columnWidthConstraints();
-    constraints.insert(col, QTextLength(QTextLength::FixedLength, 120));
-    format.setColumnWidthConstraints(constraints);
-    table->setFormat(format);
-    cursor.endEditBlock();
-    qDebug() << "TableBrick: Inserted column after column" << (col - 1);
 }
 
-void TableBrick::insertColumnAbove() { insertColumnBefore(); } // Alias
-void TableBrick::insertColumnBelow() { insertColumnAfter(); }  // Alias
+void TableBrick::addColumnAfter() {
+    QTextTable *table = getCurrentTable();
+    if (table) {
+        QTextCursor cursor = targetEdit->textCursor();
+        QTextTableCell cell = table->cellAt(cursor);
+        if (cell.isValid()) {
+            table->insertColumns(cell.column() + 1, 1);
+            qDebug() << "TableBrick: Added column after column" << cell.column();
+        } else {
+            qDebug() << "TableBrick: No valid cell selected for column insertion";
+        }
+    } else {
+        qDebug() << "TableBrick: No table at cursor to add column";
+    }
+}
 
 void TableBrick::deleteRow() {
-    QTextCursor cursor = m_textEdit->textCursor();
-    QTextTable *table = cursor.currentTable();
-    if (!table) {
+    QTextTable *table = getCurrentTable();
+    if (table) {
+        QTextCursor cursor = targetEdit->textCursor();
+        QTextTableCell cell = table->cellAt(cursor);
+        if (cell.isValid()) {
+            table->removeRows(cell.row(), 1);
+            qDebug() << "TableBrick: Deleted row" << cell.row();
+        } else {
+            qDebug() << "TableBrick: No valid cell selected for row deletion";
+        }
+    } else {
         qDebug() << "TableBrick: No table at cursor to delete row";
-        return;
     }
-    int row = cursor.currentTable()->cellAt(cursor).row();
-    cursor.beginEditBlock();
-    table->removeRows(row, 1);
-    cursor.endEditBlock();
-    qDebug() << "TableBrick: Deleted row" << row;
 }
 
 void TableBrick::deleteColumn() {
-    QTextCursor cursor = m_textEdit->textCursor();
-    QTextTable *table = cursor.currentTable();
-    if (!table) {
+    QTextTable *table = getCurrentTable();
+    if (table) {
+        QTextCursor cursor = targetEdit->textCursor();
+        QTextTableCell cell = table->cellAt(cursor);
+        if (cell.isValid()) {
+            table->removeColumns(cell.column(), 1);
+            qDebug() << "TableBrick: Deleted column" << cell.column();
+        } else {
+            qDebug() << "TableBrick: No valid cell selected for column deletion";
+        }
+    } else {
         qDebug() << "TableBrick: No table at cursor to delete column";
-        return;
     }
-    int col = cursor.currentTable()->cellAt(cursor).column();
-    cursor.beginEditBlock();
-    table->removeColumns(col, 1);
-    cursor.endEditBlock();
-    qDebug() << "TableBrick: Deleted column" << col;
+}
+
+void TableBrick::deleteTable() {
+    QTextTable *table = getCurrentTable();
+    if (table) {
+        QTextCursor cursor = targetEdit->textCursor();
+        int start = table->firstCursorPosition().position();
+        int end = table->lastCursorPosition().position();
+        cursor.setPosition(start);
+        cursor.setPosition(end + 1, QTextCursor::KeepAnchor);
+        cursor.removeSelectedText();
+        qDebug() << "TableBrick: Deleted entire table";
+    } else {
+        qDebug() << "TableBrick: No table at cursor to delete";
+    }
+}
+
+void TableBrick::alignTableLeft() {
+    QTextTable *table = getCurrentTable();
+    if (table) {
+        QTextTableFormat format = table->format();
+        format.setAlignment(Qt::AlignLeft);
+        table->setFormat(format);
+        qDebug() << "TableBrick: Table aligned left";
+    } else {
+        qDebug() << "TableBrick: No table at cursor to align";
+    }
+}
+
+void TableBrick::alignTableCenter() {
+    QTextTable *table = getCurrentTable();
+    if (table) {
+        QTextTableFormat format = table->format();
+        format.setAlignment(Qt::AlignHCenter);
+        table->setFormat(format);
+        qDebug() << "TableBrick: Table aligned center";
+    } else {
+        qDebug() << "TableBrick: No table at cursor to align";
+    }
+}
+
+void TableBrick::alignTableRight() {
+    QTextTable *table = getCurrentTable();
+    if (table) {
+        QTextTableFormat format = table->format();
+        format.setAlignment(Qt::AlignRight);
+        table->setFormat(format);
+        qDebug() << "TableBrick: Table aligned right";
+    } else {
+        qDebug() << "TableBrick: No table at cursor to align";
+    }
 }
 
 void TableBrick::mergeCells() {
-    QTextCursor cursor = m_textEdit->textCursor();
-    QTextTable *table = cursor.currentTable();
-    if (!table) {
-        qDebug() << "TableBrick: No table at cursor to merge cells";
-        return;
-    }
-    if (!cursor.hasSelection()) {
-        qDebug() << "TableBrick: No cell selection to merge";
-        return;
-    }
-    QTextTableCell startCell = table->cellAt(cursor.selectionStart());
-    QTextTableCell endCell = table->cellAt(cursor.selectionEnd());
-    int firstRow = startCell.row();
-    int firstCol = startCell.column();
-    int numRows = endCell.row() - firstRow + 1;
-    int numCols = endCell.column() - firstCol + 1;
-    if (numRows > 1 || numCols > 1) {
-        cursor.beginEditBlock();
-        table->mergeCells(firstRow, firstCol, numRows, numCols);
-        cursor.endEditBlock();
-        qDebug() << "TableBrick: Merged" << numRows << "rows and" << numCols << "columns at" << firstRow << "," << firstCol;
+    QTextTable *table = getCurrentTable();
+    if (table) {
+        QTextCursor cursor = targetEdit->textCursor();
+        if (cursor.hasSelection()) {
+            table->mergeCells(cursor);
+            qDebug() << "TableBrick: Selected cells merged";
+        } else {
+            qDebug() << "TableBrick: No selection to merge cells";
+        }
     } else {
-        qDebug() << "TableBrick: Selection too small to merge";
+        qDebug() << "TableBrick: No table at cursor to merge cells";
     }
 }
 
 void TableBrick::splitCells() {
-    if (!m_textEdit) {
-        qDebug() << "TableBrick: No text edit set to split cells";
-        return;
-    }
-
-    QTextCursor cursor = m_textEdit->textCursor();
-    QTextTable *table = cursor.currentTable();
+    QTextTable *table = getCurrentTable();
     if (!table) {
         qDebug() << "TableBrick: No table at cursor to split cells";
         return;
     }
 
-    int maxRows = table->rows();
-    int maxCols = table->columns();
+    QTextCursor cursor = targetEdit->textCursor();
+    QTextTableCell cell = table->cellAt(cursor);
+    if (!cell.isValid()) {
+        qDebug() << "TableBrick: No valid cell selected to split";
+        return;
+    }
 
-    QDialog dialog;
-    dialog.setWindowTitle("Split Cell");
-    QVBoxLayout *layout = new QVBoxLayout(&dialog);
+    // Check if the cell is merged (spans > 1 row or column)
+    int rowSpan = cell.rowSpan();
+    int colSpan = cell.columnSpan();
+    if (rowSpan <= 1 && colSpan <= 1) {
+        qDebug() << "TableBrick: Cell at row" << cell.row() << "column" << cell.column() << "is not merged, cannot split";
+        return;
+    }
 
-    QHBoxLayout *rowPosLayout = new QHBoxLayout();
-    QLabel *rowPosLabel = new QLabel("Row (0-based):");
-    QSpinBox *rowPosSpin = new QSpinBox();
-    rowPosSpin->setRange(0, maxRows - 1);
-    rowPosSpin->setValue(0); // Default to top row
-    rowPosLayout->addWidget(rowPosLabel);
-    rowPosLayout->addWidget(rowPosSpin);
+    QDialog *splitDialog = new QDialog(nullptr);
+    splitDialog->setWindowTitle("Split Cell");
+    QVBoxLayout *layout = new QVBoxLayout(splitDialog);
 
-    QHBoxLayout *colPosLayout = new QHBoxLayout();
-    QLabel *colPosLabel = new QLabel("Column (0-based):");
-    QSpinBox *colPosSpin = new QSpinBox();
-    colPosSpin->setRange(0, maxCols - 1);
-    colPosSpin->setValue(0); // Default to left column
-    colPosLayout->addWidget(colPosLabel);
-    colPosLayout->addWidget(colPosSpin);
+    QLabel *rowLabel = new QLabel("Rows (max " + QString::number(rowSpan) + "):");
+    QComboBox *rowCombo = new QComboBox();
+    for (int i = 1; i <= rowSpan; ++i) {
+        rowCombo->addItem(QString::number(i));
+    }
+    rowCombo->setCurrentIndex(rowSpan > 1 ? 1 : 0); // Default to 2 if possible
 
-    QHBoxLayout *rowSplitLayout = new QHBoxLayout();
-    QLabel *rowSplitLabel = new QLabel("Split into Rows:");
-    QSpinBox *rowSplitSpin = new QSpinBox();
-    rowSplitSpin->setRange(1, 1); // Will adjust dynamically
-    rowSplitSpin->setValue(1);
-    rowSplitLayout->addWidget(rowSplitLabel);
-    rowSplitLayout->addWidget(rowSplitSpin);
+    QLabel *colLabel = new QLabel("Columns (max " + QString::number(colSpan) + "):");
+    QComboBox *colCombo = new QComboBox();
+    for (int i = 1; i <= colSpan; ++i) {
+        colCombo->addItem(QString::number(i));
+    }
+    colCombo->setCurrentIndex(colSpan > 1 ? 1 : 0); // Default to 2 if possible
 
-    QHBoxLayout *colSplitLayout = new QHBoxLayout();
-    QLabel *colSplitLabel = new QLabel("Split into Columns:");
-    QSpinBox *colSplitSpin = new QSpinBox();
-    colSplitSpin->setRange(1, 1); // Will adjust dynamically
-    colSplitSpin->setValue(1);
-    colSplitLayout->addWidget(colSplitLabel);
-    colSplitLayout->addWidget(colSplitSpin);
-
-    QHBoxLayout *buttonLayout = new QHBoxLayout();
     QPushButton *okButton = new QPushButton("OK");
-    QPushButton *cancelButton = new QPushButton("Cancel");
-    buttonLayout->addWidget(okButton);
-    buttonLayout->addWidget(cancelButton);
+    connect(okButton, &QPushButton::clicked, splitDialog, &QDialog::accept);
 
-    layout->addLayout(rowPosLayout);
-    layout->addLayout(colPosLayout);
-    layout->addLayout(rowSplitLayout);
-    layout->addLayout(colSplitLayout);
-    layout->addLayout(buttonLayout);
+    layout->addWidget(rowLabel);
+    layout->addWidget(rowCombo);
+    layout->addWidget(colLabel);
+    layout->addWidget(colCombo);
+    layout->addWidget(okButton);
+    splitDialog->setLayout(layout);
 
-    // Dynamically update split ranges based on selected cell
-    auto updateSplitRanges = [table, rowPosSpin, colPosSpin, rowSplitSpin, colSplitSpin]() {
-        int row = rowPosSpin->value();
-        int col = colPosSpin->value();
-        QTextTableCell cell = table->cellAt(row, col);
-        int rowSpan = cell.rowSpan();
-        int colSpan = cell.columnSpan();
-        rowSplitSpin->setRange(1, rowSpan);
-        rowSplitSpin->setValue(rowSpan); // Default to max
-        colSplitSpin->setRange(1, colSpan);
-        colSplitSpin->setValue(colSpan); // Default to max
-    };
-
-    connect(rowPosSpin, QOverload<int>::of(&QSpinBox::valueChanged), updateSplitRanges);
-    connect(colPosSpin, QOverload<int>::of(&QSpinBox::valueChanged), updateSplitRanges);
-    updateSplitRanges(); // Initial call to set ranges
-
-    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
-    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
-
-    if (dialog.exec() == QDialog::Accepted) {
-        int row = rowPosSpin->value();
-        int col = colPosSpin->value();
-        int numRows = rowSplitSpin->value();
-        int numCols = colSplitSpin->value();
-
-        QTextTableCell cell = table->cellAt(row, col);
-        int rowSpan = cell.rowSpan();
-        int colSpan = cell.columnSpan();
-
-        if (rowSpan <= 1 && colSpan <= 1) {
-            qDebug() << "TableBrick: Cell at" << row << "," << col << "is not merged, cannot split";
-            return;
-        }
-
-        if (numRows <= rowSpan && numCols <= colSpan) {
-            cursor.beginEditBlock();
-            table->splitCell(row, col, numRows, numCols);
-            cursor.endEditBlock();
-            m_textEdit->viewport()->update(); // Force UI refresh
-            qDebug() << "TableBrick: Split cell at" << row << "," << col << "from" << rowSpan << "x" << colSpan << "to" << numRows << "x" << numCols;
+    if (splitDialog->exec() == QDialog::Accepted) {
+        int rows = rowCombo->currentText().toInt();
+        int cols = colCombo->currentText().toInt();
+        if ((rows > 1 || cols > 1) && rows <= rowSpan && cols <= colSpan) {
+            table->splitCell(cell.row(), cell.column(), rows, cols);
+            targetEdit->update(); // Force redraw
+            qDebug() << "TableBrick: Cell at row" << cell.row() << "column" << cell.column() << "split into" << rows << "rows and" << cols << "columns";
         } else {
-            qDebug() << "TableBrick: Invalid split dimensions" << numRows << "x" << numCols << "exceed" << rowSpan << "x" << colSpan;
+            qDebug() << "TableBrick: Invalid split dimensions (rows:" << rows << ", cols:" << cols << ") for span (rows:" << rowSpan << ", cols:" << colSpan << ")";
         }
     } else {
-        qDebug() << "TableBrick: Split cell canceled";
+        qDebug() << "TableBrick: Split cell dialog canceled";
     }
+    delete splitDialog;
 }
-
-void TableBrick::deleteTable() {
-    if (!m_textEdit) {
-        qDebug() << "TableBrick: No text edit set to delete table";
-        return;
-    }
-
-    QTextCursor cursor = m_textEdit->textCursor();
-    QTextTable *table = cursor.currentTable();
-    
-    if (!table) {
-        cursor.setPosition(0); // Start at beginning
-        while (!cursor.atEnd()) {
-            table = cursor.currentTable();
-            if (table) {
-                break;
-            }
-            cursor.movePosition(QTextCursor::NextBlock);
-        }
-    }
-
-    if (!table) {
-        qDebug() << "TableBrick: No table found to delete";
-        return;
-    }
-
-    int rows = table->rows();
-    int cols = table->columns();
-    cursor.beginEditBlock();
-    table->removeRows(0, rows); // Remove all rows to delete the table entirely
-    cursor.endEditBlock();
-    m_textEdit->setTextCursor(cursor);
-    m_textEdit->document()->setModified(true); // Mark document as modified
-    m_textEdit->viewport()->update(); // Force UI refresh
-    qDebug() << "TableBrick: Table deleted (" << rows << "x" << cols << ")";
-}
-
-void TableBrick::alignTableLeft() {} // Handled by TableHandlerBrick
-void TableBrick::alignTableCenter() {} // Handled by TableHandlerBrick
-void TableBrick::alignTableRight() {} // Handled by TableHandlerBrick

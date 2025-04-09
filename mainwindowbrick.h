@@ -2,15 +2,26 @@
 #define MAINWINDOWBRICK_H
 
 #include <QMainWindow>
-#include "documenthandlerbrick.h"
-#include "toolbarbrick.h"
-#include "menumanagerbrick.h"
-#include "boldbrick.h"
-#include "importbrick.h"  // Add for ImportBrick
-#include "exportbrick.h"  // Add for ExportBrick
-#include "translatorbrick.h"  // Added for TranslatorBrick
 
 class QMdiArea;
+class ToolBarBrick;
+class MenuManagerBrick;
+class NewFileBrick;
+class OpenFileBrick;
+class ImportBrick;
+class ExportBrick;
+class SaveManagerBrick;
+class BoldBrick;
+class ItalicBrick;
+class FontBrick;
+class ColorBrick;
+class InsertBrick;
+class AlignBrick;
+class DocumentHandlerBrick;
+class ResizeBrick;
+class TranslatorBrick;
+class TableBrick;
+class ListBrick;
 
 class MainWindowBrick : public QMainWindow {
     Q_OBJECT
@@ -23,20 +34,22 @@ private slots:
     void handleImportFile();
     void handleExportFile();
     void exitApplication();
-    void showAboutDialog();  // Added for Help -> About
+    void showAboutDialog();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
 
 private:
     QMdiArea *mdiArea;
-    DocumentHandlerBrick *documentHandler;
     ToolBarBrick *toolBarBrick;
     MenuManagerBrick *menuManagerBrick;
     BoldBrick *boldBrick;
-    ImportBrick *importBrick;  // Declare global instance
-    ExportBrick *exportBrick;  // Declare global instance
-    TranslatorBrick *translatorBrick;  // Added global instance
+    ImportBrick *importBrick;
+    ExportBrick *exportBrick;
+    TranslatorBrick *translatorBrick;
+    TableBrick *tableBrick;
+    ListBrick *listBrick;
+    DocumentHandlerBrick *documentHandler;
 };
 
 #endif // MAINWINDOWBRICK_H

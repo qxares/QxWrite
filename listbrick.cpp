@@ -1,65 +1,58 @@
 #include "listbrick.h"
 #include <QTextCursor>
 #include <QTextList>
-#include <QTextListFormat>
+#include <QTextBlock>
 #include <QDebug>
 
-ListBrick::ListBrick(QTextEdit *textEdit, QObject *parent) : QObject(parent), m_textEdit(textEdit) {}
-
-void ListBrick::setTextEdit(QTextEdit *textEdit) {
-    m_textEdit = textEdit;
+ListBrick::ListBrick(QTextEdit *edit, QObject *parent) : QObject(parent), targetEdit(edit) {
+    qDebug() << "ListBrick initialized, target edit:" << targetEdit;
 }
 
-void ListBrick::toggleNumbering() {
-    if (!m_textEdit) {
-        qDebug() << "ListBrick: No text edit set for numbering";
-        return;
-    }
-
-    QTextCursor cursor = m_textEdit->textCursor();
-    QTextList *list = cursor.currentList();
-
-    if (list && list->format().style() == QTextListFormat::ListDecimal) {
-        // Remove list if it's already numbered
-        cursor.beginEditBlock();
-        QTextBlock block = cursor.block();
-        list->remove(block);
-        cursor.endEditBlock();
-    } else {
-        // Add numbered list
-        cursor.beginEditBlock();
-        QTextListFormat listFormat;
-        listFormat.setStyle(QTextListFormat::ListDecimal);
-        cursor.createList(listFormat);
-        cursor.endEditBlock();
-    }
-
-    m_textEdit->setTextCursor(cursor);
+void ListBrick::setTextEdit(QTextEdit *edit) {
+    targetEdit = edit;
+    qDebug() << "ListBrick: TextEdit updated to:" << targetEdit;
 }
 
 void ListBrick::toggleBullets() {
-    if (!m_textEdit) {
-        qDebug() << "ListBrick: No text edit set for bullets";
+    if (!targetEdit) {
+        qDebug() << "ListBrick: No target edit set for bullets";
         return;
     }
 
-    QTextCursor cursor = m_textEdit->textCursor();
-    QTextList *list = cursor.currentList();
+    QTextCursor cursor = targetEdit->textCursor();
+    QTextList *currentList = cursor.currentList();
 
-    if (list && list->format().style() == QTextListFormat::ListDisc) {
-        // Remove list if it's already bulleted
-        cursor.beginEditBlock();
+    if (currentList && currentList->format().style() == QTextListFormat::ListDisc) {
+        // Remove bullets
         QTextBlock block = cursor.block();
-        list->remove(block);
-        cursor.endEditBlock();
+        currentList->remove(block);
+        qDebug() << "ListBrick: Bullets removed from block at position" << block.position();
     } else {
-        // Add bulleted list
-        cursor.beginEditBlock();
-        QTextListFormat listFormat;
-        listFormat.setStyle(QTextListFormat::ListDisc);
-        cursor.createList(listFormat);
-        cursor.endEditBlock();
+        // Add bullets
+        cursor.createList(QTextListFormat::ListDisc);
+        qDebug() << "ListBrick: Bullets added at cursor position" << cursor.position();
+    }
+    targetEdit->setTextCursor(cursor);
+}
+
+void ListBrick::toggleNumbering() {
+    if (!targetEdit) {
+        qDebug() << "ListBrick: No target edit set for numbering";
+        return;
     }
 
-    m_textEdit->setTextCursor(cursor);
+    QTextCursor cursor = targetEdit->textCursor();
+    QTextList *currentList = cursor.currentList();
+
+    if (currentList && currentList->format().style() == QTextListFormat::ListDecimal) {
+        // Remove numbering
+        QTextBlock block = cursor.block();
+        currentList->remove(block);
+        qDebug() << "ListBrick: Numbering removed from block at position" << block.position();
+    } else {
+        // Add numbering
+        cursor.createList(QTextListFormat::ListDecimal);
+        qDebug() << "ListBrick: Numbering added at cursor position" << cursor.position();
+    }
+    targetEdit->setTextCursor(cursor);
 }

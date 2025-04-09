@@ -7,13 +7,15 @@
 class ListBrick : public QObject {
     Q_OBJECT
 public:
-    explicit ListBrick(QTextEdit *textEdit, QObject *parent = nullptr);
-    void setTextEdit(QTextEdit *textEdit);
-    void toggleNumbering();
+    explicit ListBrick(QTextEdit *edit, QObject *parent = nullptr);
+    void setTextEdit(QTextEdit *edit);
+
+public slots:
     void toggleBullets();
+    void toggleNumbering();
 
 private:
-    QTextEdit *m_textEdit;
+    QTextEdit *targetEdit;
 };
 
 #endif // LISTBRICK_H

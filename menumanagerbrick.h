@@ -16,7 +16,7 @@ public:
                     QAction *colorAction, QAction *imageAction, QAction *alignLeftAction,
                     QAction *alignCenterAction, QAction *alignRightAction,
                     QAction *tableAction = nullptr,
-                    QAction *translateAction = nullptr);  // Removed numberingAction and bulletsAction
+                    QAction *translateAction = nullptr);
     QMenuBar* getMenuBar() const;
 
 signals:
@@ -26,15 +26,12 @@ signals:
     void exportTriggered();
     void numberingTriggered();
     void bulletsTriggered();
+    void insertImageTriggered();
     void insertTableTriggered();
-    void insertRowBeforeTriggered();
-    void insertRowAfterTriggered();
     void insertRowAboveTriggered();
     void insertRowBelowTriggered();
     void insertColumnBeforeTriggered();
     void insertColumnAfterTriggered();
-    void insertColumnAboveTriggered();
-    void insertColumnBelowTriggered();
     void deleteRowTriggered();
     void deleteColumnTriggered();
     void mergeCellsTriggered();
@@ -45,8 +42,8 @@ signals:
     void alignTableRightTriggered();
     void moveTriggered();
     void exitTriggered();
-    void translateTriggered();  // Signal for translation
-    void aboutTriggered();     // Signal for About dialog
+    void translateTriggered();
+    void aboutTriggered();
 
 private:
     QMenuBar *menuBar;
@@ -55,7 +52,7 @@ private:
     QMenu *formatMenu;
     QMenu *tableMenu;
     QMenu *toolsMenu;
-    QMenu *helpMenu;  // New Help menu
+    QMenu *helpMenu;
 };
 
 #endif // MENUMANAGERBRICK_H
