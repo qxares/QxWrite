@@ -49,11 +49,16 @@ QString PandocHandlerBrick::convertToHtml(const QString &inputFile, const QStrin
     file.close();
     QFile::remove(expectedHtml);
 
-    // Inject CSS to enforce tight line spacing
+    // Inject CSS to enforce tight spacing and visible text
     QString styledContent = "<!DOCTYPE html><html><head><meta charset=\"UTF-8\">"
-                            "<style>body { font-family: 'Ubuntu', sans-serif; margin: 0; padding: 0; }"
-                            "p { margin: 0; padding: 0; line-height: 1; }"
-                            "b { font-weight: bold; } i { font-style: italic; }</style></head><body>"
+                            "<style>"
+                            "body { font-family: 'Ubuntu', sans-serif; margin: 0; padding: 0; color: black; background: white; }"
+                            "p { margin: 0; padding: 0; line-height: 1; color: black; }"
+                            "div { margin: 0; padding: 0; }"
+                            "b { font-weight: bold; }"
+                            "i { font-style: italic; }"
+                            "* { display: block; visibility: visible; }"
+                            "</style></head><body>"
                             + content + "</body></html>";
 
     qDebug() << "PandocHandlerBrick: Converted to HTML with tight spacing:" << inputFile;
